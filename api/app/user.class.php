@@ -10,40 +10,27 @@
 
 namespace api\app;
 
-class user{
+class user extends base{
     // 用户登陆
     public function login(){
         $phone = isset($_POST['phone']) ? $_POST['phone'] : '';
         $code = isset($_POST['code']) ? $_POST['code'] : '';
-        $data['status'] = 200;
-        $data['data'] = [];
-        $data['message'] = '请求成功';
-        $data['data'] = array(
+        $data = array(
             'access_token' => 2,
             'nike_name' => 'monkey',
             'user_type' => 2
         );
-        if($phone and $code){
-
-        } else {
-
-        }
-
-        die(json_encode($data));
-
+        $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $data);
     }
 
     //支付宝绑定
     public function alipayBind(){
+        $this->loginInit();
         $alipay = $_POST['alipay'];
         if($alipay){
-            $data['status'] = 200;
-            $data['data'] = [];
-            $data['message'] = '请求成功';
-            $data['data'] = array(
-
-            );
-            die(json_encode($data));
+            $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success']);
+        } else {
+            $this->appDie($this->back_code['user']['bind_empty'], $this->back_msg['user']['bind_empty']);
         }
 
     }

@@ -10,39 +10,16 @@
 
 namespace api\app;
 
-class order{
-    //
-    public function login(){
-        $phone = isset($_POST['phone']) ? $_POST['phone'] : '';
-        $code = isset($_POST['code']) ? $_POST['code'] : '';
-        $data['status'] = 200;
-        $data['data'] = [];
-        $data['message'] = '请求成功';
-        $data['data'] = array(
+class order extends base {
 
-        );
-        if($phone and $code){
-
-
-        } else {
-
-        }
-
-        die(json_encode($data));
-
+    public function __construct()
+    {
+        parent::__construct();
+        $this-> loginInit();
     }
 
-    public function alipayBind(){
-        $alipay = $_POST['alipay'];
-        if($alipay){
-            $data['status'] = 200;
-            $data['data'] = [];
-            $data['message'] = '请求成功';
-            $data['data'] = array(
-
-            );
-            die(json_encode($data));
-        }
+    //
+    public function validatePhoneOrderType(){
 
     }
 
