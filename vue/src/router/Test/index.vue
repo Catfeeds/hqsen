@@ -1,4 +1,6 @@
 <template>
+  <main>
+    <my-menu mode="horizontal" :data="headData" theme="dark" :activeIndex="headIndex" @handleSelect="handleSelect($event)"></my-menu>
     <el-row>
       <el-col :span="4">
         <my-menu :data="sideData" activeIndex="1"></my-menu>
@@ -32,6 +34,7 @@
 
       </el-col>
     </el-row>
+  </main>
 </template>
 
 <script>

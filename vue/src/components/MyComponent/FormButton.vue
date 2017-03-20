@@ -1,7 +1,7 @@
 <template>
   <el-form-item>
-    <el-button type="primary" @click="$emit('onSubmit')">立即创建</el-button>
-    <el-button>取消</el-button>
+    <el-button type="primary" @click="$emit('submitForm')">提交</el-button>
+    <el-button @click="$emit('resetForm')">重置</el-button>
   </el-form-item>
 </template>
 
