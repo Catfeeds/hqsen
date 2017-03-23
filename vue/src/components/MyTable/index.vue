@@ -9,14 +9,6 @@
         :prop="item.name"
         :label="item.label"
         :width="item.width">
-          <!--<template scope="scope">
-            <el-button
-              @click.native.prevent="deleteRow(scope.$index, tableData4)"
-              type="text"
-              size="small">
-              移除
-            </el-button>
-          </template>-->
       </el-table-column>
       <slot></slot>
     </el-table>
@@ -49,15 +41,8 @@
       currentPage: Number,
       total: Number,
       rowData: Array,
-      columnData: Array
-    },
-    data () {
-      return {}
-    },
-    methods: {
-      hhh (data) {
-        console.log(data)
-      }
+      columnData: Array,
+      loading: Boolean
     }
   }
 </script>

@@ -1,6 +1,6 @@
 <template>
   <div class="content-wrapper">
-    <my-breadcrumb :data="breadcrumb"></my-breadcrumb>
+    <my-breadcrumb :data="breadcrumb"/>
     <div class="control-box">
       <el-input
         class="search-input"
@@ -25,33 +25,31 @@
       :currentPage="currentPage"
       :total="total"
       :rowData="rowData" 
+      :loading="loading"
       :columnData="columnData">
         <el-table-column
           prop="control"
           label="操作">
             <template scope="scope">
               <!--查看详情-->
-              <el-button @click="lookRow(scope)" size="small" v-if="detailBtnType.indexOf(type) > -1">查看详情</el-button>
+              <el-button v-if="detailBtnType.indexOf(type) > -1" @click="lookRow(scope)" size="small">查看详情</el-button>
               <!--禁用-->
-              <el-button @click="disableRow(scope)" size="small" :plain="true" type="warn" v-if="disableBtnType.indexOf(type) > -1">禁用</el-button>
+              <el-button v-if="disableBtnType.indexOf(type) > -1" @click="disableRow(scope)" size="small" :plain="true" type="warn">禁用</el-button>
               <!--<el-button @click="disableRow(scope)" size="small" :plain="true" type="warn">启用</el-button>-->
               <!--编辑-->
-              <el-button @click="editRow(scope)" size="small" v-if="editBtnType.indexOf(type) > -1">编辑</el-button>
+              <el-button v-if="editBtnType.indexOf(type) > -1" icon="edit" @click="editRow(scope)" size="small"></el-button>
               <!--删除-->
-              <el-button @click="deleteRow(scope)" size="small" :plain="true" type="danger" v-if="deleteBtnType.indexOf(type) > -1">删除</el-button>
+              <el-button v-if="deleteBtnType.indexOf(type) > -1" icon="delete" @click="deleteRow(scope)" size="small" :plain="true" type="danger"></el-button>
+              <!--审批-->
+              <el-button v-if="approveBtnType.indexOf(type) > -1" @click="goApprove(scope)" size="small" :plain="true" type="warn">审批</el-button>
+              <!--<el-button @click="disableRow(scope)" size="small" :plain="true" type="warn">重开</el-button>
 
               
-              <!--<el-button @click="disableRow(scope)" size="small" :plain="true" type="warn">查看搭建信息</el-button>
-              <el-button @click="goApprove(scope)"size="small" :plain="true" type="warn">审批</el-button>
-              <el-button @click="disableRow(scope)" size="small" :plain="true" type="warn">重开</el-button>
-
-              
-              <el-button @click="disableRow(scope)" size="small" :plain="true" type="warn">查看信息</el-button>
               <el-button @click="disableRow(scope)" size="small" :plain="true" type="warn">已完成</el-button>
               <el-button @click="disableRow(scope)" size="small" :plain="true" type="warn">完成打款</el-button>-->
             </template>
         </el-table-column>
-      </my-table>
+    </my-table>
   </div>
 </template>
 
@@ -74,10 +72,11 @@
 </style>
 
 <script>
-  import { TableColumn, Button, Input } from 'element-ui'
+  import { TableColumn, Button, Input, MessageBox } from 'element-ui'
   import MyTable from '../../components/MyTable'
   import MyBreadcrumb from '../../components/MyBreadcrumb'
   import config from './config'
+  import Fetch from '../../Fetch'
   export default {
     components: {
       MyTable,
@@ -93,7 +92,8 @@
       return {
         type: '',           // 列表类型
         searchInput: '',    // 输入框
-        detailBtnType: ['custom', 'build'],
+        detailBtnType: ['custom', 'build', 'customPlay', 'buildPlay'],
+        approveBtnType: ['customVerify', 'buildVerify'],
         editBtnType: ['hotelAccount', 'innerAccount', 'customArea', 'hotel'],
         deleteBtnType: ['hotelAccount', 'innerAccount', 'customArea', 'hotel'],
         disableBtnType: ['hotelAccount', 'innerAccount'],
@@ -118,6 +118,7 @@
           name: '王小虎',
           address: '上海市普陀区金沙江路 1516 弄'
         }],
+        loading: true,
         columnData: [], // 表头
         total: 55,     // 总页数
         currentPage: 1 // 当前页
@@ -140,11 +141,11 @@
       // 分页跳转
       handleCurrentChange (current) {
         console.log('currentpage', current)
-        // Fetch('getData', { id, page: current }).then(response => {
-        //  this.rowData = response
-        //  this.currentPage = current
-        // this.total = total
-        // })
+        Fetch('getData', { page: current }).then(response => {
+          this.rowData = response
+          this.currentPage = current
+          this.total = response.total
+        })
       },
       // 搜索
       handSearch () {
@@ -167,7 +168,16 @@
       },
       // --禁用--
       disableRow (data) {
-
+        MessageBox({
+          message: '您确定要禁用该条数据？',
+          type: 'warning',
+          showCancelButton: true,
+          callback: (action, instance) => {
+            if (action === 'confirm') {
+              // do something
+            }
+          }
+        })
       },
       // --编辑--
       editRow (data) {
@@ -180,7 +190,16 @@
       },
       // --删除--
       deleteRow (data) {
-
+        MessageBox({
+          message: '您确定要删除该条数据？',
+          type: 'warning',
+          showCancelButton: true,
+          callback: (action, instance) => {
+            if (action === 'confirm') {
+              // do something
+            }
+          }
+        })
       },
       // --添加--
       addRow () {
@@ -192,10 +211,13 @@
       },
       // 审批
       goApprove (scope) {
+        let param = 'custom,tBuild,mBuild,dBuild'
+        let control = this.type.indexOf('man') > -1 ? 'man' : 'caiwu'
         this.$router.push({
           path: '/approve',
           name: 'Approve',
-          params: { type: this.type }
+          params: { type: param },
+          query: { control }
         })
       }
     }

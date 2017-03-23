@@ -63,7 +63,7 @@
       <template slot="title">财务打款</template>
       <el-menu-item index="customPlay">客资合同</el-menu-item>
       <el-menu-item index="buildPlay">搭建合同</el-menu-item>
-      <el-menu-item index="6-3">打款系数</el-menu-item>
+      <el-menu-item index="moneyCoefficient">打款系数</el-menu-item>
     </el-submenu>
     <el-menu-item index="feedback">意见反馈</el-menu-item>
   </el-menu>
@@ -89,7 +89,13 @@
       },
       handleSelect (key, keyPath) {
         console.log(key, keyPath)
-        this.$router.push({ name: 'List', params: { type: key } })
+        switch (key) {
+          case 'moneyCoefficient':
+            this.$router.push({ name: 'Add', params: { type: key } })
+            break
+          default:
+            this.$router.push({ name: 'List', params: { type: key } })
+        }
       }
     }
   }

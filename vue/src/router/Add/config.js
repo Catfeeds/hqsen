@@ -112,5 +112,27 @@ export default {
       ]
     },
     breadcrumb: ['账号管理', '账号信息', '新增搭建账号']
+  },
+  // 设定打款系数
+  moneyCoefficient: {
+    formList: [{
+      label: '客资提供者系数',
+      type: 'text',
+      name: 'name'
+    }, {
+      label: '客资跟踪者系数',
+      type: 'text',
+      name: 'type'
+    }, {
+      label: '搭建提供者系数',
+      type: 'text',
+      name: 'name'
+    }],
+    rules: {
+      area: [
+        { required: true, message: '请输入活动名称', trigger: 'blur' }
+      ]
+    },
+    breadcrumb: ['财务打款', '设置提供者系数']
   }
 }

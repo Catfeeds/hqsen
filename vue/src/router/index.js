@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Login from './Login'
-import Test from './Test'
 // 列表
 import List from './List'
 // 审批
@@ -47,11 +46,6 @@ export default new Router({
           name: 'Add',
           path: '/add/:type',
           component: Add
-        },
-        {
-          name: 'Test',
-          path: '/test',
-          component: Test
         }
       ]
     }

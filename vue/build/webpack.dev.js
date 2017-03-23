@@ -5,7 +5,8 @@ const webpack = require('webpack')
 const base = require('./webpack.base')
 const config = require('./config')
 
-base.devtool = 'eval-source-map'
+// base.devtool = 'eval-source-map'
+base.devtool = 'cheap-module-source-map'
 base.output.publicPath = '/assets/'
 base.performance.hints = false
 
