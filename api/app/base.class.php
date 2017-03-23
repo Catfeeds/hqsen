@@ -21,9 +21,13 @@ class base{
                 'fail' => '请求失败',
                 'token_empty' => 'token不能为空',
                 'token_fail' => '登录失效请重新登录',
+                'value_empty' => '数据缺失',
             ),
             'user' => array(
                 'bind_empty' => '绑定不能为空'
+            ),
+            'order' => array(
+                'phone_type_exist' => '婚宴中已存在该手机信息，无法成功录入',
             ),
         );
         $this-> back_code = array(
@@ -32,9 +36,13 @@ class base{
                 'fail' => '999',
                 'token_empty' => '998',
                 'token_fail' => '997',
+                'value_empty' => '994',
             ),
             'user' => array(
                 'bind_empty' => '996'
+            ),
+            'order' => array(
+                'phone_type_exist' => '995'
             ),
         );
     }
@@ -62,6 +70,19 @@ class base{
         $data['data'] = (array)$back_data;
         $data['message'] = (string)$back_msg;
         die(json_encode($data));
+    }
+
+    public function getInt($get_key, $default = 0){
+        return isset($_GET[$get_key]) ? (int)$_GET[$get_key] : $default;
+    }
+    public function getString($get_key, $default = ''){
+        return isset($_GET[$get_key]) ? (string)$_GET[$get_key] : (string)$default;
+    }
+    public function postInt($post_key, $default = 0){
+        return isset($_POST[$post_key]) ? (int)$_POST[$post_key] : $default;
+    }
+    public function postString($post_key, $default = ''){
+        return isset($_POST[$post_key]) ? (string)$_POST[$post_key] : (string)$default;
     }
 
 

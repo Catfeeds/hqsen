@@ -20,7 +20,46 @@ class order extends base {
 
     //
     public function validatePhoneOrderType(){
+        $order_type = $this->postInt('order_type');
+        $phone = $this->postInt('order_phone');
+        if($order_type and $phone){
+            $this->appDie();
+        } else {
+            $this->appDie($this->back_code['order']['phone_type_exist'], $this->back_msg['order']['phone_type_exist']);
+        }
+    }
 
+    public function createKeZi(){
+        $customer_name = $this->postString('customer_name');
+        $order_type = $this->postInt('order_type');
+        $phone = $this->postInt('order_phone');
+        $order_area = $this->postString('order_area');
+        $order_hotel = $this->postString('order_hotel');
+        $desk_count = $this->postInt('desk_count');
+        $order_money = $this->postInt('order_money');
+        $use_date = $this->postString('use_date');
+        $watch_user = $this->postString('watch_user');
+        $order_desc = $this->postString('order_desc');
+        if($order_type and $phone and $order_area and $order_hotel){
+            $this->appDie();
+        } else {
+            $this->appDie($this->back_code['sys']['value_empty'], $this->back_msg['sys']['value_empty']);
+        }
+
+    }
+
+    public function orderKeZiList(){
+        $order_status = $this->getInt('order_status');
+        $order_page = $this->getInt('order_page', 1);
+        $order_item = array(
+            'id' => (int)116,
+            'create_time' => (string)time(),
+            'order_status' => (int)1,
+            'order_phone' => (string)'186 2736 1728',
+            'watch_user' => (string)'上海国际饭店',
+        );
+        $order_list['order_list'] = [$order_item, $order_item, $order_item];
+        $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $order_list);
     }
 
 
