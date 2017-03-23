@@ -57,6 +57,9 @@
       MyBreadcrumb,
       ElCard: Card
     },
+    created () {
+      this.$emit('setActiveIndex', '1-2')
+    },
     data () {
       return {
         breadcrumb: ['首页', '技术'],

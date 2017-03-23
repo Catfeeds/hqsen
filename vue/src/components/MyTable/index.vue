@@ -7,9 +7,18 @@
         v-for="(item,index) in columnData"
         :key="index"
         :prop="item.name"
-        :label="item.lable"
+        :label="item.label"
         :width="item.width">
+          <!--<template scope="scope">
+            <el-button
+              @click.native.prevent="deleteRow(scope.$index, tableData4)"
+              type="text"
+              size="small">
+              移除
+            </el-button>
+          </template>-->
       </el-table-column>
+      <slot></slot>
     </el-table>
     <el-pagination
       class="my-pagination"
@@ -44,6 +53,11 @@
     },
     data () {
       return {}
+    },
+    methods: {
+      hhh (data) {
+        console.log(data)
+      }
     }
   }
 </script>

@@ -103,7 +103,7 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             // alert('submit!')
-            this.$router.push('/home')
+            this.$router.push('/list/custom')
           } else {
             console.log('error submit!!')
             return false
