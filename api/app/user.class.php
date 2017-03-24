@@ -19,7 +19,7 @@ class user extends base{
         $data = array(
             'access_token' => 2,
             'alipay_account' => '15068159661',
-            'nike_name' => 'monkey',
+            'nike_name' => 'monkey肖',
             'user_type' => 2
         );
         $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $data);
