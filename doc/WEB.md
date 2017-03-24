@@ -1,7 +1,7 @@
-app接口管理
+后台接口管理
 =========
 ## API概述
-### 客户端 API
+### 后台 API
 
 #### 请求
 http://dev.meiui.me/index.php?m=home&c=index&f=main
