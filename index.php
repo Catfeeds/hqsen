@@ -7,6 +7,7 @@
  * File Using:应用入口文件
  */
 // 定义API目录
+define('APP_PATH', __DIR__ . '/');
 define('API_PATH', __DIR__ . '/api/');
 // 错误debug信息
 
