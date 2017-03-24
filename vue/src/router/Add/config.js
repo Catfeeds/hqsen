@@ -15,7 +15,7 @@ export default {
       name: 'tel'
     }],
     rules: {
-      area: [
+      tel: [
         { required: true, message: '请输入活动名称', trigger: 'blur' }
       ]
     },
@@ -71,6 +71,14 @@ export default {
       }]
     }, {
       label: '初始密码',
+      type: 'text',
+      name: 'name'
+    }, {
+      label: '重置用户密码',
+      type: 'text',
+      name: 'name'
+    }, {
+      label: '再次确认密码',
       type: 'text',
       name: 'name'
     }],

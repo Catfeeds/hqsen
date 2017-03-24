@@ -4,7 +4,7 @@ export default {
     formList: [{
       label: '姓名',
       type: 'text',
-      name: 'name',
+      name: 'aa',
       disabled: true
     }, {
       label: '类型',
@@ -29,12 +29,12 @@ export default {
     }, {
       label: '桌数',
       type: 'text',
-      name: 'name',
+      name: 'cc',
       disabled: true
     }, {
       label: '预算',
       type: 'text',
-      name: 'name',
+      name: 'dd',
       disabled: true
     }, {
       label: '时间',

@@ -3,14 +3,13 @@
     <my-breadcrumb :data="basicInfo.breadcrumb"></my-breadcrumb>
     <el-row>
       <el-col :span="8" :offset="8">
-        <el-form label-width="80px" :model="formData" :rules="basicInfo.rules">
+        <el-form label-width="90px" :model="formData" :rules="basicInfo.rules">
           <my-component 
             v-for="(item,index) in basicInfo.formList" 
             :key="index"
             :item="item" 
-            v-model="formData[item.name]"
-            ></my-component>
-            <form-button @submitForm="submitForm" @cancleForm="cancleForm"></form-button>
+            v-model="formData[item.name]"/>
+            <form-button @submitForm="submitForm" @cancleForm="cancleForm"/>
         </el-form>
       </el-col>
     </el-row>
@@ -57,8 +56,19 @@
         this.type = type
       },
       submitForm () {
+        this.$refs.myForm.validate((valid) => {
+          if (valid) {
+            console.log(this.formData)
+          } else {
+            console.log('error submit!!')
+            return false
+          }
+        })
       },
       cancleForm () {
+        this.$refs.myForm.resetFields()
+        this.formData = {}
+        console.log('cancle')
       }
     }
   }

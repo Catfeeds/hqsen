@@ -1,15 +1,14 @@
 <template>
   <div class="content-wrapper">
-    <my-breadcrumb :data="basicInfo.breadcrumb"></my-breadcrumb>
+    <my-breadcrumb :data="basicInfo.breadcrumb"/>
     <el-row>
       <el-col :span="8" :offset="8">
-        <el-form label-width="80px" :model="formData" :rules="basicInfo.rules">
+        <el-form label-width="90px" :model="formData" :rules="basicInfo.rules">
           <my-component 
             v-for="(item,index) in basicInfo.formList" 
             :key="index"
             :item="item" 
-            v-model="formData[item.name]"
-            ></my-component>
+            v-model="formData[item.name]"/>
         </el-form>
       </el-col>
     </el-row>

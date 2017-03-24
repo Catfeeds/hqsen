@@ -14,7 +14,9 @@ export default function Fetch (url, data = {}, method = 'post', showLoading = fa
     return
   }
   if (showLoading) {
-    loadingInstance = Loading.service({ fullscreen: true })
+    loadingInstance = Loading.service({
+      fullscreen: true
+    })
   }
   if (method === 'get') {
     data = { params: {...data, token} }

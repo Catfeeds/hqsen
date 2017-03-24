@@ -1,15 +1,15 @@
-# vue
+# 婚管系统
 
 To start:
 
 ```bash
-$ npm install
+$ yarn
 ```
 
 To develop:
 
 ```bash
-$ npm run dev
+$ yarn run dev
 ```
 
 
@@ -17,5 +17,5 @@ $ npm run dev
 To build for production:
 
 ```bash
-$ npm run build
+$ yarn run build
 ```

@@ -41,7 +41,7 @@ module.exports = {
       },
       {
         test: /\.(ico|jpg|png|gif|eot|otf|webp|svg|ttf|woff|woff2)(\?.*)?$/,
-        use: 'file-loader?limit=8192'
+        use: 'url-loader?limit=8192'
       }
     ]
   },

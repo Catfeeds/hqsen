@@ -1,14 +1,22 @@
 <template>
-  <el-form-item :label="item.label" :prop="item.name">
+  <el-form-item :label="item.label" :prop="item.name" v-if="!item.hide">
     <!--input-->
      <el-input 
-      v-if="item.type === 'text' || item.type === 'textarea'"
+      v-if="item.type === 'text' || item.type === 'textarea' || item.type === 'password'"
       :disabled="item.disabled" 
       :type="item.type" 
       v-model="currentValue" 
       :placeholder="item.placeholder"></el-input>
+    <!--number-->
+     <el-input 
+      v-if="item.type === 'number'"
+      :disabled="item.disabled" 
+      :type="item.type" 
+      v-model.number="currentValue" 
+      :placeholder="item.placeholder"></el-input>
     <!--select-->
     <el-select
+      clearable
       v-else-if="item.type === 'select'"
       v-model="currentValue" 
       :multiple="item.multiple" 
@@ -83,12 +91,16 @@
       ImageView
     },
     props: {
-      // item containe placeholder type name disabled data multiple
+      // item containe placeholder type name disabled data multiple hide
       item: {
         type: Object,
         required: true
       },
       value: {}
+    },
+    updated () {
+      console.log('update')
+      this.currentValue = this.value
     },
     data () {
       return {

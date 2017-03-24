@@ -6,16 +6,16 @@ export default {
       name: 'date',
       label: '序号'
     }, {
-      name: 'name',
+      name: 'hh',
       label: '姓名'
     }, {
       name: 'address',
       label: '手机号'
     }, {
-      name: '3',
+      name: 'kk',
       label: '指定类型'
     }, {
-      name: '2',
+      name: 'jj',
       label: '酒店/区域名称'
     }]
   },

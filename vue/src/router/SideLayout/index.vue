@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <!--<my-menu :activeIndex="activeIndex"></my-menu>-->
+    <my-menu :activeIndex="activeIndex"/>
     <router-view @setActiveIndex="setActiveIndex($event)"></router-view>
   </div>
 </template>

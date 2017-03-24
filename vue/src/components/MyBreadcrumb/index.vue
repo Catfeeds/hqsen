@@ -5,9 +5,9 @@
 </template>
 
 <style>
-.my-breadcrumb {
-  margin: 10px;
-}
+  .my-breadcrumb {
+    margin: 10px;
+  }
 </style>
 
 <script>

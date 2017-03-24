@@ -1,6 +1,6 @@
 <template>
   <div class="content-wrapper">
-    <my-breadcrumb :data="basicInfo.breadcrumb"></my-breadcrumb>
+    <my-breadcrumb :data="basicInfo.breadcrumb"/>
     <el-row>
       <el-col :span="10" :offset="7">
         <el-form label-width="90px" :model="formData" :rules="basicInfo.rules">
@@ -10,15 +10,19 @@
                 v-for="(item,index) in basicInfo.formList" 
                 :key="index" 
                 :item="item" 
-                v-model="formData[item.name]"></my-component>
+                v-model="formData[item.name]"/>
             </el-col>
           </el-row>
           <p class="approve-title">审批</p>
-          <my-component v-for="(item,index) in approveList" :key="index" :item="item" v-model="formData[item.name]"></my-component>
-          <form-button @submitForm="submitForm" @cancleForm="cancleForm"></form-button>
+          <my-component 
+            v-for="(item,index) in approveList" 
+            :key="index" 
+            :item="item" 
+            v-model="formData[item.name]"/>
+          <form-button @submitForm="submitForm" @cancleForm="cancleForm"/>
         </el-form>
         <p class="approve-title">历史审批记录</p>
-        <my-card></my-card>
+        <my-card/>
       </el-col>
     </el-row>
   </div>
@@ -55,7 +59,7 @@
       return {
         type: '',
         approveList: [{
-          type: 'checkbox',
+          type: 'radio',
           name: 'name',
           data: [{
             label: '通过',

@@ -11,7 +11,7 @@
   "author": "yanling.liao <yanling.liao@ele.me>",
   "dependencies": {
     "axios": "^0.15.3",
-    "element-ui": "latest",
+    "element-ui": "^1.2.5",
     "es6-promise": "^4.1.0",
     "vue": "latest",
     "vue-router": "latest"
@@ -39,6 +39,7 @@
     "progress-bar-webpack-plugin": "^1.9.3",
     "rimraf": "^2.6.1",
     "style-loader": "^0.13.2",
+    "url-loader": "^0.5.8",
     "vue-loader": "latest",
     "vue-template-compiler": "latest",
     "webpack": "^2.2.1",

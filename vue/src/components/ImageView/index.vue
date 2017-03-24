@@ -5,13 +5,11 @@
     </div>
     <div class="image-view-box" v-if="showLayer">
       <span class="delete-image-btn el-icon-close" @click="toggleImage(false)"></span>
-      <div class="image-content">
-        <el-carousel height="500" arrow="never" :autoplay="false" :initial-index="activeIndex">
-          <el-carousel-item v-for="item in 4" :key="item">
-            <img class="image-source" src="http://www.desktopwallpaperhd.net/thumbs/8/7/xiaogoukuanping-animal-tupian-85399.jpg">
-          </el-carousel-item>
-        </el-carousel>
-      </div>
+      <el-carousel class="image-content" arrow="never" :autoplay="false" :initial-index="activeIndex">
+        <el-carousel-item v-for="item in 4" :key="item">
+          <img class="image-source" src="http://www.desktopwallpaperhd.net/thumbs/8/7/xiaogoukuanping-animal-tupian-85399.jpg">
+        </el-carousel-item>
+      </el-carousel>
     </div>
   </div>
 </template>
@@ -31,10 +29,9 @@
     bottom: 0;
     z-index: 100;
     & .image-content {
-      height: 550px;
+      height: 600px;
       position: absolute;
-      top: 50%;
-      margin-top: -250px;
+      bottom: 0;
       width: 100%;
     }
     & .image-source {
@@ -45,10 +42,9 @@
       display: block;
       position: absolute;
       color: #fff;
-      top: 10px;
-      right: 10px;
-      width: 50px;
-      height: 50px;
+      top: 20px;
+      right: 20px;
+      transform: scale(1.5);
     }
   }
 </style>
