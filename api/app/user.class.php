@@ -18,6 +18,7 @@ class user extends base{
         $code = isset($_POST['code']) ? $_POST['code'] : '';
         $data = array(
             'access_token' => 2,
+            'alipay_account' => '15068159661',
             'nike_name' => 'monkey',
             'user_type' => 2
         );
