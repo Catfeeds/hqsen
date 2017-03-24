@@ -51,10 +51,9 @@ class Avf {
         if(is_file($filename)) {
             include $filename;
         } else {
-            var_dump(APP_PATH);
-            var_dump(str_replace('\\', '/', $class) . EXT);die();
             $filename = APP_PATH . str_replace('\\', '/', $class) . EXT;
-            include $filename;
+//            var_dump($filename);
+            require $filename;
         }
     }
 
