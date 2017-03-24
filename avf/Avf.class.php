@@ -156,8 +156,9 @@ class Avf {
                 $e              = $error;
             }
         } else {
-            $e['status'] = 999;
+            $e['status'] = 1000;
             $e['data'] = array();
+            $e['message'] = 'fatalError';
             if (!is_array($error)) {
                 $e['message'] = $error;
             } else {
