@@ -9,6 +9,7 @@
 
 
 namespace api\app;
+//include('base.class.php');
 
 class user extends base{
     // 用户登陆

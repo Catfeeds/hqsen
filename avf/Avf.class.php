@@ -50,6 +50,9 @@ class Avf {
         $filename = $path . str_replace('\\', '/', $class) . EXT;
         if(is_file($filename)) {
             include $filename;
+        } else {
+            $filename = $path . __NAMESPACE__ . str_replace('\\', '/', $class) . EXT;
+            include $filename;
         }
     }
 
@@ -158,12 +161,7 @@ class Avf {
         } else {
             $e['status'] = 1000;
             $e['data'] = array();
-            $e['message'] = 'fatalError';
-            if (!is_array($error)) {
-                $e['message'] = $error;
-            } else {
-                $e['message'] = $error['message'];
-            }
+            $e['message'] = 'FatalError';
         }
         die(json_encode($e));
     }
