@@ -14,7 +14,7 @@ class base{
     public $message;
     public $user;
     public function __construct(){
-        $this-> db = mysql::getInstance();
+//        $this-> db = mysql::getInstance();
         $this-> back_msg = array(
             'sys' => array(
                 'success' => '请求成功',
