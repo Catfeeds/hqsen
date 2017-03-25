@@ -257,12 +257,12 @@
       },
       // 审批
       goApprove (scope) {
-        let param = 'custom,tBuild,mBuild,dBuild'
+        // let param = 'custom,tBuild,mBuild,dBuild'
         let control = this.type.indexOf('man') > -1 ? 'man' : 'caiwu'
         this.$router.push({
           path: '/approve',
           name: 'Approve',
-          params: { type: param },
+          params: { type: 'custom' },
           query: { control }
         })
       }

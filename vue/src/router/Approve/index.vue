@@ -3,7 +3,7 @@
     <my-breadcrumb :data="basicInfo.breadcrumb"/>
     <el-row>
       <el-col :span="10" :offset="7">
-        <el-form label-width="90px" :model="formData" :rules="basicInfo.rules">
+        <el-form label-width="110px" :model="formData" :rules="basicInfo.rules">
           <el-row>
             <el-col :span="18">
               <my-component 
@@ -73,7 +73,9 @@
           name: 'name',
           placehodler: '默认为123456'
         }],
-        formData: {},
+        formData: {
+          pic: ['http://img01.sogoucdn.com/app/a/100540002/457880.jpg', 'http://img.ivsky.com/img/tupian/pre/201612/03/zaocan_niunai_mianbao-011.jpg']
+        },
         basicInfo: {
           rules: {},
           formList: [],
