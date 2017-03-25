@@ -20,8 +20,7 @@ export default {
     }, {
       label: '合同附件',
       type: 'image',
-      name: 'name',
-      placehodler: '默认为123456'
+      name: 'pic'
     }]
   },
   // 首付-搭建

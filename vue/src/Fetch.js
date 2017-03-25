@@ -24,7 +24,7 @@ export default function Fetch (url, data = {}, method = 'post', showLoading = fa
     data = {...data, token}
   }
   const instance = axios.create({
-    baseURL: 'http://172.16.6.105:8080/rider/',
+    baseURL: 'http://www',
     timeout: 10000,
     validateStatus: function (status) {
       return status >= 200 && status < 300
@@ -61,10 +61,10 @@ export default function Fetch (url, data = {}, method = 'post', showLoading = fa
         })
       } else {
         console.log('Error', error.message)
-        Message({
-          message: '接口异常',
-          type: 'error'
-        })
+        // Message({
+        //   message: '接口异常',
+        //   type: 'error'
+        // })
       }
       console.log(error.config)
     })

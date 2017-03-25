@@ -63,7 +63,7 @@
     <!--image-->
     <image-view 
       v-else-if="item.type === 'image'" 
-      :data="item.data"></image-view>
+      :data="currentValue"></image-view>
   </el-form-item>
 </template>
 
