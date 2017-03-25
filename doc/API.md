@@ -6,7 +6,7 @@ app接口管理
 #### 请求
 http://dev.meiui.me/index.php?m=app&c=user&f=login
 
-```
+```javascript
 {
   "status": 200,
   "data": "hello AV视图框架",
