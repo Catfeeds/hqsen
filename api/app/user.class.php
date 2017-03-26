@@ -32,7 +32,7 @@ class user extends base{
     //支付宝绑定
     public function alipayBind(){
 //        $this->loginInit();
-        $alipay = $_POST['alipay'];
+        $alipay = $this->postString('alipay');
         if($alipay){
             $this->appDie();
         } else {

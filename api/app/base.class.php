@@ -54,11 +54,11 @@ class base{
         if($session_id){
             session_id($session_id);
             session_start();
-            if(isset($_SESSION['user_info'])){
-                $this->user = $_SESSION['user_info'];
-            } else {
-                $this->appDie($this->back_code['sys']['token_fail'], $this->back_msg['sys']['token_fail']);
-            };
+//            if(isset($_SESSION['user_info'])){
+//                $this->user = $_SESSION['user_info'];
+//            } else {
+//                $this->appDie($this->back_code['sys']['token_fail'], $this->back_msg['sys']['token_fail']);
+//            };
         } else {
             $this->appDie($this->back_code['sys']['token_empty'], $this->back_msg['sys']['token_empty']);
         }
