@@ -3,7 +3,7 @@
     <my-breadcrumb :data="basicInfo.breadcrumb"></my-breadcrumb>
     <el-row>
       <el-col :span="8" :offset="8">
-        <el-form label-width="110px" :model="formData" :rules="basicInfo.rules">
+        <el-form ref="myForm" label-width="110px" :model="formData" :rules="basicInfo.rules">
           <my-component 
             v-for="(item,index) in basicInfo.formList" 
             :key="index"
@@ -38,7 +38,11 @@
     data () {
       return {
         type: '',
-        formData: {},
+        formData: {
+          name: '888',
+          type: [],
+          tel: []
+        },
         basicInfo: {
           rules: {},
           formList: [],
@@ -67,7 +71,9 @@
       },
       cancleForm () {
         this.$refs.myForm.resetFields()
-        this.formData = {}
+        // this.formData = {
+        //   name: ''
+        // }
         console.log('cancle')
       }
     }

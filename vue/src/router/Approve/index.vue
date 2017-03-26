@@ -11,15 +11,20 @@
                 :key="index" 
                 :item="item" 
                 v-model="formData[item.name]"/>
+                <router-link to="/test" class="look-old">查看原搭建合同内容</router-link>
             </el-col>
           </el-row>
           <p class="approve-title">审批</p>
-          <my-component 
-            v-for="(item,index) in approveList" 
-            :key="index" 
-            :item="item" 
-            v-model="formData[item.name]"/>
-          <form-button @submitForm="submitForm" @cancleForm="cancleForm"/>
+          <el-row>
+            <el-col :span="18">
+              <my-component 
+                v-for="(item,index) in approveList" 
+                :key="index" 
+                :item="item" 
+                v-model="formData[item.name]"/>
+              <form-button @submitForm="submitForm" @cancleForm="cancleForm"/>
+            </el-col>
+          </el-row>
         </el-form>
         <p class="approve-title">历史审批记录</p>
         <my-card/>
@@ -29,6 +34,9 @@
 </template>
 
 <style>
+  .look-old {
+    float: right;
+  }
   .approve-title {
     padding-bottom: 10px;
     border-bottom: 1px dashed #ccc;

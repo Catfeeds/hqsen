@@ -39,6 +39,7 @@
       handleSelect (key, keyPath) {
         switch (key) {
           case 'moneyCoefficient':
+          case 'resetpwd':
             this.$router.push({ name: 'Add', params: { type: key } })
             break
           default:

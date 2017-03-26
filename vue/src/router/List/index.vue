@@ -44,7 +44,7 @@
       :columnData="columnData">
         <el-table-column
           prop="control"
-          v-if="true"
+          v-if="noControl.indexOf(type) < 0"
           label="操作">
             <template scope="scope">
               <!--查看详情-->
@@ -58,17 +58,19 @@
                 @click="disableRow(scope)" 
                 size="small" 
                 :plain="true" 
-                type="warn">禁用</el-button>
+                type="warn">{{scope.row.disabled ? '启用' : '禁用'}}</el-button>
               <!--编辑-->
               <el-button 
                 v-if="operateBtnType.indexOf(type) > -1" 
                 icon="edit" 
+                :disabled="scope.row.disabled"
                 @click="editRow(scope)" 
                 size="small"></el-button>
               <!--删除-->
               <el-button 
                 v-if="operateBtnType.indexOf(type) > -1" 
                 icon="delete" 
+                :disabled="scope.row.disabled"
                 @click="deleteRow(scope)" 
                 size="small" 
                 :plain="true" 
@@ -131,9 +133,10 @@
         type: '',           // 列表类型
         searchInput: '',    // 输入框
         hideOperate: false,
+        noControl: ['registerAccount'],
         noDetailBtnType: ['hotel', 'customArea', 'hotelAccount', 'innerAccount'],
         moneyBntType: ['customPlay', 'buildPlay'],
-        approveBtnType: ['customVerify', 'buildVerify'],
+        approveBtnType: ['customVerify', 'buildVerify', 'manCustomVerify', 'manBuildVerify'],
         operateBtnType: ['hotelAccount', 'innerAccount', 'customArea', 'hotel'],
         disableBtnType: ['hotelAccount', 'innerAccount'],
         addBtnType: ['hotelAccount', 'innerAccount', 'customArea', 'hotel'],
@@ -144,22 +147,26 @@
           name: '王小虎',
           address: '上海市普陀区金沙江路 1518 弄',
           hh: 'hhhhhh',
-          dd: 'ddd'
+          dd: 'ddd',
+          disabled: false
         }, {
           id: 2,
           date: '2016-05-04',
           name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄'
+          address: '上海市普陀区金沙江路 1517 弄',
+          disabled: false
         }, {
           id: 3,
           date: '2016-05-01',
           name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
+          address: '上海市普陀区金沙江路 1519 弄',
+          disabled: false
         }, {
           id: 4,
           date: '2016-05-03',
           name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
+          address: '上海市普陀区金沙江路 1516 弄',
+          disabled: false
         }],
         loading: true,
         columnData: [], // 表头
@@ -221,6 +228,12 @@
           callback: (action, instance) => {
             if (action === 'confirm') {
               // do something
+              const id = data.row.id
+              this.rowData.map(item => {
+                if (item.id === id) {
+                  item.disabled = true
+                }
+              })
             }
           }
         })
@@ -243,6 +256,9 @@
           callback: (action, instance) => {
             if (action === 'confirm') {
               // do something
+              console.log(data)
+              const id = data.row.id
+              this.rowData = this.rowData.filter(item => item.id !== id)
             }
           }
         })

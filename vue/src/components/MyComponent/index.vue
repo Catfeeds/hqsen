@@ -98,13 +98,13 @@
       },
       value: {}
     },
-    updated () {
-      console.log('update')
+    created () {
       this.currentValue = this.value
     },
     data () {
       return {
-        currentValue: this.value,
+        // currentValue: this.value,
+        currentValue: null,
         showImageLayer: false,
         pickerOptions: {
           disabledDate (time) {
@@ -116,6 +116,9 @@
     watch: {
       currentValue (val) {
         this.$emit('input', val)
+      },
+      value (val) {
+        this.currentValue = val
       }
     },
     methods: {
