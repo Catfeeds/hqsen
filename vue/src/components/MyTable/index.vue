@@ -31,6 +31,7 @@
   }
   .disable-row {
     background: #f5f3f3 !important;
+    color: #ccc;
   }
 </style>
 

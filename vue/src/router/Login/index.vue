@@ -3,7 +3,7 @@
     <h1 class="login-title">森（婚管）系统后台</h1>
     <el-row>
       <el-col :span="6" :offset="9">
-        <el-form ref="loginForm" :rules="rules" :model="loginForm">
+        <el-form ref="loginForm" :rules="rules" :model="loginForm" @submit="submitForm('loginForm')">
           <div class="form-row" v-for="item in formList" :key="item.label">
             <i class="login-icon" :class="item.label"/>
             <my-component 
@@ -35,9 +35,10 @@
   }
   .login-title {
     font-size: 30px;
+    font-weight: bold;
     color: #808080;
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
   }
   .login-btn-box {
     padding-left: 36px;
@@ -49,6 +50,7 @@
     display: block;
     width: 36px;
     height: 36px;
+    margin-right: 10px;
     background-position: center;
     background-repeat: no-repeat;
     background-size: 25px 25px;

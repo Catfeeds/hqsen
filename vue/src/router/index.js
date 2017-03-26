@@ -12,20 +12,9 @@ import Detail from './Detail'
 import Add from './Add'
 // 侧栏
 import SideLayout from './SideLayout'
+import Test from './Test'
 
 Vue.use(Router)
-
-// 设置文件地址
-Vue.directive('loading', (el, binding) => {
-  const { modifiers, value } = binding
-  if (value) {
-    if (modifiers.background) {
-      el.style.backgroundImage = `url(${fileUrl}${value})`
-    } else if (modifiers.src) {
-      el.src = `${fileUrl}${value}`
-    }
-  }
-})
 
 export default new Router({
   mode: 'hash',
@@ -34,6 +23,11 @@ export default new Router({
       name: 'Login',
       path: '/login',
       component: Login
+    },
+    {
+      name: 'Test',
+      path: '/test',
+      component: Test
     },
     {
       name: 'SideLayout',

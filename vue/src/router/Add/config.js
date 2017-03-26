@@ -142,5 +142,27 @@ export default {
       ]
     },
     breadcrumb: ['财务打款', '设置提供者系数']
+  },
+  // 超管重置密码
+  resetpwd: {
+    formList: [{
+      label: '原密码',
+      type: 'text',
+      name: 'name'
+    }, {
+      label: '新密码',
+      type: 'password',
+      name: 'type'
+    }, {
+      label: '再次确认密码',
+      type: 'password',
+      name: 'name'
+    }],
+    rules: {
+      type: [
+        { required: true, message: '请输入活动名称', trigger: 'blur' }
+      ]
+    },
+    breadcrumb: ['账号管理', '超管重置密码']
   }
 }

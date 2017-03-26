@@ -30,6 +30,9 @@ export default [{
   }, {
     key: 'innerAccount',
     label: '内部账号'
+  }, {
+    key: 'resetpwd',
+    label: '超管重置密码'
   }]
 }, {
   key: '4',
