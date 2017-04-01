@@ -44,11 +44,10 @@ class user extends base{
                 $login_user = array(
                     'access_token' => session_id(),
                     'alipay_account' => $user['alipay_account'],
-                    'user_name' => $user['user_name'],
                     'nike_name' => $user['nike_name'],
                     'user_type' => $user['user_type']
                 );
-                $_SESSION['user_info'] = $login_user;
+                $_SESSION['user_info'] = $user;
                 $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $login_user);
             } else {
                 $this->appDie($this->back_code['user']['phone_code_err'], $this->back_msg['user']['phone_code_err']);
