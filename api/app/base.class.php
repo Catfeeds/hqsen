@@ -14,7 +14,7 @@ class base{
     public $message;
     public $user;
     public function __construct(){
-//        $this-> db = mysql::getInstance();
+        $this-> db = mysql::getInstance();
         $this-> back_msg = array(
             'sys' => array(
                 'success' => '请求成功',
@@ -22,9 +22,12 @@ class base{
                 'token_empty' => 'token不能为空',
                 'token_fail' => '登录失效请重新登录',
                 'value_empty' => '数据缺失',
+                'mysql_err' => '数据操作失败',
             ),
             'user' => array(
-                'bind_empty' => '绑定不能为空'
+                'bind_empty' => '绑定不能为空',
+                'phone_illegal' => '手机号非法',
+                'phone_code_err' => '手机验证码错误',
             ),
             'order' => array(
                 'phone_type_exist' => '婚宴中已存在该手机信息，无法成功录入',
@@ -37,14 +40,18 @@ class base{
                 'token_empty' => '998',
                 'token_fail' => '997',
                 'value_empty' => '994',
+                'mysql_err' => '991',
             ),
             'user' => array(
-                'bind_empty' => '996'
+                'bind_empty' => '996',
+                'phone_illegal' => '993',
+                'phone_code_err' => '992',
             ),
             'order' => array(
                 'phone_type_exist' => '995'
             ),
         );
+
     }
 
 
@@ -54,11 +61,11 @@ class base{
         if($session_id){
             session_id($session_id);
             session_start();
-//            if(isset($_SESSION['user_info'])){
-//                $this->user = $_SESSION['user_info'];
-//            } else {
-//                $this->appDie($this->back_code['sys']['token_fail'], $this->back_msg['sys']['token_fail']);
-//            };
+            if(isset($_SESSION['user_info'])){
+                $this->user = $_SESSION['user_info'];
+            } else {
+                $this->appDie($this->back_code['sys']['token_fail'], $this->back_msg['sys']['token_fail']);
+            };
         } else {
             $this->appDie($this->back_code['sys']['token_empty'], $this->back_msg['sys']['token_empty']);
         }

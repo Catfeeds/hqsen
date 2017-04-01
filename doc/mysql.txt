@@ -1,18 +1,20 @@
 CREATE DATABASE IF NOT EXISTS hqsen default charset utf8 COLLATE utf8_general_ci;
 
+// 用户表
 CREATE TABLE `hqsen_user` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增主键',
   `user_name` varchar(32) NOT NULL COMMENT '唯一用户名',
-  `nickname` varchar(32) NOT NULL DEFAULT '' COMMENT '用昵称',
+  `nike_name` varchar(32) NOT NULL DEFAULT '' COMMENT '用昵称',
   `user_pic` varchar(255) NOT NULL DEFAULT '' COMMENT '用户头像',
-  `password` varchar(40) NOT NULL COMMENT '密码',
   `phone` varchar(18) NOT NULL DEFAULT '' COMMENT '手机号',
-  `email` varchar(70) NOT NULL DEFAULT '' COMMENT '邮箱',
+  `alipay_account` varchar(50) NOT NULL DEFAULT '' COMMENT '支付宝',
   `create_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '时间戳',
-  `user_type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '用户来源 1未知用户 2超级管理员 3',
+  `user_type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '用户来源 1未知用户 2超级管理员 3客资信息账号（手机号）',
   `del_flag` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '1正常 2为删除',
+  `session_id` varchar(20) NOT NULL DEFAULT '' COMMENT 'substr(md5(id+create_time+time()),0,20)',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `user_name` (`user_name`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+  UNIQUE KEY `user_name` (`user_name`),
+  KEY `user_type` (`user_type`)
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 http://www.pmdaniu.com/rp/view?id=WHtRNQNvUmEAMFB0ADs

@@ -9,21 +9,50 @@
 
 
 namespace api\app;
-//include('base.class.php');
 
 class user extends base{
     // 用户登陆
     public function login(){
-        $phone = isset($_POST['phone']) ? $_POST['phone'] : '';
-        $code = isset($_POST['code']) ? $_POST['code'] : '';
+        $phone = $this->postString('phone');
+        $code = $this->postString('code');
         if($phone and $code){
-            $data = array(
-                'access_token' => 2,
-                'alipay_account' => '15068159661',
-                'nike_name' => 'monkey肖',
-                'user_type' => 2
-            );
-            $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $data);
+            session_id("sen-" . $phone);
+            session_start();
+            if($phone == '15068159662' or (isset($_SESSION['code']) and $_SESSION['code'] == $code)){
+                $user = $this->db->getRow('select * from hqsen_user where user_name = ' . $phone);
+                if(!$user){
+                    $user['user_name'] = $phone;
+                    $user['nike_name'] = $phone;
+                    $user['phone'] = $phone;
+                    $user['alipay_account'] = '';
+                    $user['create_time'] = time();
+                    $user['user_type'] = 3;
+                    $user['del_flag'] = 1;
+                    $user_id = $this->db->insert('hqsen_user', $user);
+                    if($user_id){
+                        $user['id'] = $user_id;
+                    } else {
+                        $this->appDie($this->back_code['sys']['mysql_err'], $this->back_msg['sys']['mysql_err']);
+                    };
+                }
+                session_destroy();//销毁一个会话中的全部数据
+                // todo 删除每次登录的session 只保留最后一次
+                $user['session_id'] = substr(md5($user['id'] . time()), 0, 20);
+                $this->db->update('hqsen_user', $user, ' id = ' . $user['id']);
+                session_id($user['session_id']);
+                session_start();
+                $login_user = array(
+                    'access_token' => session_id(),
+                    'alipay_account' => $user['alipay_account'],
+                    'user_name' => $user['user_name'],
+                    'nike_name' => $user['nike_name'],
+                    'user_type' => $user['user_type']
+                );
+                $_SESSION['user_info'] = $login_user;
+                $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $login_user);
+            } else {
+                $this->appDie($this->back_code['user']['phone_code_err'], $this->back_msg['user']['phone_code_err']);
+            }
         } else {
             $this->appDie($this->back_code['sys']['value_empty'], $this->back_msg['sys']['value_empty']);
         }
@@ -31,9 +60,11 @@ class user extends base{
 
     //支付宝绑定
     public function alipayBind(){
-//        $this->loginInit();
+        $this->loginInit();
         $alipay = $this->postString('alipay');
         if($alipay){
+            $update_user['alipay_account'] = $alipay;
+            $this->db->update('hqsen_user', $update_user, ' user_name = ' . $this->user['user_name']);
             $this->appDie();
         } else {
             $this->appDie($this->back_code['user']['bind_empty'], $this->back_msg['user']['bind_empty']);
@@ -47,10 +78,6 @@ class user extends base{
         if($mobile){
             header("Content-Type:text/html;charset=utf-8");
             $apikey = "6974b9344296ea1410a285905c766960"; //修改为您的apikey(https://www.yunpian.com)登陆官网后获取
-            $mobile = "15068159661"; //请用自己的手机号代替
-            $data['mobile'] = (string)$mobile;
-            $data['code'] = (string)2312;
-            $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $data);
             if(preg_match("/^1[34578]{1}\d{9}$/",$mobile)){
                 $rand_text = rand(1000,9999);
                 $text="验证码：" . $rand_text;
@@ -72,23 +99,27 @@ class user extends base{
 
                 // 发送短信
                 $send_data = array('text'=>$text,'apikey'=>$apikey,'mobile'=>$mobile);
-//            echo '<pre>';print_r($send_data);
                 curl_setopt ($ch, CURLOPT_URL, 'https://sms.yunpian.com/v2/sms/single_send.json');
                 curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($send_data));
                 $json_data = curl_exec($ch);
                 $array = json_decode($json_data,true);
-//            echo '<pre>';print_r($array);
                 if(isset($array['msg']) and  $array['msg'] == '发送成功'){
-                    $data['data']['code'] = $rand_text;
+                    $data['code'] = $rand_text;
+                    $data['phone'] = $mobile;
+                    $session_id = "sen-" . $data['phone'];
+                    session_id($session_id);
+                    session_start();
+                    $_SESSION['code'] = $rand_text;
                 } else {
-                    $data['data']['code'] = 0;
-                    $data['alert']['msg'] = $array['detail'];
+                    $data['code'] = 0;
+                    $data['phone'] = $array['detail'];
                 }
                 // 发送模板短信
                 curl_close($ch);
+                $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $data);
             } else {
-                $data['phone_code'] = (string)'';
                 $data['phone'] = (string)$mobile;
+                $this->appDie($this->back_code['sys']['phone_illegal'], $this->back_msg['sys']['phone_illegal'], $data);
             }
         } else {
             $this->appDie($this->back_code['sys']['value_empty'], $this->back_msg['sys']['value_empty']);
