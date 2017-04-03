@@ -23,7 +23,6 @@ class user extends base{
                 $login_user = array(
                     'access_token' => session_id(),
                     'user_type' => $user['user_type'],
-                    'user_security' => $this->user_security('all_right'),
                 );
                 $_SESSION['user_info'] = $user;
                 $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $login_user);
@@ -36,10 +35,15 @@ class user extends base{
     }
 
     public function configData(){
+        $this->loginInit();
         $config_data = array(
-            'user_security' => $this->user_security('all_right'),
             'order_type' => $this->order_type(),
         );
+        if($this->user['user_name'] == 'monkey'){
+            $config_data['user_security'] = $this->user_security('monkey');
+        } else {
+            $config_data['user_security'] = $this->user_security('first_user');
+        }
         $area = $this->db->getRows("select * from hqsen_area  where del_flag = 1 ");
         foreach ($area as $one_area){
             $area_item = array(

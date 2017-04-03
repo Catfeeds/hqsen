@@ -76,10 +76,10 @@ class user extends base{
         $mobile = isset($_POST['mobile']) ? (string)$_POST['mobile'] : '';
         if($mobile){
             header("Content-Type:text/html;charset=utf-8");
-            $apikey = "6974b9344296ea1410a285905c766960"; //修改为您的apikey(https://www.yunpian.com)登陆官网后获取
+            $apikey = "b181d90efe2155f5fe3d74b468c0a136"; //修改为您的apikey(https://www.yunpian.com)登陆官网后获取
             if(preg_match("/^1[34578]{1}\d{9}$/",$mobile)){
                 $rand_text = rand(1000,9999);
-                $text="验证码：" . $rand_text;
+//                $text="验证码：" . $rand_text;
                 $ch = curl_init();
 
                 /* 设置验证方式 */
@@ -97,8 +97,8 @@ class user extends base{
                 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 
                 // 发送短信
-                $send_data = array('text'=>$text,'apikey'=>$apikey,'mobile'=>$mobile);
-                curl_setopt ($ch, CURLOPT_URL, 'https://sms.yunpian.com/v2/sms/single_send.json');
+                $send_data = array('tpl_id'=>'1755704','tpl_value'=>('#code#').'='.urlencode($rand_text),'apikey'=>$apikey,'mobile'=>$mobile);
+                curl_setopt ($ch, CURLOPT_URL, 'https://sms.yunpian.com/v2/sms/tpl_single_send.json');
                 curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($send_data));
                 $json_data = curl_exec($ch);
                 $array = json_decode($json_data,true);

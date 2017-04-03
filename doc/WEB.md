@@ -4,7 +4,7 @@
 ### 后台 API
 
 ##### 请求
-http://dev.meiui.me/index.php?m=home&c=index&f=main
+http://dev.51isen.com/index.php?m=home&c=index&f=main
 
 ##### 返回值
 {
