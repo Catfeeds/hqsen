@@ -13,6 +13,7 @@ import Add from './Add'
 // 侧栏
 import SideLayout from './SideLayout'
 import Test from './Test'
+import Video from './Video'
 
 Vue.use(Router)
 
@@ -28,6 +29,11 @@ export default new Router({
       name: 'Test',
       path: '/test',
       component: Test
+    },
+    {
+      name: 'Video',
+      path: '/video',
+      component: Video
     },
     {
       name: 'SideLayout',

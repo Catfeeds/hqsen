@@ -1,11 +1,11 @@
 <template>
   <div class="content-wrapper">
-    <my-breadcrumb :data="breadcrumb"/>
+    <my-breadcrumb :data="basicInfo.breadcrumb"/>
     <div class="control-box">
       <el-input
         class="search-input"
         @keyup.enter="handSearch"
-        v-if="type === 'hotelAccount'"
+        v-if="type === 'account_info__hotel_list'"
         placeholder="跟进账号或酒店筛选"
         icon="search"
         v-model="searchInput"
@@ -41,7 +41,7 @@
       :total="total"
       :rowData="rowData" 
       :loading="loading"
-      :columnData="columnData">
+      :columnData="basicInfo.columnData">
         <el-table-column
           prop="control"
           v-if="noControl.indexOf(type) < 0"
@@ -110,7 +110,7 @@
 </style>
 
 <script>
-  import { TableColumn, Button, Input, MessageBox, Message, Popover } from 'element-ui'
+  import { TableColumn, Button, Input, MessageBox, Message } from 'element-ui'
   import MyTable from '../../components/MyTable'
   import MyBreadcrumb from '../../components/MyBreadcrumb'
   import config from './config'
@@ -121,8 +121,7 @@
       MyBreadcrumb,
       ElTableColumn: TableColumn,
       ElButton: Button,
-      ElInput: Input,
-      ElPopover: Popover
+      ElInput: Input
     },
     created () {
       this.setBasicInfo()
@@ -133,13 +132,13 @@
         type: '',           // 列表类型
         searchInput: '',    // 输入框
         hideOperate: false,
-        noControl: ['registerAccount'],
-        noDetailBtnType: ['hotel', 'customArea', 'hotelAccount', 'innerAccount'],
-        moneyBntType: ['customPlay', 'buildPlay'],
-        approveBtnType: ['customVerify', 'buildVerify', 'manCustomVerify', 'manBuildVerify'],
-        operateBtnType: ['hotelAccount', 'innerAccount', 'customArea', 'hotel'],
-        disableBtnType: ['hotelAccount', 'innerAccount'],
-        addBtnType: ['hotelAccount', 'innerAccount', 'customArea', 'hotel'],
+        noControl: ['account_info__register_list'],
+        noDetailBtnType: ['hotel_info__hotel_list', 'hotel_info__area_list', 'account_info__hotel_list', 'account_info__inner_list'],
+        moneyBntType: ['remittance_info__kezi_contract', 'remittance_info__dajian_contract'],
+        approveBtnType: ['finance_info__kezi_contract', 'finance_info__dajian_contract', 'manager_info__kezi_contract', 'manager_info__dajian_contract'],
+        operateBtnType: ['account_info__hotel_list', 'account_info__inner_list', 'hotel_info__area_list', 'hotel_info__hotel_list'],
+        disableBtnType: ['account_info__hotel_list', 'account_info__inner_list'],
+        addBtnType: ['account_info__hotel_list', 'account_info__inner_list', 'hotel_info__area_list', 'hotel_info__hotel_list'],
         breadcrumb: [],     // 导航条
         rowData: [{
           id: 1,
@@ -168,6 +167,11 @@
           address: '上海市普陀区金沙江路 1516 弄',
           disabled: false
         }],
+        basicInfo: {
+          uniqueKey: '',
+          columnData: [],
+          breadcrumb: []
+        },
         loading: true,
         columnData: [], // 表头
         total: 55,     // 总页数
@@ -181,20 +185,32 @@
       // 设置基础信息
       setBasicInfo () {
         const type = this.$route.params.type
-        const { breadcrumb, columnData } = config[type]
+        // const { breadcrumb, columnData, uniqueKey } = config[type]
+        this.basicInfo = config[type]
         this.$emit('setActiveIndex', type)
         this.type = type
-        this.breadcrumb = breadcrumb
-        this.columnData = columnData
+        // this.breadcrumb = breadcrumb
+        // this.columnData = columnData
         this.handleCurrentChange(1)
       },
       // 分页跳转
       handleCurrentChange (current) {
         console.log('currentpage', current)
-        Fetch('getData', { page: current }, 'post', true).then(response => {
-          this.rowData = response
+        Fetch(this.basicInfo.listUrlKey, { page: current }, 'post').then(response => {
+          const data = response.data.list
+          if (this.type === 'order_info__kezi_list') {
+            let configData = JSON.parse(localStorage.getItem('basicInfo'))
+            data.map(item => {
+              configData.order_type.map(sub => {
+                if (item.order_type === sub.value) {
+                  item.order_type_name = sub.label
+                }
+              })
+            })
+          }
+          this.rowData = data
           this.currentPage = current
-          this.total = response.total
+          this.total = response.data.count
         })
       },
       // 搜索
@@ -216,7 +232,7 @@
           path: '/detail',
           name: 'Detail',
           param: { type: this.type },
-          query: { id: 1 }
+          query: { id: data.row[this.basicInfo.uniqueKey] }
         })
       },
       // --禁用--
@@ -231,7 +247,7 @@
               const id = data.row.id
               this.rowData.map(item => {
                 if (item.id === id) {
-                  item.disabled = true
+                  item.disabled = !item.disabled
                 }
               })
             }
@@ -244,7 +260,7 @@
           path: '/add',
           name: 'Add',
           params: { type: this.type },
-          query: { id: 1 }
+          query: { id: data.row[this.basicInfo.uniqueKey] }
         })
       },
       // --删除--
@@ -256,9 +272,14 @@
           callback: (action, instance) => {
             if (action === 'confirm') {
               // do something
-              console.log(data)
-              const id = data.row.id
-              this.rowData = this.rowData.filter(item => item.id !== id)
+              const { deleteUrlKey, uniqueKey } = this.basicInfo
+              Fetch(deleteUrlKey, { id: data.row[uniqueKey] }).then(response => {
+                Message({
+                  message: '删除成功',
+                  type: 'success'
+                })
+                this.handleCurrentChange(this.currentPage)
+              })
             }
           }
         })

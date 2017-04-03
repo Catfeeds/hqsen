@@ -90,6 +90,7 @@
         rules: {
           name: [
             { required: true, message: '请输入活动名称', trigger: 'blur' },
+            { type: 'number', message: '年龄必须为数字值' },
             { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
           ],
           region: [

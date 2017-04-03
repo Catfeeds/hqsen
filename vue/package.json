@@ -1,7 +1,7 @@
 {
   "name": "vue",
-  "version": "",
-  "description": "",
+  "version": "1.0.0",
+  "description": "管理系统",
   "main": "src/index.js",
   "scripts": {
     "prebuild": "rimraf ../web",

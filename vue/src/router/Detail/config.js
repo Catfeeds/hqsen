@@ -1,55 +1,58 @@
+let configData = JSON.parse(localStorage.getItem('basicInfo'))
 export default {
   // 客资详情
-  custom: {
+  order_info__kezi_list: {
+    detailUrlKey: 'keziDetail',
     formList: [{
       label: '姓名',
       type: 'text',
-      name: 'aa',
+      name: 'customer_name',
       disabled: true
     }, {
       label: '类型',
       type: 'select',
-      name: 'type',
+      name: 'order_type',
+      data: configData.order_type,
       disabled: true
     }, {
       label: '手机号',
       type: 'text',
-      name: 'tel',
+      name: 'order_phone',
       disabled: true
     }, {
       label: '区域',
       type: 'select',
-      name: 'area',
+      name: 'order_area',
       disabled: true
     }, {
       label: '酒店',
       type: 'select',
-      name: 'hotel',
+      name: 'order_hotel',
       disabled: true
     }, {
       label: '桌数',
       type: 'text',
-      name: 'cc',
+      name: 'desk_count',
       disabled: true
     }, {
       label: '预算',
       type: 'text',
-      name: 'dd',
+      name: 'order_money',
       disabled: true
     }, {
       label: '时间',
-      type: 'date',
-      name: 'name',
+      type: 'text',
+      name: 'use_date',
       disabled: true
     }, {
       label: '跟踪者',
       type: 'text',
-      name: 'name',
+      name: 'watch_user',
       disabled: true
     }, {
       label: '',
       type: 'textarea',
-      name: 'name',
+      name: 'order_desc',
       disabled: true
     }],
     rules: {
@@ -63,7 +66,7 @@ export default {
     breadcrumb: ['客资/搭建信息', '客资信息列表', '客资详情']
   },
   // 搭建详情
-  build: {
+  order_info__dajian_list: {
     formList: [{
       label: '姓名',
       type: 'text',
@@ -108,7 +111,7 @@ export default {
     breadcrumb: ['客资/搭建信息', '搭建信息列表', '搭建详情']
   },
   // 客资打款详情
-  customPlay: {
+  remittance_info__kezi_contract: {
     formList: [{
       label: '合同金额',
       type: 'text',
@@ -153,7 +156,7 @@ export default {
     breadcrumb: ['财务打款', '搭建打款列表', '搭建打款详情']
   },
   // 搭建打款详情
-  buildPlay: {
+  remittance_info__dajian_contract: {
     formList: [{
       label: '合同金额',
       type: 'text',

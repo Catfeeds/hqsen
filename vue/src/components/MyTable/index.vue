@@ -16,7 +16,7 @@
       class="my-pagination"
       @current-change="$emit('handleCurrentChange',$event)"
       :current-page="currentPage"
-      :page-size="20"
+      :page-size="10"
       :total="total"/>
   </div>
 </template>

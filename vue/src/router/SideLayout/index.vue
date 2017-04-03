@@ -18,7 +18,8 @@
     },
     methods: {
       setActiveIndex (key) {
-        this.activeIndex = key
+        const keyGroup = key.split('__')
+        this.activeIndex = keyGroup.length > 1 ? keyGroup[1] : keyGroup[0]
       }
     }
   }

@@ -18,11 +18,12 @@
 </template>
 
 <script>
-  import { Form, Row, Col } from 'element-ui'
+  import { Form, Row, Col, Message } from 'element-ui'
   import MyComponent from '../../components/MyComponent'
   import FormButton from '../../components/MyComponent/FormButton'
   import MyBreadcrumb from '../../components/MyBreadcrumb'
   import config from './config'
+  import Fetch from '../../Fetch'
   export default {
     components: {
       ElRow: Row,
@@ -37,14 +38,14 @@
     },
     data () {
       return {
+        id: '',
         type: '',
         formData: {
-          name: '888',
-          type: [],
-          tel: []
+          // 区域名
+          area_list: []
         },
+        rules: {},
         basicInfo: {
-          rules: {},
           formList: [],
           breadcrumb: []
         }
@@ -54,15 +55,70 @@
       '$route': 'setBasicInfo'
     },
     methods: {
+      getInit (id) {
+        Fetch(this.basicInfo.detailUrlKey, { id }).then(response => {
+          let data = response.data
+          data.area_list && (data.area_list = data.area_list.split(','))
+          this.formData = data
+        })
+      },
       setBasicInfo () {
+        const validatePass = (rule, value, callback) => {
+          if (value === '') {
+            callback(new Error('请输入密码'))
+          } else {
+            if (this.myForm.checkPass !== '') {
+              this.$refs.myForm.validateField('checkPass')
+            }
+            callback()
+          }
+        }
+        const validatePass2 = (rule, value, callback) => {
+          if (value === '') {
+            callback(new Error('请再次输入密码'))
+          } else if (value !== this.myForm.pass) {
+            callback(new Error('两次输入密码不一致!'))
+          } else {
+            callback()
+          }
+        }
+        const passrules = {
+          pass: [
+            { validator: validatePass, trigger: 'blur' }
+          ],
+          checkPass: [
+            { validator: validatePass2, trigger: 'blur' }
+          ]
+        }
         const type = this.$route.params.type
+        const id = this.$route.query.id
+        // const { rules, formList, breadcrumb } = config[type]
         this.basicInfo = config[type]
         this.type = type
+        this.id = id
+        // this.formList = formList
+        // this.breadcrumb = breadcrumb
+        this.basicInfo.rules = {
+          ...this.basicInfo.rules,
+          ...passrules
+        }
+        id && this.getInit(id)
       },
       submitForm () {
+        const { id, basicInfo, formData } = this
+        formData.area_list && (formData.area_list = formData.area_list.join())
+        const url = id ? basicInfo.editUrlKey : basicInfo.createUrlKey
+        const data = id ? { ...formData, id } : { ...formData }
         this.$refs.myForm.validate((valid) => {
           if (valid) {
-            console.log(this.formData)
+            Fetch(url, data).then(response => {
+              console.log(response)
+              Message({
+                message: '保存成功',
+                type: 'success'
+              })
+              this.$router.push(basicInfo.returnUrl)
+            })
           } else {
             console.log('error submit!!')
             return false
@@ -71,10 +127,6 @@
       },
       cancleForm () {
         this.$refs.myForm.resetFields()
-        // this.formData = {
-        //   name: ''
-        // }
-        console.log('cancle')
       }
     }
   }

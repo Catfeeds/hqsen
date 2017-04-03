@@ -3,7 +3,7 @@
     <my-breadcrumb :data="basicInfo.breadcrumb"/>
     <el-row>
       <el-col :span="10" :offset="7">
-        <el-form label-width="110px" :model="formData" :rules="basicInfo.rules">
+        <el-form ref="myForm" label-width="110px" :model="formData" :rules="basicInfo.rules">
           <el-row>
             <el-col :span="18">
               <my-component 
@@ -49,6 +49,7 @@
   import FormButton from '../../components/MyComponent/FormButton'
   import MyBreadcrumb from '../../components/MyBreadcrumb'
   import MyCard from '../../components/MyCard'
+  import Fetch from '../../Fetch'
   import config from './config'
   export default {
     components: {
@@ -101,8 +102,20 @@
         this.type = type
       },
       submitForm () {
+        this.$refs.myForm.validate((valid) => {
+          if (valid) {
+            console.log(this.formData)
+            Fetch('data', { formData: this.formData }).then(response => {
+              console.log(response)
+            })
+          } else {
+            console.log('error submit!!')
+            return false
+          }
+        })
       },
       cancleForm () {
+        this.$refs.myForm.resetFields()
       }
     }
   }

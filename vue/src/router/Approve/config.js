@@ -1,6 +1,6 @@
 export default {
   // 客资合同
-  custom: {
+  order_info__kezi_list: {
     breadcrumb: ['财务审批', '客资审核列表', '财务审批'],
     formList: [{
       label: '合同金额',

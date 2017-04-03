@@ -21,6 +21,7 @@
   import MyComponent from '../../components/MyComponent'
   import MyBreadcrumb from '../../components/MyBreadcrumb'
   import config from './config'
+  import Fetch from '../../Fetch'
   export default {
     components: {
       ElRow: Row,
@@ -49,8 +50,28 @@
     methods: {
       setBasicInfo () {
         const type = this.$route.params.type
+        const id = this.$route.query.id
         this.basicInfo = config[type]
         this.type = type
+        this.getInit(id)
+      },
+      getInit (id) {
+        Fetch(this.basicInfo.detailUrlKey, { id }).then(response => {
+          const data = response.data
+          if (this.type === 'order_info__kezi_list') {
+            this.basicInfo.formList.map(item => {
+              if (item.name === 'order_hotel') {
+                item.data = data.order_hotel
+                data.order_hotel = data.order_hotel[0].value
+              }
+              if (item.name === 'order_area') {
+                item.data = data.order_area
+                data.order_area = data.order_area[0].value
+              }
+            })
+          }
+          this.formData = data
+        })
       }
     }
   }
