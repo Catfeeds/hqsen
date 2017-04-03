@@ -1,5 +1,4 @@
-const basicInfo = JSON.parse(localStorage.getItem('basicInfo'))
-
+import { configData } from '../../commonData'
 export default {
   // 新增酒店
   hotel_info__hotel_list: {
@@ -15,7 +14,7 @@ export default {
       label: '所在区',
       type: 'select',
       name: 'area_id',
-      data: basicInfo.config_area
+      data: configData().config_area
     }, {
       label: '具体地址',
       type: 'text',

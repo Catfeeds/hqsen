@@ -1,4 +1,4 @@
-let configData = JSON.parse(localStorage.getItem('basicInfo'))
+import { configData } from '../../commonData'
 export default {
   // 客资详情
   order_info__kezi_list: {
@@ -12,7 +12,7 @@ export default {
       label: '类型',
       type: 'select',
       name: 'order_type',
-      data: configData.order_type,
+      data: configData().order_type,
       disabled: true
     }, {
       label: '手机号',

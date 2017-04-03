@@ -12,7 +12,7 @@
               v-model="loginForm[item.form.name]"/>
           </div>
           <el-form-item class="login-btn-box">
-            <el-button class="login-btn" type="primary" @click="submitForm('loginForm')">登录</el-button>
+            <el-button class="login-btn" type="primary" @click="submitForm('loginForm')" :loading="loading">登录</el-button>
           </el-form-item>
         </el-form>
       </el-col>
@@ -81,6 +81,7 @@
     },
     data () {
       return {
+        loading: false,
         loginForm: {},
         formList: [{
           label: 'icon-female',
@@ -111,15 +112,22 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             console.log(this.loginForm)
-            Fetch('login', { ...this.loginForm }).then(response => {
+            Fetch('login', { ...this.loginForm }, 'post', true).then(response => {
               console.log(response)
-              sessionStorage.setItem('access_token', response.data.access_token)
-              this.$router.push('/list/order_info__kezi_list')
+              const accessToken = response.data.access_token
+              sessionStorage.setItem('access_token', accessToken)
+              this.getBasecInfo()
             })
           } else {
             console.log('error submit!!')
             return false
           }
+        })
+      },
+      getBasecInfo () {
+        Fetch('configData').then(response => {
+          localStorage.setItem('basicInfo', JSON.stringify(response.data))
+          this.$router.push('/list/order_info__kezi_list')
         })
       }
     }

@@ -44,10 +44,10 @@
           // 区域名
           area_list: []
         },
-        rules: {},
         basicInfo: {
           formList: [],
-          breadcrumb: []
+          breadcrumb: [],
+          rules: {}
         }
       }
     },
@@ -111,7 +111,7 @@
         const data = id ? { ...formData, id } : { ...formData }
         this.$refs.myForm.validate((valid) => {
           if (valid) {
-            Fetch(url, data).then(response => {
+            Fetch(url, data, 'post', true).then(response => {
               console.log(response)
               Message({
                 message: '保存成功',

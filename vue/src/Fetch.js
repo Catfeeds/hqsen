@@ -37,6 +37,7 @@ const formatData = (param) => {
 
 export default function Fetch (url, data = {}, method = 'post', showLoading = false) {
   // 开启loding
+  console.log(url)
   let loadingInstance
   let domain = 'http://dev.meiui.me/index.php?'
   const token = sessionStorage.getItem('access_token') || ''

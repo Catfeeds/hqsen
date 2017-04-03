@@ -1,3 +1,12 @@
-import Fetch from './Fetch'
 
-export const aa = Fetch('aa', { dd: 'dd' }).then(response => response.data)
+export const configData = () => {
+  const basicInfo = localStorage.getItem('basicInfo')
+  if (basicInfo && basicInfo.length) {
+    return JSON.parse(basicInfo)
+  }
+  return {
+    order_type: [],
+    config_area: [],
+    user_security: []
+  }
+}
