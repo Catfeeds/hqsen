@@ -7,7 +7,7 @@
  * File Using:市场部报表接口
  */
 
-namespace api\app;
+namespace api\web;
 use avf\lib\mysql;
 
 class base{
@@ -15,6 +15,7 @@ class base{
     public $user;
     public function __construct(){
         $this-> db = mysql::getInstance();
+        ini_set('session.gc_maxlifetime', 3600 * 12); //设置时间
         $this-> back_msg = array(
             'sys' => array(
                 'success' => '请求成功',
@@ -25,12 +26,9 @@ class base{
                 'mysql_err' => '数据操作失败',
             ),
             'user' => array(
-                'bind_empty' => '绑定不能为空',
-                'phone_illegal' => '手机号非法',
-                'phone_code_err' => '手机验证码错误',
+                'login_err' => '账号或密码错误',
             ),
             'order' => array(
-                'phone_type_exist' => '婚宴中已存在该手机信息，无法成功录入',
             ),
         );
         $this-> back_code = array(
@@ -39,16 +37,13 @@ class base{
                 'fail' => '999',
                 'token_empty' => '998',
                 'token_fail' => '997',
-                'value_empty' => '994',
-                'mysql_err' => '991',
+                'value_empty' => '996',
+                'mysql_err' => '995',
             ),
             'user' => array(
-                'bind_empty' => '996',
-                'phone_illegal' => '993',
-                'phone_code_err' => '992',
+                'login_err' => '994',
             ),
             'order' => array(
-                'phone_type_exist' => '995'
             ),
         );
 
@@ -61,11 +56,10 @@ class base{
         if($session_id){
             session_id($session_id);
             session_start();
-            $user = $this->db->getRow("select * from hqsen_user where session_id = '$session_id'");
             if(isset($_SESSION['user_info'])){
                 $this->user = $_SESSION['user_info'];
-            } else if($user){
-                $this->user = $user;
+                // 请求权限处理
+
             } else {
                 $this->appDie($this->back_code['sys']['token_fail'], $this->back_msg['sys']['token_fail']);
             };
@@ -76,6 +70,7 @@ class base{
     }
 
     public function appDie($back_code = 200, $back_msg = 'success', $back_data = []){
+        header('Access-Control-Allow-Origin:*');
         $data['status'] = (int)$back_code;
         $data['data'] = (array)$back_data;
         $data['message'] = (string)$back_msg;
@@ -93,6 +88,91 @@ class base{
     }
     public function postString($post_key, $default = ''){
         return isset($_POST[$post_key]) ? (string)$_POST[$post_key] : (string)$default;
+    }
+
+
+    public function user_security($user_type){
+        $security = array(
+            'all_right' => array(
+                array(
+                    'key' => 'order_info',
+                    'label'=>'客资/搭建信息',
+                    'child' => array(
+                        array('key'=>'kezi_list', 'label'=>'客资列表'),
+//                        array('key'=>'dajian_list', 'label'=>'搭建列表'),
+                    ),
+                ),
+                array(
+                    'key' => 'hotel_info',
+                    'label'=>'基础信息设定',
+                    'child' => array(
+                        array('key'=>'hotel_list', 'label'=>'酒店信息'),
+                        array('key'=>'area_list', 'label'=>'区域信息'),
+                    ),
+                ),
+                array(
+                    'key' => 'account_info',
+                    'label'=>'帐号管理',
+                    'child' => array(
+                        array('key'=>'register_list', 'label'=>'注册账号'),
+//                        array('key'=>'hotel_list', 'label'=>'酒店账号'),
+//                        array('key'=>'inner_list', 'label'=>'内部账号'),
+//                        array('key'=>'password_back', 'label'=>'超管重置密码'),
+                    ),
+                ),
+//                array(
+//                    'key' => 'finance_info',
+//                    'label'=>'财务审批',
+//                    'child' => array(
+//                        array('key'=>'kezi_contract', 'label'=>'客资合同'),
+//                        array('key'=>'dajian_contract', 'label'=>'搭建合同'),
+//                    ),
+//                ),
+//                array(
+//                    'key' => 'manager_info',
+//                    'label'=>'总经理审批',
+//                    'child' => array(
+//                        array('key'=>'kezi_contract', 'label'=>'客资合同'),
+//                        array('key'=>'dajian_contract', 'label'=>'搭建合同'),
+//                    ),
+//                ),
+//                array(
+//                    'key' => 'remittance_info',
+//                    'label'=>'财务打款',
+//                    'child' => array(
+//                        array('key'=>'kezi_contract', 'label'=>'客资合同'),
+//                        array('key'=>'dajian_contract', 'label'=>'搭建合同'),
+//                        array('key'=>'remittance_ratio', 'label'=>'打款系数'),
+//                    ),
+//                ),
+//                array(
+//                    'key' => 'feedback_info',
+//                    'label'=>'意见反馈'
+//                ),
+            ),
+
+        );
+        return $security[$user_type];
+    }
+
+    public function user_right(){
+        $right = array(
+            'user' => ['login'=>'用户登录'],
+            'kezi' => ['keziList' => '客资列表', 'keziDetail'=>'客资详情'],
+            'dajian' => ['dajianList' => '搭建列表', 'dajianDetail' => '搭建详情'],
+            'hotel' => ['hotelList'=>'酒店列表', 'hotelCreate'=>'新增', 'hotelEdit'=>'编辑', 'hotelDelete'=>'删除', ],
+            'area' => ['areaList'=>'地域列表', 'arealCreate'=>'新增', 'arealEdit'=>'编辑', 'arealDelete'=>'删除', ],
+            'account' => ['registerAccountList' => '注册账号列表'],
+
+        );
+    }
+
+    public function order_type(){
+        return array(
+            array('value'=>'1', 'label'=>'婚宴'),
+            array('value'=>'2', 'label'=>'会务'),
+            array('value'=>'3', 'label'=>'生日宴 团宴 宝宝宴'),
+        );
     }
 
 

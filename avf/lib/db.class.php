@@ -85,6 +85,16 @@ class mysql{
         return $rows;
     }
 
+    /**
+     * 多行记录
+     */
+    public function getCount($table, $where, $type = MYSQL_ASSOC) {
+        $sql = 'select count(1) as count_num from ' . $table . ' where ' . $where;
+        $result = $this->query($sql);
+        $row =  @ mysqli_fetch_array ($result, $type);
+        return intval($row['count_num']);
+    }
+
 
     /**
      * [getOne 获取单条数据]

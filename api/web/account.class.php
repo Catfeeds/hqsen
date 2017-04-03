@@ -19,7 +19,12 @@ class account extends base {
     }
 
     public function registerAccountList(){
-        $user = $this->db->getRow("select * from hqsen_user where user_type = 3");
+        $page = $this->postInt('page', 1);
+        $limit = 10;
+        $offset = ($page - 1) * $limit;
+        $sql_limit = " limit $offset , $limit";
+
+        $user = $this->db->getRows("select * from hqsen_user where user_type = 3 " . $sql_limit);
         $data = [];
         foreach ($user as $one_user){
             if($one_user){
@@ -28,9 +33,10 @@ class account extends base {
                     'user_name' => $one_user['user_name'],
                     'alipay_account' => $one_user['alipay_account'],
                 );
-                $data[] = $user_item;
+                $data['list'][] = $user_item;
             }
         }
+        $data['count'] = $this->db->getCount('hqsen_user', ' del_flag = 1 and user_type = 3 ');
         $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $data);
 
     }
