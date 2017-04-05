@@ -7,3 +7,7 @@ body {
   max-width: 1200px;
   margin: 0 auto;
 }
+
+.el-loading-mask.is-fullscreen {
+  top: 60px !important;
+}

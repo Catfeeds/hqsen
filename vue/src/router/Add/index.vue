@@ -9,7 +9,7 @@
             :key="index"
             :item="item" 
             v-model="formData[item.name]"/>
-            <form-button @submitForm="submitForm" @cancleForm="cancleForm"/>
+            <form-button @submitForm="submitForm" @cancleForm="cancleForm" :loading="loading"/>
         </el-form>
       </el-col>
     </el-row>
@@ -18,12 +18,13 @@
 </template>
 
 <script>
-  import { Form, Row, Col, Message } from 'element-ui'
+  import { Form, Row, Col, Message, MessageBox } from 'element-ui'
   import MyComponent from '../../components/MyComponent'
   import FormButton from '../../components/MyComponent/FormButton'
   import MyBreadcrumb from '../../components/MyBreadcrumb'
-  import config from './config'
+  import { getConfig } from './config'
   import Fetch from '../../Fetch'
+  import { configData } from '../../commonData'
   export default {
     components: {
       ElRow: Row,
@@ -40,6 +41,7 @@
       return {
         id: '',
         type: '',
+        loading: false,
         formData: {
           // 区域名
           area_list: []
@@ -93,6 +95,7 @@
         const type = this.$route.params.type
         const id = this.$route.query.id
         // const { rules, formList, breadcrumb } = config[type]
+        let config = getConfig(configData())
         this.basicInfo = config[type]
         this.type = type
         this.id = id
@@ -105,19 +108,30 @@
         id && this.getInit(id)
       },
       submitForm () {
-        const { id, basicInfo, formData } = this
-        formData.area_list && (formData.area_list = formData.area_list.join())
-        const url = id ? basicInfo.editUrlKey : basicInfo.createUrlKey
-        const data = id ? { ...formData, id } : { ...formData }
         this.$refs.myForm.validate((valid) => {
           if (valid) {
-            Fetch(url, data, 'post', true).then(response => {
-              console.log(response)
-              Message({
-                message: '保存成功',
-                type: 'success'
+            MessageBox.confirm('此操作将提交该表单, 是否继续?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              // submit form
+              const { id, basicInfo, formData } = this
+              formData.area_list && (formData.area_list = formData.area_list.join())
+              const url = id ? basicInfo.editUrlKey : basicInfo.createUrlKey
+              const data = id ? { ...formData, id } : { ...formData }
+              this.loading = true
+              Fetch(url, data).then(response => {
+                console.log(response)
+                this.loading = false
+                Message({
+                  message: '保存成功',
+                  type: 'success'
+                })
+                this.$router.push(basicInfo.returnUrl)
+              }, () => {
+                this.loading = false
               })
-              this.$router.push(basicInfo.returnUrl)
             })
           } else {
             console.log('error submit!!')

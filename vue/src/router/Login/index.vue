@@ -125,7 +125,7 @@
         })
       },
       getBasecInfo () {
-        Fetch('configData').then(response => {
+        Fetch('configData', {}, 'post', true).then(response => {
           localStorage.setItem('basicInfo', JSON.stringify(response.data))
           this.$router.push('/list/order_info__kezi_list')
         })
