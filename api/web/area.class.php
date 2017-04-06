@@ -23,14 +23,22 @@ class area extends base {
         $limit = 10;
         $offset = ($page - 1) * $limit;
         $sql_limit = " limit $offset , $limit";
-        $area = $this->db->getRows("select *   from hqsen_area  where del_flag = 1 " . $sql_limit);
+        $area = $this->db->getRows("select *   from hqsen_area  where del_flag = 1 order by id desc " . $sql_limit);
         $data = [];
         foreach ($area as $one_area){
             if($one_area){
+                $area_sh_arr = explode(',', $one_area['area_list']);
+                $area_list = '';
+                foreach ($area_sh_arr as $one_area_sh){
+                    if($one_area_sh){
+                        $area_list .= ',' . $this->area_sh_config()[$one_area_sh];
+                    }
+
+                }
                 $area_item = array(
                     'area_id' => $one_area['id'],
                     'area_name' => $one_area['area_name'],
-                    'area_list' => $one_area['area_list'],
+                    'area_list' => trim($area_list,','),
                 );
                 $data['list'][] = $area_item;
             }
@@ -115,6 +123,7 @@ class area extends base {
     }
 
     public function areaSH(){
+        $area_id = $this->postInt('id');
         $area = $this->db->getRows("select has.* , ha.`del_flag` as is_used from hqsen_area_sh as has left join hqsen_area as ha on has.`link_area_id`=ha.id");
         $data = [];
         foreach ($area as $one_area){
@@ -122,8 +131,13 @@ class area extends base {
                 $area_item = array(
                     'label' => $one_area['area_label'],
                     'value' => $one_area['id'],
-                    'is_used' => intval($one_area['is_used']),
+//                    'is_used' => intval($one_area['is_used']),
                 );
+                if(intval($one_area['is_used']) != 1 or ($area_id and $area_id == $one_area['link_area_id'])){
+                    $area_item['disabled'] = false;
+                } else {
+                    $area_item['disabled'] = true;
+                }
                 $data['area_sh'][] = $area_item;
             }
         }

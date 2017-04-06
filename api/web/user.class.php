@@ -72,6 +72,7 @@ class user extends base{
                     'user_name' => $one_feedback['user_name'],
                     'content' => $one_feedback['content'],
                     'phone' => $one_feedback['phone'],
+                    'id' => $one_feedback['id'],
                 );
                 $data['list'][] = $one_feedback_item;
             }
