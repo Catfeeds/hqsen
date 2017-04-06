@@ -47,7 +47,14 @@ class area extends base {
             $sql_order['area_list'] = $area_list;
             $sql_order['create_time'] = time();
             $sql_order['del_flag'] = 1;
-            $this->db->insert('hqsen_area', $sql_order);
+            $sql_order['id'] = $this->db->insert('hqsen_area', $sql_order);
+
+            // 更新区域信息
+            $area_sh_arr = explode(',', $sql_order['area_list']);
+            foreach ($area_sh_arr as $one_area_sh){
+                $sql_area_sh['link_area_id'] = $sql_order['id'];
+                $this->db->update('hqsen_area_sh', $sql_area_sh, ' id = ' . $one_area_sh);
+            }
             $this->appDie();
         } else {
             $this->appDie($this->back_code['sys']['value_empty'], $this->back_msg['sys']['value_empty']);
@@ -66,6 +73,12 @@ class area extends base {
             }
             if($area_list){
                 $sql_order['area_list'] = $area_list;
+                // 更新区域信息
+                $area_sh_arr = explode(',', $sql_order['area_list']);
+                foreach ($area_sh_arr as $one_area_sh){
+                    $sql_area_sh['link_area_id'] = $area_id;
+                    $this->db->update('hqsen_area_sh', $sql_area_sh, ' id = ' . $one_area_sh);
+                }
             }
 
             $this->db->update('hqsen_area', $sql_order, ' id = ' . $area_id);
@@ -99,5 +112,22 @@ class area extends base {
         } else {
             $this->appDie($this->back_code['sys']['value_empty'], $this->back_msg['sys']['value_empty']);
         }
+    }
+
+    public function areaSH(){
+        $area = $this->db->getRows("select has.* , ha.`del_flag` as is_used from hqsen_area_sh as has left join hqsen_area as ha on has.`link_area_id`=ha.id");
+        $data = [];
+        foreach ($area as $one_area){
+            if($one_area){
+                $area_item = array(
+                    'label' => $one_area['area_label'],
+                    'value' => $one_area['id'],
+                    'is_used' => intval($one_area['is_used']),
+                );
+                $data['area_sh'][] = $area_item;
+            }
+        }
+        $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $data);
+
     }
 }

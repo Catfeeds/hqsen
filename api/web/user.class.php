@@ -58,6 +58,28 @@ class user extends base{
         $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $config_data);
     }
 
+    public function feedback(){
+        $this->loginInit();
+        $page = $this->postInt('page', 1);
+        $limit = 10;
+        $offset = ($page - 1) * $limit;
+        $sql_limit = " limit $offset , $limit";
+        $feedback = $this->db->getRows("select *   from hqsen_feedback  where del_flag = 1 " . $sql_limit);
+        $data = [];
+        foreach ($feedback as $one_feedback){
+            if($one_feedback){
+                $one_feedback_item = array(
+                    'user_name' => $one_feedback['user_name'],
+                    'content' => $one_feedback['content'],
+                    'phone' => $one_feedback['phone'],
+                );
+                $data['list'][] = $one_feedback_item;
+            }
+        }
+        $data['count'] = $this->db->getCount('hqsen_area', 'del_flag = 1');
+        $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $data);
+    }
+
 
 
 

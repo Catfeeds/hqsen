@@ -20,9 +20,16 @@ class feedback extends base {
 
     //
     public function create(){
-        $feedback_main = $this->postString('feedback_main');
-        $feedback_phone = $this->postString('feedback_phone');
+        $feedback_main = $this->postString('content');
+        $feedback_phone = $this->postString('phone');
         if($feedback_main){
+            $sql_feedback['content'] = $feedback_main;
+            $sql_feedback['phone'] = $feedback_phone;
+            $sql_feedback['user_id'] = $this->user['id'];
+            $sql_feedback['user_name'] = $this->user['user_name'];
+            $sql_feedback['create_time'] = time();
+            $sql_feedback['del_flag'] = 1;
+            $sql_feedback['id'] = $this->db->insert('hqsen_feedback', $sql_feedback);
             $this->appDie();
         } else {
             $this->appDie($this->back_code['sys']['value_empty'], $this->back_msg['sys']['value_empty']);

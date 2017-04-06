@@ -70,6 +70,11 @@ class kezi extends base {
                 'watch_user' => $order['watch_user'],
                 'order_desc' => $order['order_desc'],
             );
+            // todo  暂时兼容
+            if($this->user['user_name'] == 'monkey'){
+                $order_item['order_area'] = $order['order_area_name'];
+                $order_item['order_hotel'] = $order['order_hotel_name'];
+            }
             $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $order_item);
         } else {
             $this->appDie($this->back_code['sys']['value_empty'], $this->back_msg['sys']['value_empty']);

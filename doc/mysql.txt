@@ -17,4 +17,4 @@ CREATE TABLE `hqsen_user` (
   KEY `user_type` (`user_type`)
 ) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
-http://www.pmdaniu.com/rp/view?id=WHtRNQNvUmEAMFB0ADs
+http://www.pmdaniu.com/rp/view?id=V3QGZAdiAjRRaFBuBCwFfA
