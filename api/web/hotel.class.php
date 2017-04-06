@@ -24,7 +24,7 @@ class hotel extends base {
         $offset = ($page - 1) * $limit;
         $sql_limit = " limit $offset , $limit";
         $hotel = $this->db->getRows("select *,hh.id as hotel_id  from hqsen_hotel as hh 
-                  left join hqsen_area as ha on hh.area_id = ha.id where hh.del_flag = 1 " . $sql_limit);
+                  left join hqsen_area as ha on hh.area_id = ha.id where hh.del_flag = 1 order by hh.id desc " . $sql_limit);
         $data = [];
         foreach ($hotel as $one_hotel){
             if($one_hotel){
@@ -45,10 +45,12 @@ class hotel extends base {
         $hotel_name = $this->postString('hotel_name');
         $hotel_address = $this->postString('hotel_address');
         $area_id = $this->postString('area_id');
+        $hotel_level = $this->postString('hotel_level');
         if($hotel_name and $hotel_address and $area_id){
             $sql_order['hotel_name'] = $hotel_name;
             $sql_order['hotel_address'] = $hotel_address;
             $sql_order['area_id'] = $area_id;
+            $sql_order['hotel_level'] = $hotel_level;
             $sql_order['create_time'] = time();
             $sql_order['del_flag'] = 1;
             $this->db->insert('hqsen_hotel', $sql_order);
@@ -64,6 +66,7 @@ class hotel extends base {
         $hotel_name = $this->postString('hotel_name');
         $hotel_address = $this->postString('hotel_address');
         $area_id = $this->postString('area_id');
+        $hotel_level = $this->postString('hotel_level');
         if($hotel_id and ($hotel_name or $hotel_address or $area_id)){
             $sql_order = [];
             if($hotel_name){
@@ -74,6 +77,9 @@ class hotel extends base {
             }
             if($area_id){
                 $sql_order['area_id'] = $area_id;
+            }
+            if($area_id){
+                $sql_order['hotel_level'] = $hotel_level;
             }
             $this->db->update('hqsen_hotel', $sql_order, ' id = ' . $hotel_id);
             $this->appDie();
@@ -102,6 +108,7 @@ class hotel extends base {
                 'hotel_name' => $hotel['hotel_name'],
                 'area_id' => $hotel['area_id'],
                 'hotel_address' => $hotel['hotel_address'],
+                'hotel_level' => $hotel['hotel_level'],
             );
             $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $hotel_item);
         } else {

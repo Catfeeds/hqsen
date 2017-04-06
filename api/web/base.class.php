@@ -232,5 +232,13 @@ class base{
         );
     }
 
+    public function hotel_level(){
+        return array(
+            array('value'=>'A', 'label'=>'A'),
+            array('value'=>'B', 'label'=>'B'),
+            array('value'=>'C', 'label'=>'C'),
+        );
+    }
+
 
 }

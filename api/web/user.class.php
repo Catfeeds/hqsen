@@ -38,6 +38,7 @@ class user extends base{
         $this->loginInit();
         $config_data = array(
             'order_type' => $this->order_type(),
+            'hotel_level' => $this->hotel_level(),
         );
         if($this->user['user_name'] == 'monkey'){
             $config_data['user_security'] = $this->user_security('monkey');
