@@ -13,11 +13,11 @@ import Add from './Add'
 // 侧栏
 import SideLayout from './SideLayout'
 import Test from './Test'
-import Video from './Video'
 
 Vue.use(Router)
 
-export default new Router({
+
+const router = new Router({
   mode: 'hash',
   routes: [
     {
@@ -29,11 +29,6 @@ export default new Router({
       name: 'Test',
       path: '/test',
       component: Test
-    },
-    {
-      name: 'Video',
-      path: '/video',
-      component: Video
     },
     {
       name: 'SideLayout',
@@ -61,6 +56,19 @@ export default new Router({
           component: Add
         }
       ]
+    },
+    {
+      path: '*',
+      redirect: '/list/order_info__kezi_list'
     }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  if (to.fullPath === '/') {
+    next('/list/order_info__kezi_list')
+  }
+  next()
+})
+
+export default router

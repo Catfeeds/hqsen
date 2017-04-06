@@ -115,6 +115,7 @@
   import MyBreadcrumb from '../../components/MyBreadcrumb'
   import config from './config'
   import Fetch from '../../Fetch'
+  import { configData } from '../../commonData'
   export default {
     components: {
       MyTable,
@@ -128,7 +129,6 @@
     },
     data () {
       return {
-        deleteLayer: false,
         type: '',           // 列表类型
         searchInput: '',    // 输入框
         hideOperate: false,
@@ -139,41 +139,13 @@
         operateBtnType: ['account_info__hotel_list', 'account_info__inner_list', 'hotel_info__area_list', 'hotel_info__hotel_list'],
         disableBtnType: ['account_info__hotel_list', 'account_info__inner_list'],
         addBtnType: ['account_info__hotel_list', 'account_info__inner_list', 'hotel_info__area_list', 'hotel_info__hotel_list'],
-        breadcrumb: [],     // 导航条
-        rowData: [{
-          id: 1,
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄',
-          hh: 'hhhhhh',
-          dd: 'ddd',
-          disabled: false
-        }, {
-          id: 2,
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄',
-          disabled: false
-        }, {
-          id: 3,
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄',
-          disabled: false
-        }, {
-          id: 4,
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄',
-          disabled: false
-        }],
+        rowData: [],
         basicInfo: {
           uniqueKey: '',
           columnData: [],
           breadcrumb: []
         },
         loading: true,
-        columnData: [], // 表头
         total: 55,     // 总页数
         currentPage: 1 // 当前页
       }
@@ -196,12 +168,11 @@
       // 分页跳转
       handleCurrentChange (current) {
         console.log('currentpage', current)
-        Fetch(this.basicInfo.listUrlKey, { page: current }, 'post').then(response => {
+        Fetch(this.basicInfo.listUrlKey, { page: current }, 'post', true).then(response => {
           const data = response.data.list
           if (this.type === 'order_info__kezi_list') {
-            let configData = JSON.parse(localStorage.getItem('basicInfo'))
             data.map(item => {
-              configData.order_type.map(sub => {
+              configData().order_type.map(sub => {
                 if (item.order_type === sub.value) {
                   item.order_type_name = sub.label
                 }

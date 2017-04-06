@@ -20,8 +20,10 @@
   import { Form, Row, Col } from 'element-ui'
   import MyComponent from '../../components/MyComponent'
   import MyBreadcrumb from '../../components/MyBreadcrumb'
-  import config from './config'
+  import { getConfig } from './config'
   import Fetch from '../../Fetch'
+  import { configData } from '../../commonData'
+
   export default {
     components: {
       ElRow: Row,
@@ -51,6 +53,7 @@
       setBasicInfo () {
         const type = this.$route.params.type
         const id = this.$route.query.id
+        const config = getConfig(configData())
         this.basicInfo = config[type]
         this.type = type
         this.getInit(id)

@@ -57,7 +57,7 @@ export default {
       name: 'hotel_name',
       label: '酒店名称'
     }, {
-      name: 'hotel_address',
+      name: 'area_list',
       label: '所在区'
     }, {
       name: 'hotel_address',

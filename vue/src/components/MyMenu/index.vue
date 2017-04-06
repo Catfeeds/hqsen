@@ -20,6 +20,8 @@
 
 <script>
   import { Menu, MenuItem, Submenu } from 'element-ui'
+  import { configData } from '../../commonData'
+
   export default {
     components: {
       ElMenu: Menu,
@@ -35,7 +37,7 @@
       }
     },
     created () {
-      this.menu = JSON.parse(localStorage.getItem('basicInfo')).user_security
+      this.menu = configData().user_security
     },
     methods: {
       handleSelect (key, keyPath) {
