@@ -115,4 +115,17 @@ class hotel extends base {
             $this->appDie($this->back_code['sys']['value_empty'], $this->back_msg['sys']['value_empty']);
         }
     }
+
+    public function hotelArea(){
+        $config_data['config_area'] = [];
+        $area = $this->db->getRows("select * from hqsen_area  where del_flag = 1 ");
+        foreach ($area as $one_area){
+            $area_item = array(
+                'value' => $one_area['id'],
+                'label' => $one_area['area_name']
+            );
+            $config_data['config_area'][] = $area_item;
+        }
+        $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $config_data);
+    }
 }
