@@ -118,7 +118,7 @@
 #### 创建确定类型的客资信息
 * 接口地址 [http://dev.51isen.com/index.php?m=app&c=order&f=createKeZi](http://dev.51isen.com/index.php?m=app&c=order&f=createKeZi) 
 * 接口方法 post  
-* 接口参数 order_type(必填 客资订单类别 1) | order_phone  (必填 手机号 15068159661) | access_token(必填 登录返回access_token 1233232) | order_area(必填 区域 2) | order_hotel(必填 酒店 3)
+* 接口参数 order_type(必填 客资订单类别 1) | order_phone  (必填 手机号 15068159661) | access_token(必填 登录返回access_token 1233232) | order_area(必填 区域 2) | order_hotel(必填 酒店 3) |customer_name(选填 消费者 张三)  |desk_count(选填 桌数 66)|use_date(选填 使用时间 12-09-09)|order_money(选填 金额 18万)|order_desc(选填 订单简介 简介内容)
 * 接口返回 
 
         {
@@ -166,7 +166,7 @@
 --------------------------------
 
 
-#### 创建确定类型的客资信息
+#### 根据ID获取客资信息
 * 接口地址 [http://dev.51isen.com/index.php?m=app&c=order&f=orderKeZiDetail](http://dev.51isen.com/index.php?m=app&c=order&f=orderKeZiDetail) 
 * 接口方法 get  
 * 接口参数 access_token(必填 登录返回access_token 1233232) | order_id (必填 订单ID)
