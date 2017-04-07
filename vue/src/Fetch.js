@@ -3,27 +3,28 @@ import axios from 'axios'
 import { Loading, Message } from 'element-ui'
 
 const urlKey = {
-  login: 'm=web&c=user&f=login',
-  registerList: 'm=web&c=account&f=registerAccountList',
-  configData: 'm=web&c=user&f=configData',
+  login: 'c=user&f=login',
+  registerList: 'c=account&f=registerAccountList',
+  configData: 'c=user&f=configData',
   // hotel
-  hotelList: 'm=web&c=hotel&f=hotelList',
-  createHotel: 'm=web&c=hotel&f=hotelCreate',
-  editHotel: 'm=web&c=hotel&f=hotelEdit',
-  deleteHotel: 'm=web&c=hotel&f=hotelDelete',
-  hotelDetail: 'm=web&c=hotel&f=hotelDetail',
+  hotelList: 'c=hotel&f=hotelList',
+  createHotel: 'c=hotel&f=hotelCreate',
+  editHotel: 'c=hotel&f=hotelEdit',
+  deleteHotel: 'c=hotel&f=hotelDelete',
+  hotelDetail: 'c=hotel&f=hotelDetail',
   // area
-  areaList: 'm=web&c=area&f=areaList',
-  createArea: 'm=web&c=area&f=areaCreate',
-  editArea: 'm=web&c=area&f=areaEdit',
-  deleteArea: 'm=web&c=area&f=areaDelete',
-  areaDetail: 'm=web&c=area&f=areaDetail',
+  areaList: 'c=area&f=areaList',
+  createArea: 'c=area&f=areaCreate',
+  editArea: 'c=area&f=areaEdit',
+  deleteArea: 'c=area&f=areaDelete',
+  areaDetail: 'c=area&f=areaDetail',
   // 客资产列表详情
-  keziList: 'm=web&c=kezi&f=keziList',
-  keziDetail: 'm=web&c=kezi&f=keziDetail',
+  keziList: 'c=kezi&f=keziList',
+  keziDetail: 'c=kezi&f=keziDetail',
   // 搭建列表详情
-  dajianList: 'm=web&c=dajian&f=dajianList',
-  createdajian: 'm=web&c=dajian&f=dajianCreate'
+  dajianList: 'c=dajian&f=dajianList',
+  createdajian: 'c=dajian&f=dajianCreate',
+  getShanghaiArea: 'c=area&f=areaSH'
 }
 
 const formatData = (param) => {
@@ -31,15 +32,13 @@ const formatData = (param) => {
   for (let key in param) {
     newData += `${key}=${param[key]}&`
   }
-  console.log(newData)
   return newData.substring(0, newData.length - 1)
 }
 
 export default function Fetch (url, data = {}, method = 'post', showLoading = false) {
   // 开启loding
-  console.log(url)
   let loadingInstance
-  let domain = 'http://dev.meiui.me/index.php?'
+  let domain = 'http://dev.meiui.me/index.php?m=web&'
   const token = sessionStorage.getItem('access_token') || ''
   if (showLoading) {
     loadingInstance = Loading.service({
@@ -52,13 +51,11 @@ export default function Fetch (url, data = {}, method = 'post', showLoading = fa
     data = formatData({...data, access_token: token})
   }
   const instance = axios.create({
-    // baseURL: 'http://dev.meiui.me/',
     timeout: 10000,
     validateStatus: function (status) {
       return status >= 200 && status < 300
     }
   })
-  console.log('url', `${domain}${urlKey[url]}`)
   const defer = new Promise((resolve, reject) => {
     instance[method](`${domain}${urlKey[url]}`, data)
     .then(response => response.data)
@@ -67,6 +64,7 @@ export default function Fetch (url, data = {}, method = 'post', showLoading = fa
       if (response.status === 200) {
         resolve(response)
       } else if (response.message === '登录失效请重新登录') {
+        // 登录失效
         Message({
           message: response.message,
           type: 'error'
@@ -97,11 +95,10 @@ export default function Fetch (url, data = {}, method = 'post', showLoading = fa
           type: 'error'
         })
       } else {
-        console.log('Error', error.message)
-        // Message({
-        //   message: '接口异常',
-        //   type: 'error'
-        // })
+        Message({
+          message: '接口异常',
+          type: 'error'
+        })
       }
       console.log(error.config)
     })

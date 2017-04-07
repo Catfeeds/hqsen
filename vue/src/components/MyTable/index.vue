@@ -2,6 +2,7 @@
   <div class="table-box">
     <el-table
       :data="rowData"
+      v-loading.body="loading"
       :row-class-name="disableRowClassName"
       border>
       <el-table-column
@@ -36,7 +37,11 @@
 </style>
 
 <script>
-  import { Table, TableColumn, Pagination } from 'element-ui'
+  import Vue from 'vue'
+  import { Table, TableColumn, Pagination, Loading } from 'element-ui'
+
+  Vue.use(Loading)
+
   export default {
     components: {
       ElTable: Table,

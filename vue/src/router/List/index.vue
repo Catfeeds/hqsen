@@ -40,7 +40,6 @@
       :currentPage="currentPage"
       :total="total"
       :rowData="rowData" 
-      :loading="loading"
       :columnData="basicInfo.columnData">
         <el-table-column
           prop="control"
@@ -157,18 +156,17 @@
       // 设置基础信息
       setBasicInfo () {
         const type = this.$route.params.type
-        // const { breadcrumb, columnData, uniqueKey } = config[type]
+        this.type = type
         this.basicInfo = config[type]
         this.$emit('setActiveIndex', type)
-        this.type = type
-        // this.breadcrumb = breadcrumb
-        // this.columnData = columnData
         this.handleCurrentChange(1)
       },
       // 分页跳转
       handleCurrentChange (current) {
         console.log('currentpage', current)
-        Fetch(this.basicInfo.listUrlKey, { page: current }, 'post', true).then(response => {
+        this.loading = true
+        Fetch(this.basicInfo.listUrlKey, { page: current }).then(response => {
+          // this.loading = false
           const data = response.data.list
           if (this.type === 'order_info__kezi_list') {
             data.map(item => {
@@ -182,13 +180,13 @@
           this.rowData = data
           this.currentPage = current
           this.total = response.data.count
-        })
+        }, () => { this.loading = false })
       },
       // 搜索
       handSearch () {
         const { searchInput } = this
         if (searchInput) {
-          console.log(searchInput)
+          this.handleCurrentChange(1, searchInput)
         } else {
           Message({
             message: '查询内容不能为空',

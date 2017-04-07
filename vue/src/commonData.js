@@ -1,4 +1,4 @@
-
+import Fetch from './Fetch'
 export const configData = () => {
   const basicInfo = localStorage.getItem('basicInfo')
   if (basicInfo && basicInfo.length) {
@@ -9,4 +9,10 @@ export const configData = () => {
     config_area: [],
     user_security: []
   }
+}
+
+export const getShanghaiArea = () => {
+  Fetch('getShanghaiArea').then(response => {
+    return response.data.area_sh
+  })
 }
