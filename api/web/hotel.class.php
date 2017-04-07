@@ -31,7 +31,7 @@ class hotel extends base {
                 $hotel_item = array(
                     'hotel_id' => $one_hotel['hotel_id'],
                     'hotel_name' => $one_hotel['hotel_name'],
-                    'area_list' => $one_hotel['area_list'],
+                    'area_list' => $one_hotel['area_name'],
                     'hotel_address' => $one_hotel['hotel_address'],
                 );
                 $data['list'][] = $hotel_item;
