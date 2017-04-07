@@ -1,0 +1,8 @@
+.my-header {
+  background: #48576a;
+  color: #fff;
+}
+.ant-menu-horizontal>.ant-menu-item-active, .ant-menu-horizontal>.ant-menu-item-open, .ant-menu-horizontal>.ant-menu-item-selected, .ant-menu-horizontal>.ant-menu-item:hover, .ant-menu-horizontal>.ant-menu-submenu-active, .ant-menu-horizontal>.ant-menu-submenu-open, .ant-menu-horizontal>.ant-menu-submenu-selected, .ant-menu-horizontal>.ant-menu-submenu:hover{
+  border-bottom: 3px solid #7fc4f5 !important;
+  color: #7fc4f5 !important;
+}
