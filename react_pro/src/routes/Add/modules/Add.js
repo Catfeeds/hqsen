@@ -17,7 +17,9 @@ export const getInit = (type, id) => {
     dispatch(setBasicInfo({ ...basicInfo, type, id }))
     if (id) {
       Fetch(basicInfo.detailUrlKey, { id }).then(response => {
-        dispatch(saveForm(response.data))
+        let data = response.data
+        data.area_list && (data.area_list = data.area_list.split(','))
+        dispatch(saveForm(data))
       })
     }
   }
