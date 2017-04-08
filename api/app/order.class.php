@@ -73,7 +73,9 @@ class order extends base {
 
     public function orderKeZiList(){
         $order_status = $this->getInt('order_status');
+        $order_status = $order_status ? $order_status : $this->postInt('order_status');
         $order_page = $this->getInt('order_page', 1);
+        $order_page = $order_page ? $order_page : $this->postInt('order_page', 1);
         $limit = 10;
         $offset = ($order_page - 1) * $limit;
         $sql_limit = " limit $offset , $limit";
@@ -101,6 +103,7 @@ class order extends base {
 
     public function orderKeZiDetail(){
         $order_id = $this->getInt('order_id');
+        $order_id = $order_id ? $order_id : $this->postInt('order_id');
         if($order_id){
             $order = $this->db->getRow('select * from hqsen_kezi_order where id = ' . $order_id );
             $order_list['order_item'] = [];
@@ -126,6 +129,35 @@ class order extends base {
             }
             $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $order_list);
         }
+    }
+
+    public function orderHotelArea(){
+        $hotel_area_type = $this->postInt('hotel_area_type');// 1酒店列表 2区域列表
+        $list = [];
+        if($hotel_area_type == 1){
+            $hotel = $this->db->getRows("select *  from hqsen_hotel  where del_flag = 1 order by id desc ");
+            foreach ($hotel as $one_hotel){
+                if($one_hotel){
+                    $hotel_item = array(
+                        'hotel_id' => $one_hotel['id'],
+                        'hotel_name' => $one_hotel['hotel_name'],
+                    );
+                    $list[] = $hotel_item;
+                }
+            }
+        } else {
+            $area = $this->db->getRows("select *  from hqsen_area  where del_flag = 1 order by id desc ");
+            foreach ($area as $one_area){
+                if($one_area){
+                    $area_item = array(
+                        'area_id' => $one_area['id'],
+                        'area_name' => $one_area['area_name'],
+                    );
+                    $list[] = $area_item;
+                }
+            }
+        }
+        $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $list);
     }
 
 
