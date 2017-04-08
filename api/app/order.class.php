@@ -37,14 +37,14 @@ class order extends base {
         $customer_name = $this->postString('customer_name');
         $order_type = $this->postInt('order_type');
         $order_phone = $this->postInt('order_phone');
-        $order_area = $this->postString('order_area');
-        $order_hotel = $this->postString('order_hotel');
+        $order_area_hotel_type = $this->postString('order_area_hotel_type');
+        $order_area_hotel_id = $this->postString('order_area_hotel_id');
         $desk_count = $this->postInt('desk_count');
         $order_money = $this->postInt('order_money');
         $use_date = $this->postString('use_date');
         $watch_user = $this->postString('watch_user');
         $order_desc = $this->postString('order_desc');
-        if($order_type and $order_phone and $order_area and $order_hotel){
+        if($order_type and $order_phone and $order_area_hotel_type and $order_area_hotel_id){
             $order = $this->db->getRow('select * from hqsen_kezi_order where order_type = ' . $order_type . ' and order_phone = '. $order_phone);
             if($order){
                 $this->appDie($this->back_code['order']['phone_type_exist'], $this->back_msg['order']['phone_type_exist']);
@@ -52,8 +52,8 @@ class order extends base {
                 $sql_order['customer_name'] = $customer_name;
                 $sql_order['order_type'] = $order_type;
                 $sql_order['order_phone'] = $order_phone;
-                $sql_order['order_area'] = $order_area;
-                $sql_order['order_hotel'] = $order_hotel;
+                $sql_order['order_area_hotel_type'] = $order_area_hotel_type;
+                $sql_order['order_area_hotel_id'] = $order_area_hotel_id;
                 $sql_order['desk_count'] = $desk_count;
                 $sql_order['use_date'] = $use_date;
                 $sql_order['order_money'] = $order_money;
@@ -116,15 +116,21 @@ class order extends base {
                     'watch_user' => (string)$order['watch_user'],
                     'customer_name' => (string)$order['customer_name'],
                     'order_type' => (int)$order['order_type'],
-                    'order_type_name' => (string)'废弃 请用更新接口map',
-                    'order_area' => (int)$order['order_area'],
-                    'order_area_name' => (string)'废弃 请用更新接口map',
-                    'order_hotel' => (int)$order['order_hotel'],
+                    'order_area_hotel_type' => (int)$order['order_area_hotel_type'],
+                    'order_area_hotel_id' => (int)$order['order_area_hotel_id'],
+                    'order_area_hotel_name' => (int)$order['order_area_hotel_name'],
                     'desk_count' => (string)$order['desk_count'],
                     'order_money' => (string)$order['order_money'],
                     'use_date' => (string)$order['use_date'],
                     'order_desc' => (string)$order['order_desc'],
                 );
+                if($order['order_area_hotel_type'] == 1){
+                    $area = $this->db->getRow("select * from hqsen_area  where id =  " . $order['order_area_hotel_id']);
+                    $order_item['order_area_hotel_name'] = (string)$area['area_name'];
+                } else {
+                    $hotel = $this->db->getRow("select * from hqsen_hotel  where id =  " . $order['order_area_hotel_id']);
+                    $order_item['order_area_hotel_name'] = (string)$hotel['hotel_name'];
+                }
                 $order_list['order_item'] = $order_item;
             }
             $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $order_list);
@@ -132,20 +138,9 @@ class order extends base {
     }
 
     public function orderHotelArea(){
-        $hotel_area_type = $this->postInt('hotel_area_type');// 1酒店列表 2区域列表
+        $hotel_area_type = $this->postInt('hotel_area_type');// 1区域列表 2酒店列表
         $list = [];
         if($hotel_area_type == 1){
-            $hotel = $this->db->getRows("select *  from hqsen_hotel  where del_flag = 1 order by id desc ");
-            foreach ($hotel as $one_hotel){
-                if($one_hotel){
-                    $hotel_item = array(
-                        'hotel_id' => $one_hotel['id'],
-                        'hotel_name' => $one_hotel['hotel_name'],
-                    );
-                    $list[] = $hotel_item;
-                }
-            }
-        } else {
             $area = $this->db->getRows("select *  from hqsen_area  where del_flag = 1 order by id desc ");
             foreach ($area as $one_area){
                 if($one_area){
@@ -154,6 +149,17 @@ class order extends base {
                         'area_name' => $one_area['area_name'],
                     );
                     $list[] = $area_item;
+                }
+            }
+        } else {
+            $hotel = $this->db->getRows("select *  from hqsen_hotel  where del_flag = 1 order by id desc ");
+            foreach ($hotel as $one_hotel){
+                if($one_hotel){
+                    $hotel_item = array(
+                        'hotel_id' => $one_hotel['id'],
+                        'hotel_name' => $one_hotel['hotel_name'],
+                    );
+                    $list[] = $hotel_item;
                 }
             }
         }

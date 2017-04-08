@@ -105,7 +105,7 @@
 #### 验证订单类型的手机 还能不能创建
 * 接口地址 [http://dev.51isen.com/index.php?m=app&c=order&f=validatePhoneOrderType](http://dev.51isen.com/index.php?m=app&c=order&f=validatePhoneOrderType) 
 * 接口方法 post  
-* 接口参数 order_type(必填 客资订单类别 1) | order_phone  (必填 手机号 15068159661) | access_token(必填 登录返回access_token 1233232)
+* 接口参数 order_type(必填 客资订单类别 1婚宴 2会务 3宝宝宴) | order_phone  (必填 手机号 15068159661) | access_token(必填 登录返回access_token 1233232)
 * 接口返回 
 
         {
@@ -118,7 +118,7 @@
 #### 创建确定类型的客资信息
 * 接口地址 [http://dev.51isen.com/index.php?m=app&c=order&f=createKeZi](http://dev.51isen.com/index.php?m=app&c=order&f=createKeZi) 
 * 接口方法 post  
-* 接口参数 order_type(必填 客资订单类别 1) | order_phone  (必填 手机号 15068159661) | access_token(必填 登录返回access_token 1233232) | order_area(必填 区域 2) | order_hotel(必填 酒店 3) |customer_name(选填 消费者 张三)  |desk_count(选填 桌数 66)|use_date(选填 使用时间 12-09-09)|order_money(选填 金额 18万)|order_desc(选填 订单简介 简介内容)
+* 接口参数 order_type(必填 客资订单类别 1婚宴 2会务 3宝宝宴) | order_phone  (必填 手机号 15068159661) | access_token(必填 登录返回access_token 1233232) | order_area_hotel_type(必填 指定区域或酒店 1区域 2酒店) | order_area_hotel_id(必填 区域ID 或则酒店ID) |customer_name(选填 消费者 张三)  |desk_count(选填 桌数 66)|use_date(选填 使用时间 12-09-09)|order_money(选填 金额 18万)|order_desc(选填 订单简介 简介内容)
 * 接口返回 
 
         {
@@ -206,5 +206,31 @@
           "status": 200,
           "data": [],
           "message": "success"
+        }
+--------------------------------
+
+#### 获取区域酒店列表
+* 接口地址 [http://dev.51isen.com/index.php?m=app&c=order&f=orderHotelArea](http://dev.51isen.com/index.php?m=app&c=order&f=orderHotelArea) 
+* 接口方法 post 
+* 接口参数 access_token(必填 登录返回access_token 1233232) | hotel_area_type(必填 区域或酒店 1区域 2酒店) 
+* 接口返回 
+
+        {
+          "status": 200,
+          "data": [
+            {
+              "hotel_id": "45",
+              "hotel_name": "如家"
+            },
+            {
+              "hotel_id": "44",
+              "hotel_name": "如家"
+            },
+            {
+              "hotel_id": "43",
+              "hotel_name": "希尔顿"
+            }
+          ],
+          "message": "请求成功"
         }
 --------------------------------
