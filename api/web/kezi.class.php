@@ -23,12 +23,7 @@ class kezi extends base {
         $limit = 10;
         $offset = ($page - 1) * $limit;
         $sql_limit = " limit $offset , $limit";
-        $order = $this->db->getRows("
-                        select hko.*, ha.`area_name` as order_area_name, hh.`hotel_name` as order_hotel_name 
-                        from hqsen_kezi_order as hko 
-                        left join hqsen_area as ha on hko.order_area = ha.id 
-                        left join hqsen_hotel as hh on hko.order_hotel=hh.id 
-                        where hko.del_flag = 1 " . $sql_limit);
+        $order = $this->db->getRows("select * from hqsen_kezi_order  where del_flag = 1 " . $sql_limit);
         $data = [];
         foreach ($order as $one_order){
             if($one_order){
@@ -37,10 +32,14 @@ class kezi extends base {
                     'customer_name' => $one_order['customer_name'],
                     'order_phone' => $one_order['order_phone'],
                     'order_type' => $one_order['order_type'],
-                    'order_hotel' => $one_order['order_hotel'],
-                    'area_hotel_name' => $one_order['order_hotel_name'] . "/" . $one_order['order_area_name'],
-                    'order_area' => $one_order['order_area'],
                 );
+                if($one_order['order_area_hotel_type'] == 1){
+                    $area = $this->db->getRow("select * from hqsen_area  where id =  " . $one_order['order_area_hotel_id']);
+                    $kezi_item['area_hotel_name'] = (string)$area['area_name'];
+                } else {
+                    $hotel = $this->db->getRow("select * from hqsen_hotel  where id =  " . $one_order['order_area_hotel_id']);
+                    $kezi_item['area_hotel_name'] = (string)$hotel['hotel_name'];
+                }
                 $data['list'][] = $kezi_item;
             }
         }
