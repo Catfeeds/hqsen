@@ -240,8 +240,9 @@ class base{
         );
     }
 
-    public function area_sh_config(){
-        return array(
+    // 默认返回所有区域  有ID 返回对应的所有区域名字
+    public function get_sh_area($sh_area_id = 0){
+        $sh_area = array(
             '1'=>'浦东新区',
             '2'=>'卢湾区',
             '3'=>'黄浦区',
@@ -262,7 +263,8 @@ class base{
             '18'=>'宝山区',
             '19'=>'崇明县',
         );
-
+        $return = isset($sh_area[$sh_area_id]) ?  $sh_area[$sh_area_id] : $sh_area;
+        return $return;
     }
 
 

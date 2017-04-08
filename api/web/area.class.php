@@ -31,7 +31,7 @@ class area extends base {
                 $area_list = '';
                 foreach ($area_sh_arr as $one_area_sh){
                     if($one_area_sh){
-                        $area_list .= ',' . $this->area_sh_config()[$one_area_sh];
+                        $area_list .= ',' . $this->get_sh_area($one_area_sh);
                     }
 
                 }
@@ -83,6 +83,8 @@ class area extends base {
                 $sql_order['area_list'] = $area_list;
                 // 更新区域信息
                 $area_sh_arr = explode(',', $sql_order['area_list']);
+                $sql_clean_area['link_area_id'] = 0;
+                $this->db->update('hqsen_area_sh', $sql_clean_area, ' link_area_id = ' . $area_id);
                 foreach ($area_sh_arr as $one_area_sh){
                     $sql_area_sh['link_area_id'] = $area_id;
                     $this->db->update('hqsen_area_sh', $sql_area_sh, ' id = ' . $one_area_sh);

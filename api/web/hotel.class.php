@@ -23,15 +23,14 @@ class hotel extends base {
         $limit = 10;
         $offset = ($page - 1) * $limit;
         $sql_limit = " limit $offset , $limit";
-        $hotel = $this->db->getRows("select *,hh.id as hotel_id  from hqsen_hotel as hh 
-                  left join hqsen_area as ha on hh.area_id = ha.id where hh.del_flag = 1 order by hh.id desc " . $sql_limit);
+        $hotel = $this->db->getRows("select *  from hqsen_hotel  where del_flag = 1 order by id desc " . $sql_limit);
         $data = [];
         foreach ($hotel as $one_hotel){
             if($one_hotel){
                 $hotel_item = array(
-                    'hotel_id' => $one_hotel['hotel_id'],
+                    'hotel_id' => $one_hotel['id'],
                     'hotel_name' => $one_hotel['hotel_name'],
-                    'area_list' => $one_hotel['area_name'],
+                    'area_list' => $this-> get_sh_area($one_hotel['area_id']),
                     'hotel_address' => $one_hotel['hotel_address'],
                 );
                 $data['list'][] = $hotel_item;
@@ -116,16 +115,5 @@ class hotel extends base {
         }
     }
 
-    public function hotelArea(){
-        $config_data['config_area'] = [];
-        $area = $this->db->getRows("select * from hqsen_area  where del_flag = 1 ");
-        foreach ($area as $one_area){
-            $area_item = array(
-                'value' => $one_area['id'],
-                'label' => $one_area['area_name']
-            );
-            $config_data['config_area'][] = $area_item;
-        }
-        $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $config_data);
-    }
+
 }

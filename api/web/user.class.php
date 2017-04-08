@@ -45,11 +45,11 @@ class user extends base{
         } else {
             $config_data['user_security'] = $this->user_security('first_user');
         }
-        $area = $this->db->getRows("select * from hqsen_area  where del_flag = 1 ");
-        foreach ($area as $one_area){
+        $sh_area = $this->get_sh_area();
+        foreach ($sh_area as $area_key => $area_value){
             $area_item = array(
-                'value' => $one_area['id'],
-                'label' => $one_area['area_name']
+                'value' => $area_key,
+                'label' => $area_value
             );
             $config_data['config_area'][] = $area_item;
         }
