@@ -176,24 +176,25 @@
           "status": 200,
           "data": {
             "order_item": {
-              "id": 116,
-              "create_time": "1490503009",
+              "id": 6,
+              "create_time": "1491535065",
               "order_status": 1,
-              "order_phone": "186 2736 1728",
-              "watch_user": "上海国际饭店",
-              "customer_name": "monkey",
+              "order_phone": "15068148661",
+              "watch_user": "",
+              "customer_name": "大熊",
               "order_type": 1,
-              "order_type_name": "婚宴",
-              "order_area": 1,
-              "order_area_name": "指定酒店",
-              "desk_count": "18",
-              "order_money": "120000",
-              "use_date": "17-10-01",
-              "order_desc": "备注信息"
+              "order_area_hotel_type": 2,
+              "order_area_hotel_id": 43,
+              "desk_count": "5",
+              "order_money": "12",
+              "use_date": "15",
+              "order_desc": "desccccccccccccc",
+              "order_area_hotel_name": "希尔顿"
             }
           },
           "message": "请求成功"
         }
+        
 --------------------------------
 
 #### 意见反馈

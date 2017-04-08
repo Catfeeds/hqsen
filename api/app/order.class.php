@@ -118,7 +118,6 @@ class order extends base {
                     'order_type' => (int)$order['order_type'],
                     'order_area_hotel_type' => (int)$order['order_area_hotel_type'],
                     'order_area_hotel_id' => (int)$order['order_area_hotel_id'],
-                    'order_area_hotel_name' => (int)$order['order_area_hotel_name'],
                     'desk_count' => (string)$order['desk_count'],
                     'order_money' => (string)$order['order_money'],
                     'use_date' => (string)$order['use_date'],
