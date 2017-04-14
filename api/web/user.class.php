@@ -4,7 +4,7 @@
  * Author: monkey<my455628442@gmail.com>
  * Date: 2017/3/20 0020
  * Time: 10:16
- * File Using:app 接口用户类api user
+ * File Using:user 后台用户类
  */
 
 
@@ -34,6 +34,7 @@ class user extends base{
         }
     }
 
+    // 后台配置信息数据
     public function configData(){
         $this->loginInit();
         $config_data = array(
@@ -54,10 +55,10 @@ class user extends base{
             $config_data['config_area'][] = $area_item;
         }
 
-
         $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $config_data);
     }
 
+    // 意见反馈
     public function feedback(){
         $this->loginInit();
         $page = $this->postInt('page', 1);

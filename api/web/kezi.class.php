@@ -4,7 +4,7 @@
  * Author: monkey<my455628442@gmail.com>
  * Date: 2017/3/20 0020
  * Time: 10:16
- * File Using:order 接口订单类api user
+ * File Using:kezi 后台接口客资数据
  */
 
 
@@ -15,9 +15,10 @@ class kezi extends base {
     public function __construct()
     {
         parent::__construct();
-        $this-> loginInit();
+        $this-> loginInit();// 登录态操作
     }
 
+    // 客资列表
     public function keziList(){
         $page = $this->postInt('page', 1);
         $limit = 10;
@@ -33,6 +34,7 @@ class kezi extends base {
                     'order_phone' => $one_order['order_phone'],
                     'order_type' => $one_order['order_type'],
                 );
+                // 如果是1 表示是区域  如果是2 表示是酒店
                 if($one_order['order_area_hotel_type'] == 1){
                     $area = $this->db->getRow("select * from hqsen_area  where id =  " . $one_order['order_area_hotel_id']);
                     $kezi_item['area_hotel_name'] = (string)$area['area_name'];
@@ -47,6 +49,7 @@ class kezi extends base {
         $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $data);
     }
 
+    // 客资详情
     public function keziDetail(){
         $order_id = $this->postString('id');
         if($order_id){

@@ -4,7 +4,7 @@
  * Author: monkey<my455628442@gmail.com>
  * Date: 2017/3/20 0020
  * Time: 10:16
- * File Using:order 接口订单类api user
+ * File Using:area  后台接口 区域相关类
  */
 
 
@@ -15,9 +15,10 @@ class area extends base {
     public function __construct()
     {
         parent::__construct();
-        $this-> loginInit();
+        $this-> loginInit(); //  所有接口 登录态
     }
 
+    // 区域列表
     public function areaList(){
         $page = $this->postInt('page', 1);
         $limit = 10;
@@ -47,6 +48,7 @@ class area extends base {
         $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $data);
     }
 
+    // 创建区域
     public function areaCreate(){
         $area_name = $this->postString('area_name');
         $area_list = $this->postString('area_list');
@@ -70,6 +72,7 @@ class area extends base {
 
     }
 
+    // 编辑区域
     public function areaEdit(){
         $area_id = $this->postString('id');
         $area_name = $this->postString('area_name');
@@ -98,6 +101,7 @@ class area extends base {
         }
     }
 
+    // 　删除区域
     public function areaDelete(){
         $area_id = $this->postString('id');
         if($area_id){
@@ -109,6 +113,7 @@ class area extends base {
         }
     }
 
+    // 区域详情
     public function areaDetail(){
         $area_id = $this->postString('id');
         if($area_id){
@@ -124,6 +129,7 @@ class area extends base {
         }
     }
 
+    // 上海所有区
     public function areaSH(){
         $area_id = $this->postInt('id');
         $area = $this->db->getRows("select has.* , ha.`del_flag` as is_used from hqsen_area_sh as has left join hqsen_area as ha on has.`link_area_id`=ha.id");
@@ -133,7 +139,6 @@ class area extends base {
                 $area_item = array(
                     'label' => $one_area['area_label'],
                     'value' => $one_area['id'],
-//                    'is_used' => intval($one_area['is_used']),
                 );
                 if(intval($one_area['is_used']) != 1 or ($area_id and $area_id == $one_area['link_area_id'])){
                     $area_item['disabled'] = false;

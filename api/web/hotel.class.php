@@ -4,7 +4,7 @@
  * Author: monkey<my455628442@gmail.com>
  * Date: 2017/3/20 0020
  * Time: 10:16
- * File Using:order 接口订单类api user
+ * File Using:hotel 后台接口 酒店类
  */
 
 
@@ -18,6 +18,7 @@ class hotel extends base {
         $this-> loginInit();
     }
 
+    // 酒店列表
     public function hotelList(){
         $page = $this->postInt('page', 1);
         $limit = 10;
@@ -40,6 +41,7 @@ class hotel extends base {
         $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $data);
     }
 
+    // 创建酒店
     public function hotelCreate(){
         $hotel_name = $this->postString('hotel_name');
         $hotel_address = $this->postString('hotel_address');
@@ -60,6 +62,7 @@ class hotel extends base {
 
     }
 
+    // 编辑酒店
     public function hotelEdit(){
         $hotel_id = $this->postString('id');
         $hotel_name = $this->postString('hotel_name');
@@ -87,6 +90,7 @@ class hotel extends base {
         }
     }
 
+    // 删除酒店 修改酒店状态 不真正删除数据
     public function hotelDelete(){
         $hotel_id = $this->postString('id');
         if($hotel_id){
@@ -98,6 +102,7 @@ class hotel extends base {
         }
     }
 
+    // 酒店详情
     public function hotelDetail(){
         $hotel_id = $this->postString('id');
         if($hotel_id){

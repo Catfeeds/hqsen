@@ -4,7 +4,7 @@
  * Author: monkey<my455628442@gmail.com>
  * Date: 2017/3/20 0020
  * Time: 10:16
- * File Using:order 接口订单类api user
+ * File Using:web   后台接口 account 账号
  */
 
 
@@ -15,9 +15,10 @@ class account extends base {
     public function __construct()
     {
         parent::__construct();
-        $this-> loginInit();
+        $this-> loginInit(); // 所有接口需要登录态
     }
 
+    // 注册账号列表
     public function registerAccountList(){
         $page = $this->postInt('page', 1);
         $limit = 10;
@@ -38,6 +39,16 @@ class account extends base {
         }
         $data['count'] = $this->db->getCount('hqsen_user', ' del_flag = 1 and user_type = 3 ');
         $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $data);
+
+    }
+
+    // 酒店账号列表
+    public function hotelAccountList(){
+
+    }
+
+    // 内部账号列表
+    public function innerAccountList(){
 
     }
 }

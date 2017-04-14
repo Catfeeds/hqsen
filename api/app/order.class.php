@@ -74,7 +74,7 @@ class order extends base {
     public function orderKeZiList(){
         $order_status = $this->getInt('order_status');
         $order_status = $order_status ? $order_status : $this->postInt('order_status');
-        $order_page = $this->getInt('order_page', 1);
+        $order_page = $this->getInt('order_page');
         $order_page = $order_page ? $order_page : $this->postInt('order_page', 1);
         $limit = 10;
         $offset = ($order_page - 1) * $limit;
