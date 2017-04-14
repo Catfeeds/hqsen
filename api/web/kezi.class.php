@@ -50,32 +50,23 @@ class kezi extends base {
     public function keziDetail(){
         $order_id = $this->postString('id');
         if($order_id){
-            $order = $this->db->getRow("
-                        select hko.*, ha.`area_name` as order_area_name, hh.`hotel_name` as order_hotel_name 
-                        from hqsen_kezi_order as hko 
-                        left join hqsen_area as ha on hko.order_area = ha.id 
-                        left join hqsen_hotel as hh on hko.order_hotel=hh.id 
-                        where hko.id = " . $order_id);
+            $order = $this->db->getRow("select * from hqsen_kezi_order  where del_flag = 1 and id = " . $order_id);
             $order_item = array(
                 'id' => $order['id'],
                 'customer_name' => $order['customer_name'],
                 'order_type' => $order['order_type'],
                 'order_phone' => $order['order_phone'],
 //                'order_area' => [array('value'=>$order['order_area'] ,'label'=>$order['order_area_name'])],
-                'order_area' => $order['order_area_name'],
+                'order_area' => '',
 //                'order_hotel' => [array('value'=>$order['order_hotel'], 'label'=>$order['order_hotel_name'])],
-                'order_hotel' => $order['order_hotel_name'],
+                'order_hotel' => '',
                 'desk_count' => $order['desk_count'],
                 'order_money' => $order['order_money'],
                 'use_date' => $order['use_date'],
                 'watch_user' => $order['watch_user'],
                 'order_desc' => $order['order_desc'],
             );
-            // todo  暂时兼容
-            if($this->user['user_name'] == 'monkey'){
-                $order_item['order_area'] = $order['order_area_name'];
-                $order_item['order_hotel'] = $order['order_hotel_name'];
-            }
+
             $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $order_item);
         } else {
             $this->appDie($this->back_code['sys']['value_empty'], $this->back_msg['sys']['value_empty']);

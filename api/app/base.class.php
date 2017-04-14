@@ -35,7 +35,7 @@ class base{
         );
         $this-> back_code = array(
             'sys' => array(
-                'success' => '200',
+                'success' => '1000',
                 'fail' => '999',
                 'token_empty' => '998',
                 'token_fail' => '997',
@@ -75,7 +75,7 @@ class base{
 
     }
 
-    public function appDie($back_code = 200, $back_msg = 'success', $back_data = []){
+    public function appDie($back_code = 1000, $back_msg = '请求成功', $back_data = []){
         $data['status'] = (int)$back_code;
         $data['data'] = (array)$back_data;
         $data['message'] = (string)$back_msg;

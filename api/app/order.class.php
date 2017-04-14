@@ -83,6 +83,7 @@ class order extends base {
         if($order_status){
             $sql_status = ' where order_status = ' . $order_status;
         }
+        $sql_status .= ' and user_id = '. $this->user['id'];
         $order = $this->db->getRows('select * from hqsen_kezi_order ' . $sql_status . $sql_limit);
         $order_list['order_list'] = [];
         if($order){
@@ -138,16 +139,17 @@ class order extends base {
 
     public function orderHotelArea(){
         $hotel_area_type = $this->postInt('hotel_area_type');// 1区域列表 2酒店列表
-        $list = [];
+        $list['area_list'] = [];
+        $list['hotel_list'] = [];
         if($hotel_area_type == 1){
             $area = $this->db->getRows("select *  from hqsen_area  where del_flag = 1 order by id desc ");
             foreach ($area as $one_area){
                 if($one_area){
                     $area_item = array(
-                        'area_id' => $one_area['id'],
-                        'area_name' => $one_area['area_name'],
+                        'area_id' => (int)$one_area['id'],
+                        'area_name' => (string)$one_area['area_name'],
                     );
-                    $list[] = $area_item;
+                    $list['area_list'][] = $area_item;
                 }
             }
         } else {
@@ -158,7 +160,7 @@ class order extends base {
                         'hotel_id' => $one_hotel['id'],
                         'hotel_name' => $one_hotel['hotel_name'],
                     );
-                    $list[] = $hotel_item;
+                    $list['hotel_list'][] = $hotel_item;
                 }
             }
         }

@@ -102,17 +102,17 @@ class user extends base{
                 curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($send_data));
                 $json_data = curl_exec($ch);
                 $array = json_decode($json_data,true);
-                if(isset($array['msg']) and  $array['msg'] == '发送成功'){
+//                if(isset($array['msg']) and  $array['msg'] == '发送成功'){
                     $data['code'] = $rand_text;
                     $data['phone'] = $mobile;
                     $session_id = "sen-" . $data['phone'];
                     session_id($session_id);
                     session_start();
                     $_SESSION['code'] = $rand_text;
-                } else {
-                    $data['code'] = 0;
-                    $data['phone'] = $array['detail'];
-                }
+//                } else {
+//                    $data['code'] = 0;
+//                    $this->appDie($this->back_code['user']['phone_code_err'], $array['detail'], $data);
+//                }
                 // 发送模板短信
                 curl_close($ch);
                 $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $data);
