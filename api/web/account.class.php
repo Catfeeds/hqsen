@@ -49,7 +49,7 @@ class account extends base {
         $offset = ($page - 1) * $limit;
         $sql_limit = " limit $offset , $limit";
 
-        $user = $this->db->getRows("select *,hu.id as hu_id from hqsen_user as hu left join hqsen_user_data as hud on hu.id=hud.user_id where  hu.del_flag = 1 and hu.user_type = 4 " . $sql_limit);
+        $user = $this->db->getRows("select *,hu.id as hu_id from hqsen_user as hu left join hqsen_user_data as hud on hu.id=hud.user_id where  hu.del_flag = 1 and hu.user_type = 4 order by hu.id desc" . $sql_limit);
         $data = [];
         foreach ($user as $one_user){
             if($one_user){
@@ -153,7 +153,7 @@ class account extends base {
         $offset = ($page - 1) * $limit;
         $sql_limit = " limit $offset , $limit";
 
-        $user = $this->db->getRows("select *,hu.id as hu_id from hqsen_user as hu left join hqsen_user_data as hud on hu.id=hud.user_id where  hu.del_flag = 1 and hu.user_type > 10 " . $sql_limit);
+        $user = $this->db->getRows("select *,hu.id as hu_id from hqsen_user as hu left join hqsen_user_data as hud on hu.id=hud.user_id where  hu.del_flag = 1 and hu.user_type > 10 order by hu.id desc " . $sql_limit);
         $data = [];
         foreach ($user as $one_user){
             if($one_user){
