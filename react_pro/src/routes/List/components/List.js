@@ -43,9 +43,14 @@ class List extends Component {
     this.context.router.push(`/add/${type}`)
   }
 
+  setRowClass (record) {
+    if (record['user_status'] === '2') {
+      return 'disabled-row'
+    }
+  }
   render () {
     const { pageInfo, resultInfo, searchInput, loading, basicInfo } = this.props.List
-    const { handleCurrentChange, changeSearchInput, deleteRow, configData } = this.props
+    const { handleCurrentChange, changeSearchInput, deleteRow, configData, disabledRow } = this.props
     const columns = {
       // 客资信息
       order_info_kezi_list: [{
@@ -66,12 +71,50 @@ class List extends Component {
         title: '指定类型',
         render: text => {
           const orderType = configData.order_type
-          const name = orderType.filter(item => item.value === text)[0].label
+          const name = orderType.length ? orderType.filter(item => item.value === text)[0].label : ''
           return <span>{name}</span>
         }
       }, {
         key: 'area_hotel_name',
         dataIndex: 'area_hotel_name',
+        title: '酒店/区域名称'
+      }, {
+        key: 'detail',
+        dataIndex: 'detail',
+        title: '操作',
+        render: (text, record) => {
+          const id = record[basicInfo.uniqueKey]
+          return (
+            <Button
+              type="default"
+              onClick={() => this.gotoDetail(id)}>查看详情</Button>
+          )
+        }
+      }],
+      // 搭建信息
+      order_info_dajian_list: [{
+        key: 'date',
+        dataIndex: '',
+        title: '序号'
+      }, {
+        key: 'key',
+        dataIndex: '',
+        title: '姓名'
+      }, {
+        key: 'address',
+        dataIndex: '',
+        title: '手机号'
+      }, {
+        key: 'jj',
+        dataIndex: '',
+        title: '订单来源'
+      }, {
+        key: '3',
+        dataIndex: '',
+        title: '指定类型'
+      }, {
+        key: '2',
+        dataIndex: '',
         title: '酒店/区域名称'
       }, {
         key: 'detail',
@@ -128,6 +171,7 @@ class List extends Component {
         title: '操作',
         render: (text, record) => renderControlBtn(record)
       }],
+      // 注册账号
       account_info_register_list: [{
         key: 'user_id',
         dataIndex: 'user_id',
@@ -158,12 +202,73 @@ class List extends Component {
         key: 'phone',
         dataIndex: 'phone',
         title: '联系方式'
+      }],
+      // 酒店账户列表
+      account_info_hotel_list: [{
+        key: 'user_id',
+        dataIndex: 'user_id',
+        title: '序号'
+      }, {
+        key: 'user_name',
+        dataIndex: 'user_name',
+        title: '账号名称'
+      }, {
+        key: 'hotel_name',
+        dataIndex: 'hotel_name',
+        title: '所属酒店'
+      }, {
+        key: 'hotel_area',
+        dataIndex: 'hotel_area',
+        title: '酒店所在区'
+      }, {
+        key: 'user_status',
+        dataIndex: 'user_status',
+        title: '状态',
+        render: (text) => <span>{text === '1' ? '已启用' : '已禁用'}</span>
+      }, {
+        key: 'control',
+        dataIndex: 'control',
+        title: '操作',
+        render: (text, record) => renderControlBtn(record, true)
+      }],
+      // 内部账号
+      account_info_inner_list: [{
+        key: 'user_id',
+        dataIndex: 'user_id',
+        title: '序号'
+      }, {
+        key: 'user_name',
+        dataIndex: 'user_name',
+        title: '账号名称'
+      }, {
+        key: 'user_type',
+        dataIndex: 'user_type',
+        title: '账号类型'
+      }, {
+        key: 'user_status',
+        dataIndex: 'user_status',
+        title: '状态',
+        render: (text) => <span>{text === '1' ? '已启用' : '已禁用'}</span>
+      }, {
+        key: 'control',
+        dataIndex: 'control',
+        title: '操作',
+        render: (text, record) => renderControlBtn(record, true)
       }]
     }
-    const renderControlBtn = (record) => {
+    const renderControlBtn = (record, showDisabled) => {
       const id = record[basicInfo.uniqueKey]
+      const dataStatus = record['user_status']
       return (
         <div>
+          { showDisabled &&
+          <Popconfirm
+            title={`确定${dataStatus === '1' ? '禁用' : '启用'}该条数据?`}
+            onConfirm={() => disabledRow(id, dataStatus)}>
+            <Button type="primary"
+              icon={dataStatus === '1' ? 'unlock' : 'lock'} ghost shape="circle" style={{ marginRight: 5 }} />
+          </Popconfirm>
+          }
           <Button type="primary" icon="edit" ghost shape="circle" style={{ marginRight: 5 }}
             onClick={() => this.editRow(id)} />
           <Popconfirm title="确定删除该条数据?" onConfirm={() => deleteRow(id)}>
@@ -207,6 +312,7 @@ class List extends Component {
           pagination={pagination}
           onChange={(pageInfo) => handleCurrentChange(pageInfo.current)}
           dataSource={resultInfo.list}
+          rowClassName={(record) => this.setRowClass(record)}
           columns={columns[basicInfo.type]} />
       </div>
     )
@@ -214,6 +320,7 @@ class List extends Component {
 }
 
 List.propTypes = {
+  disabledRow: PropTypes.func,
   configData: PropTypes.object,
   deleteRow: PropTypes.func,
   initData: PropTypes.func,

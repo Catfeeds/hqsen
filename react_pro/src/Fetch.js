@@ -6,6 +6,7 @@ const urlKey = {
   login: 'c=user&f=login',
   registerList: 'c=account&f=registerAccountList',
   configData: 'c=user&f=configData',
+  changeDisabledStaus: 'c=account&f=accountChangeStatus',
   // hotel
   hotelList: 'c=hotel&f=hotelList',
   createHotel: 'c=hotel&f=hotelCreate',
@@ -25,7 +26,22 @@ const urlKey = {
   dajianList: 'c=dajian&f=dajianList',
   createdajian: 'c=dajian&f=dajianCreate',
   getShanghaiArea: 'c=area&f=areaSH',
-  feedback: 'c=user&f=feedback'
+  feedback: 'c=user&f=feedback',
+  // 酒店账户列表
+  hotelAccountList: 'c=account&f=hotelAccountList',
+  getHotelSelect: 'c=account&f=hotelList',
+  addHotelAccount: 'c=account&f=hotelAccountAdd',
+  hotelAccountDetail: 'c=account&f=hotelAccountDetail',
+  hotelAccountEdit: 'c=account&f=accountEdit',
+  deleteHotelAccount: 'c=account&f=accountDelete',
+  // 内部账号
+  innerAccountList: 'c=account&f=innerAccountList',
+  addInnerAccount: 'c=account&f=innerAccountAdd',
+  innerAccountDetail: 'c=account&f=innerAccountDetail',
+  innerAccountEdit: 'c=account&f=accountEdit',
+  deleteInnerAccount: 'c=account&f=accountDelete',
+  // 超管重置密码
+  resetPwd: 'c=account&f=adminAccountEdit'
 }
 
 const formatData = (param) => {

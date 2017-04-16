@@ -1,21 +1,28 @@
 import React, { Component, PropTypes } from 'react'
-import classes from './ImageView.scss'
-import { Carousel } from 'antd'
+import './ImageView.scss'
+import Viewer from 'viewerjs'
+import '../../../node_modules/viewerjs/dist/viewer.min.css'
 
 class ImageView extends Component {
+  componentDidMount () {
+    new Viewer(document.querySelector('.image-scroll-box'))
+  }
+
   render () {
     return (
-      <Carousel afterChange={} effect="fade">
-        <div><h3>1</h3></div>
-        <div><h3>2</h3></div>
-        <div><h3>3</h3></div>
-        <div><h3>4</h3></div>
-      </Carousel>
+      <ul className="image-scroll-box">
+        {this.props.data.map((item, index) =>
+          <li key={index} className="scroll-image-item">
+            <img className="scroll-image" src={item} />
+          </li>
+        )}
+      </ul>
     )
   }
 }
 
 ImageView.propTypes = {
+  data: PropTypes.array
 }
 
 export default ImageView

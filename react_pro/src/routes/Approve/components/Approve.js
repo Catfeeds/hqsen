@@ -2,24 +2,15 @@ import React, { Component, PropTypes } from 'react'
 import { Form, Button, Popconfirm } from 'antd'
 import MyBreadcrumb from 'components/MyBreadcrumb'
 import FormComponent from 'components/FormComponent'
-import ConfirmComponent from './ConfirmComponent'
-import './Add.scss'
-class Add extends Component {
-  constructor () {
-    super()
-    this.state = {
-      showConfirm: false
-    }
-  }
+import MyCard from 'components//MyCard'
+import './Approve.scss'
+
+class Approve extends Component {
 
   componentWillMount () {
-    const { getDataSource } = this.props
     const { type } = this.props.params
     const { id } = this.props.location.query
-    getDataSource(type, id)
-    this.setState({
-      showConfirm: type === 'account_info_hotel_list' || type === 'account_info_inner_list'
-    })
+    this.props.getInit(type, id)
   }
 
   componentWillUnmount () {
@@ -33,7 +24,8 @@ class Add extends Component {
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values)
-        submitForm(id, values, this.context.router)
+        if (values.radio) {}
+        // submitForm(id, values, this.context.router)
       }
     })
   }
@@ -44,43 +36,55 @@ class Add extends Component {
 
   render () {
     const { getFieldDecorator } = this.props.form
-    const { basicInfo, dataSource, formData, loading } = this.props.Add
-    let configData = { ...this.props.configData, ...dataSource }
-    configData.area_id = configData.config_area
-    configData.user_type = configData.inner_type
+    const { basicInfo, formData, loading, dataSource } = this.props.Approve
     return (
-      <div className="add-page">
+      <div className="approve-page">
         <MyBreadcrumb breadcrumb={basicInfo.breadcrumb} />
-        <Form className="vertival-form">
+        <Form>
           { basicInfo.formList.map((item, index) => {
             return <FormComponent
               key={index}
               getFieldDecorator={getFieldDecorator}
               item={item}
-              dataSource={configData[item.name]}
+              dataSource={dataSource[item.name]}
               defaultValue={formData[item.name]} />
           })
           }
-          { this.state.showConfirm && basicInfo.type && <ConfirmComponent form={this.props.form} id={basicInfo.id} />}
+          <h1 className="approve-title">审批</h1>
+          <div className="approve-form-box">
+            { basicInfo.approveList.map((item, index) => {
+              return <FormComponent
+                key={index}
+                className="radio-item"
+                getFieldDecorator={getFieldDecorator}
+                item={item}
+                dataSource={dataSource[item.name]}
+                defaultValue={formData[item.name]} />
+            })
+            }
+          </div>
           <Form.Item>
             <Popconfirm title="确认提交?" onConfirm={(e) => this.handleSubmit(e)}>
-              <Button className="add-btn" type="primary" loading={loading}>提交</Button>
+              <Button className="approve-btn" type="primary" loading={loading}>提交</Button>
             </Popconfirm>
-            <Button className="add-btn" type="default" size="default" onClick={() => this.cancleSubmit()}>取消</Button>
+            <Button className="approve-btn"
+              type="default" size="default" onClick={() => this.cancleSubmit()}>取消</Button>
           </Form.Item>
         </Form>
+        <h1 className="approve-title">历史审批记录</h1>
+        <MyCard />
       </div>
     )
   }
 }
 
-Add.propTypes = {
-  Add: PropTypes.object,
+Approve.propTypes = {
+  Approve: PropTypes.object,
   form: PropTypes.object,
   basicInfo: PropTypes.object,
   configData: PropTypes.object,
   formData: PropTypes.object,
-  getDataSource: PropTypes.func,
+  getInit: PropTypes.func,
   type: PropTypes.string,
   id: PropTypes.string,
   params: PropTypes.object,
@@ -91,8 +95,9 @@ Add.propTypes = {
 }
 
 
-Add.contextTypes = {
+Approve.contextTypes = {
   router: React.PropTypes.object.isRequired
 }
 
-export default Form.create()(Add)
+export default Form.create()(Approve)
+

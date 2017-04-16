@@ -7,26 +7,7 @@ export default {
   },
   // 搭建详情
   order_info_dajian_list: {
-    breadcrumb: ['客资/搭建信息', '搭建信息列表'],
-    columnData: [{
-      name: 'date',
-      label: '序号'
-    }, {
-      name: 'name',
-      label: '姓名'
-    }, {
-      name: 'address',
-      label: '手机号'
-    }, {
-      name: 'jj',
-      label: '订单来源'
-    }, {
-      name: '3',
-      label: '指定类型'
-    }, {
-      name: '2',
-      label: '酒店/区域名称'
-    }]
+    breadcrumb: ['客资/搭建信息', '搭建信息列表']
   },
   // 酒店列表
   hotel_info_hotel_list: {
@@ -60,40 +41,19 @@ export default {
   },
   // 酒店账号列表
   account_info_hotel_list: {
-    breadcrumb: ['账号管理', '酒店账号列表'],
-    columnData: [{
-      name: 'date',
-      label: '序号'
-    }, {
-      name: 'name',
-      label: '账号名称'
-    }, {
-      name: 'address',
-      label: '所属酒店'
-    }, {
-      name: 'jj',
-      label: '酒店所在区'
-    }, {
-      name: '3',
-      label: '状态'
-    }]
+    deleteUrlKey: 'deleteHotelAccount',
+    disableUrlKey: 'changeDisabledStaus',
+    uniqueKey: 'user_id',
+    listUrlKey: 'hotelAccountList',
+    breadcrumb: ['账号管理', '酒店账号列表']
   },
   // 内部账号列表
   account_info_inner_list: {
-    breadcrumb: ['账号管理', '内部账号列表'],
-    columnData: [{
-      name: 'date',
-      label: '序号'
-    }, {
-      name: 'name',
-      label: '账号名称'
-    }, {
-      name: 'address',
-      label: '账号类型'
-    }, {
-      name: '3',
-      label: '状态'
-    }]
+    deleteUrlKey: 'deleteInnerAccount',
+    disableUrlKey: 'changeDisabledStaus',
+    listUrlKey: 'innerAccountList',
+    uniqueKey: 'user_id',
+    breadcrumb: ['账号管理', '内部账号列表']
   },
   // 客资审核列表 - 财务审批
   finance_info_kezi_contract: {

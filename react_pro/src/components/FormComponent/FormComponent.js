@@ -1,5 +1,6 @@
 import { Form, Input, Select, Radio, Checkbox } from 'antd'
 import checkList from './checkList'
+import ImageView from '../ImageView'
 const CheckboxGroup = Checkbox.Group
 const RadioGroup = Radio.Group
 const Option = Select.Option
@@ -39,6 +40,8 @@ class FormComponent extends Component {
           options={dataSource}
           disabled={item.disabled}
           onChange={(e) => this.handleChange(e)} />
+      case 'image':
+        return <ImageView data={dataSource} />
       default:
         return <Input
           type={item.type || 'text'}
@@ -61,8 +64,11 @@ class FormComponent extends Component {
         sm: { span: 14 }
       }
     }
+    item.status = item.status || ''
+    // validateStatus="item.status"
+    console.log(item.status, 'status-----------')
     return (
-      <Form.Item label={item.label} {...formItemLayout}>
+      <Form.Item label={item.label} {...formItemLayout} >
         {getFieldDecorator(item.name, {
           initialValue: defaultValue,
           rules: ruleList

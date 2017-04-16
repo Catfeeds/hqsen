@@ -1,8 +1,39 @@
 .my-header {
   background: #48576a;
   color: #fff;
+  flex: 1;
 }
-.ant-menu-horizontal>.ant-menu-item-active, .ant-menu-horizontal>.ant-menu-item-open, .ant-menu-horizontal>.ant-menu-item-selected, .ant-menu-horizontal>.ant-menu-item:hover, .ant-menu-horizontal>.ant-menu-submenu-active, .ant-menu-horizontal>.ant-menu-submenu-open, .ant-menu-horizontal>.ant-menu-submenu-selected, .ant-menu-horizontal>.ant-menu-submenu:hover{
+.ant-menu-horizontal>.ant-menu-item-active, 
+.ant-menu-horizontal>.ant-menu-item-open, 
+.ant-menu-horizontal>.ant-menu-item-selected, 
+.ant-menu-horizontal>.ant-menu-item:hover, 
+.ant-menu-horizontal>.ant-menu-submenu-active, 
+.ant-menu-horizontal>.ant-menu-submenu-open, 
+.ant-menu-horizontal>.ant-menu-submenu-selected, 
+.ant-menu-horizontal>.ant-menu-submenu:hover{
   border-bottom: 3px solid #7fc4f5 !important;
   color: #7fc4f5 !important;
+}
+.ant-menu-item-active, .ant-menu-item:hover, 
+.ant-menu-submenu-active, 
+.ant-menu-submenu-title:hover, 
+.ant-menu:not(.ant-menu-inline) .ant-menu-submenu-open {
+  color: #7fc4f5 !important;
+}
+.user-box {
+  background: #48576a;
+  color: #fff;
+  line-height: 48px;
+  border-bottom: 1px solid #e9e9e9;
+  display: flex;
+}
+.user-logo {
+  font-size: 16px;
+  margin-right: 5px;
+}
+.header-name {
+  cursor: pointer;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

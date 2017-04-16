@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { Form } from 'antd'
-import MyBreadcrumb from '../../../components/MyBreadcrumb'
-import FormComponent from '../../../components/FormComponent'
+import MyBreadcrumb from 'components/MyBreadcrumb'
+import FormComponent from 'components/FormComponent'
 import './Detail.scss'
 
 class Detail extends Component {

@@ -8,7 +8,6 @@ import Fetch from 'root/Fetch'
 // ------------------------------------
 export const setBasicInfo = createAction('获取新增基础信息')
 export const saveForm = createAction('初始化新增数据')
-export const saveDataSource = createAction('保存列表资源')
 export const clearData = createAction('清除添加页面数据')
 export const toggleLoading = createAction('切换addLoading')
 
@@ -16,41 +15,17 @@ export const getInit = (type, id) => {
   return (dispatch, getState) => {
     const basicInfo = config[type]
     dispatch(setBasicInfo({ ...basicInfo, type, id }))
-    if (id) {
-      dispatch(toggleLoading(true))
-      Fetch(basicInfo.detailUrlKey, { id }).then(response => {
-        dispatch(toggleLoading(false))
-        let data = response.data
-        data.area_list && (data.area_list = data.area_list.split(','))
-        dispatch(saveForm(data))
-      }, () => { dispatch(toggleLoading(false)) })
-    }
-  }
-}
-// eslint-disable-line
-export const getDataSource = (type, id) => {
-  return (dispatch, getState) => {
-    if (type === 'account_info_hotel_list') {
-      Fetch('getHotelSelect').then(response => {
-        dispatch(saveDataSource({ hotel_id: response.data.list }))
-        dispatch(getInit(type, id))
-      })
-    } else {
-      Fetch('getShanghaiArea', { id }).then(response => {
-        dispatch(saveDataSource({ area_list: response.data.area_sh }))
-        dispatch(getInit(type, id))
-      })
-    }
+    Fetch(basicInfo.detailUrlKey, { id }).then(response => {
+      let data = response.data
+      dispatch(saveForm(data))
+    })
   }
 }
 
 export const submitForm = (id, data, router) => {
   return (dispatch, getState) => {
-    const { editUrlKey, createUrlKey, type } = getState().Add.basicInfo
-    const url = id ? editUrlKey : createUrlKey
-    const formData = id ? { ...data, id } : { ...data }
-    dispatch(toggleLoading(true))
-    Fetch(url, formData).then(response => {
+    const { submitKey, type } = getState().Approve.basicInfo
+    Fetch(submitKey, data).then(response => {
       dispatch(toggleLoading(false))
       message.success('提交成功')
       router.push(`/list/${type}`)
@@ -61,7 +36,6 @@ export const submitForm = (id, data, router) => {
 export const actions = {
   getInit,
   submitForm,
-  getDataSource,
   clearData
 }
 
@@ -70,25 +44,17 @@ export const actions = {
 // ------------------------------------
 const ACTION_HANDLERS = {
   [setBasicInfo]: (state, action) => {
-    const { id } = action.payload
-    if (id) {
-      action.payload.formList.map(item => { item.disabled = true })
-    }
     return {
       ...state,
-      basicInfo: action.payload
+      basicInfo: {
+        ...state.basicInfo, ...action.payload
+      }
     }
   },
   [saveForm]: (state, action) => {
     return {
       ...state,
       formData: action.payload
-    }
-  },
-  [saveDataSource]: (state, action) => {
-    return {
-      ...state,
-      dataSource: action.payload
     }
   },
   [toggleLoading]: (state, action) => {
@@ -107,16 +73,32 @@ const ACTION_HANDLERS = {
 // ------------------------------------
 const initialState = {
   loading: false,
-  formData: {
-    area_list: []
-  },
+  formData: {},
   basicInfo: {
     id: '',
     formList: [],
+    approveList: [{
+      label: '',
+      type: 'radio',
+      name: 'radio',
+      rules: { required: true }
+    }, {
+      label: '',
+      type: 'textarea',
+      name: 'name'
+    }],
     breadcrumb: []
   },
   dataSource: {
-    area_list: []
+    radio: [{
+      label: '通过',
+      value: '1'
+    }, {
+      label: '驳回',
+      value: '2'
+    }],
+    aa: ['http://img01.sogoucdn.com/app/a/100540002/457880.jpg',
+      'http://img.ivsky.com/img/tupian/pre/201612/03/zaocan_niunai_mianbao-011.jpg']
   }
 }
 export default function counterReducer (state = initialState, action) {

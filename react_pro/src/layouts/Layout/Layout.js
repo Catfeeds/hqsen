@@ -10,7 +10,11 @@ class Layout extends Component {
     window.onload = () => {
       if (token) {
         const { params, saveHeadKey } = this.props
-        saveHeadKey(params.type)
+        if (params.type) {
+          saveHeadKey(params.type)
+        } else {
+          saveHeadKey('account_info_password_back')
+        }
       } else {
         this.context.router.push('/login')
       }

@@ -46,75 +46,39 @@ export default {
     breadcrumb: ['基础信息设定', '客资区域信息', '编辑区域信息']
   },
   // 酒店账号
-  account_info__hotel_list: {
+  account_info_hotel_list: {
+    createUrlKey: 'addHotelAccount',
+    editUrlKey: 'hotelAccountEdit',
+    detailUrlKey: 'hotelAccountDetail',
     formList: [{
       label: '账号名称',
       type: 'text',
-      name: 'name'
+      name: 'user_name',
+      rules: { required: true }
     }, {
       label: '所属酒店',
       type: 'select',
-      name: 'type',
-      data: [{
-        label: '静安区',
-        value: '1'
-      }, {
-        label: '静w区',
-        value: '2'
-      }, {
-        label: '静f区',
-        value: '3'
-      }]
-    }, {
-      label: '初始密码',
-      type: 'password',
-      name: 'name'
-    }, {
-      label: '重置用户密码',
-      type: 'password',
-      name: 'pass'
-    }, {
-      label: '再次确认密码',
-      type: 'password',
-      name: 'checkPass'
+      name: 'hotel_id',
+      rules: { required: true }
     }],
-    rules: {
-      area: [
-        { required: true, message: '请输入活动名称', trigger: 'blur' }
-      ]
-    },
     breadcrumb: ['账号管理', '账号信息', '新增酒店账号']
   },
   // 内部账号
-  account_info__inner_list: {
+  account_info_inner_list: {
+    createUrlKey: 'addInnerAccount',
+    editUrlKey: 'innerAccountEdit',
+    detailUrlKey: 'innerAccountDetail',
     formList: [{
       label: '账号名称',
       type: 'text',
-      name: 'name'
+      name: 'user_name',
+      rules: { required: true }
     }, {
       label: '所属角色',
       type: 'select',
-      name: 'type',
-      data: [{
-        label: '静安区',
-        value: '1'
-      }, {
-        label: '静w区',
-        value: '2'
-      }, {
-        label: '静f区',
-        value: '3'
-      }]
-    }, {
-      label: '初始密码',
-      type: 'text',
-      name: 'name'
+      name: 'user_type',
+      rules: { required: true }
     }],
-    rules: {
-      area: [
-        { required: true, message: '请输入活动名称', trigger: 'blur' }
-      ]
-    },
     breadcrumb: ['账号管理', '账号信息', '新增搭建账号']
   },
   // 设定打款系数

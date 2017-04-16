@@ -13,6 +13,7 @@ class Login extends Component {
         Fetch('login', { ...values }).then(response => {
           const accessToken = response.data.access_token
           sessionStorage.setItem('access_token', accessToken)
+          sessionStorage.setItem('user_name', values.user_name)
           this.context.router.push('/list/order_info_kezi_list')
         })
       }

@@ -50,7 +50,10 @@ const config = {
     'react',
     'react-redux',
     'react-router',
-    'redux'
+    'redux',
+    'viewerjs',
+    'axios',
+    'es6-promise'
   ],
 
   // ----------------------------------
