@@ -40,6 +40,7 @@ class user extends base{
         $config_data = array(
             'order_type' => $this->order_type(),
             'hotel_level' => $this->hotel_level(),
+            'inner_type' => $this->inner_type(),
         );
         if($this->user['user_name'] == 'monkey'){
             $config_data['user_security'] = $this->user_security('monkey');
@@ -49,7 +50,7 @@ class user extends base{
         $sh_area = $this->get_sh_area();
         foreach ($sh_area as $area_key => $area_value){
             $area_item = array(
-                'value' => $area_key,
+                'value' => (string)$area_key,
                 'label' => $area_value
             );
             $config_data['config_area'][] = $area_item;

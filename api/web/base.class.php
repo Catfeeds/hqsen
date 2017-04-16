@@ -240,6 +240,15 @@ class base{
         );
     }
 
+    public function inner_type(){
+        return array(
+            array('value'=>'11', 'label'=>'首销'),
+            array('value'=>'12', 'label'=>'二销'),
+            array('value'=>'13', 'label'=>'财务'),
+            array('value'=>'14', 'label'=>'客服'),
+        );
+    }
+
     // 默认返回所有区域  有ID 返回对应的所有区域名字
     public function get_sh_area($sh_area_id = 0){
         $sh_area = array(

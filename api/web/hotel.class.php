@@ -110,7 +110,7 @@ class hotel extends base {
             $hotel_item = array(
                 'hotel_id' => $hotel['id'],
                 'hotel_name' => $hotel['hotel_name'],
-                'area_id' => $hotel['area_id'],
+                'area_id' => (string)$hotel['area_id'],
                 'hotel_address' => $hotel['hotel_address'],
                 'hotel_level' => $hotel['hotel_level'],
             );
