@@ -249,7 +249,7 @@ class base{
         );
     }
 
-    // 默认返回所有区域  有ID 返回对应的所有区域名字
+    // 默认返回所有区域  有ID 返回对应的所有区域名字 映射表和mysql hqsen_area_sh 对应
     public function get_sh_area($sh_area_id = 0){
         $sh_area = array(
             '1'=>'浦东新区',

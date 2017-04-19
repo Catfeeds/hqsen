@@ -62,8 +62,27 @@ class order extends base {
                 $sql_order['order_status'] = 1;
                 $sql_order['create_time'] = time();
                 $sql_order['user_id'] = $this->user['id'];
-                $sql = $this->db->insert('hqsen_kezi_order', $sql_order);
-                $this->appDie();
+                $sql_order['id'] = $this->db->insert('hqsen_kezi_order', $sql_order);
+                $area_hotel_id_array = explode(',', $order_area_hotel_id);
+                $area_hotel_id_array = array_filter($area_hotel_id_array);
+                $error_msg = '';
+                $error_count = 0;
+                foreach ($area_hotel_id_array as $one_area_hotel_id){
+                    $order_msg = $this-> insertUserKeZiOrder($sql_order['id'], $order_area_hotel_type, $one_area_hotel_id);
+                    if($order_msg){
+                        $error_msg .= $order_msg;
+                        $error_count++;
+                    }
+                }
+                if($error_count >= count($area_hotel_id_array)) {
+                    $del_order['del_flag'] = 2;
+                    $this->db->update('hqsen_kezi_order', $del_order, ' id = ' . $sql_order['id']);
+                }
+                if($error_msg){
+                    $this->appDie($this->back_code['order']['kezi_order_fail'], $error_msg);
+                } else {
+                    $this->appDie();
+                }
             }
         } else {
             $this->appDie($this->back_code['sys']['value_empty'], $this->back_msg['sys']['value_empty']);
@@ -99,6 +118,7 @@ class order extends base {
             }
 
         }
+        $order_list['count'] = $this->db->getCount('hqsen_kezi_order', 'del_flag = 1');
         $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $order_list);
     }
 
@@ -166,6 +186,56 @@ class order extends base {
         }
         $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $list);
     }
+
+    public function insertUserKeZiOrder($order_id, $area_hotel_type, $area_hotel_id)
+    {
+        if ($area_hotel_id) {
+            if ($area_hotel_type == 1) {
+                $user_data = $this->db->getRows("select * from (select *  from hqsen_user_data  where del_flag = 1 and area_id = $area_hotel_id order by last_order_time asc)  as c group by c.hotel_id");
+                if(!$user_data){
+                    $area = $this->db->getRow('select * from hqsen_area where id =' . $area_hotel_id);
+                    $error_message = '区域:' . $area['area_name'] . '客资创建失败';
+                    return $error_message;
+                }
+                foreach ($user_data as $one_user_data) {
+                    $one_user_order_sql = [];
+                    if ($one_user_data) {
+                        $one_user_order_sql['user_id'] = $this->user['id'];
+                        $one_user_order_sql['watch_user_name'] = $one_user_data['user_name'];
+                        $one_user_order_sql['watch_user_hotel_name'] = $one_user_data['hotel_name'];
+                        $one_user_order_sql['watch_user_id'] = $one_user_data['user_id'];
+                        $one_user_order_sql['kezi_order_id'] = $order_id;
+                        $rs = $this->db->insert('hqsen_user_kezi_order', $one_user_order_sql);
+                        if($rs){
+                            $update_sql['last_order_time'] = time();
+                            $this->db->update('hqsen_user_data', $update_sql, ' user_id = ' . $one_user_data['user_id']);
+                        }
+                    }
+                }
+            } else {
+                $one_user_data = $this->db->getRow("select * from (select *  from hqsen_user_data  where del_flag = 1 and hotel_id = $area_hotel_id order by last_order_time asc)  as c group by c.hotel_id");
+                $one_user_order_sql = [];
+                if ($one_user_data) {
+                    $one_user_order_sql['user_id'] = $this->user['id'];
+                    $one_user_order_sql['watch_user_name'] = $one_user_data['user_name'];
+                    $one_user_order_sql['watch_user_hotel_name'] = $one_user_data['hotel_name'];
+                    $one_user_order_sql['watch_user_id'] = $one_user_data['user_id'];
+                    $one_user_order_sql['kezi_order_id'] = $order_id;
+                    $rs = $this->db->insert('hqsen_user_kezi_order', $one_user_order_sql);
+                    if($rs){
+                        $update_sql['last_order_time'] = time();
+                        $this->db->update('hqsen_user_data', $update_sql, ' user_id = ' . $one_user_data['user_id']);
+                    }
+                } else {
+                    $hotel = $this->db->getRow('select * from hqsen_hotel where id =' . $area_hotel_id);
+                    $error_message = '酒店:' . $hotel['hotel_name'] . '客资创建失败 ';
+                    return $error_message;
+                }
+            }
+            return false;
+        }
+    }
+
 
 
 }

@@ -64,7 +64,11 @@ class mysql{
      * 查询
      */
     public function query($sql) {
-        return  @mysqli_query($this->link, $sql);
+        $rs = @mysqli_query($this->link, $sql);
+        if(!$rs){
+            var_dump($sql);
+        }
+        return  $rs;
     }
     /**
      * 单行记录

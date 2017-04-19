@@ -159,7 +159,8 @@ class Avf {
                 $e              = $error;
             }
         } else {
-            $e['status'] = 1000;
+            ob_clean();
+            $e['status'] = 9999;
             $e['data'] = array();
             $e['message'] = 'FatalError';
         }

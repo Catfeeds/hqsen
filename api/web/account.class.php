@@ -99,7 +99,8 @@ class account extends base {
             if($hotel and $sql_user['id']){
                 $sql_user_date['hotel_id'] = $hotel['id'];
                 $sql_user_date['hotel_name'] = $hotel['hotel_name'];
-                $sql_user_date['hotel_area'] = $this-> get_sh_area($hotel['area_id']);
+                $sql_user_date['area_id'] = $hotel['area_id'];
+                $sql_user_date['hotel_area'] = $this-> get_sh_area($hotel['area_sh_id']);
                 $sql_user_date['user_id'] = $sql_user['id'];
                 $this->db->insert('hqsen_user_data', $sql_user_date);
             }

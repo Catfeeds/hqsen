@@ -31,6 +31,7 @@ class base{
             ),
             'order' => array(
                 'phone_type_exist' => '婚宴中已存在该手机信息，无法成功录入',
+                'kezi_order_fail' => '生成客资订单失败',
             ),
         );
         $this-> back_code = array(
@@ -48,7 +49,8 @@ class base{
                 'phone_code_err' => '992',
             ),
             'order' => array(
-                'phone_type_exist' => '995'
+                'phone_type_exist' => '995',
+                'kezi_order_fail' => '990',
             ),
         );
 
@@ -76,6 +78,7 @@ class base{
     }
 
     public function appDie($back_code = 1000, $back_msg = '请求成功', $back_data = []){
+        if (!API_DEBUG) ob_clean();
         $data['status'] = (int)$back_code;
         $data['data'] = (array)$back_data;
         $data['message'] = (string)$back_msg;

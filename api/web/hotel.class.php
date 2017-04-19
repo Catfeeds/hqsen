@@ -31,7 +31,7 @@ class hotel extends base {
                 $hotel_item = array(
                     'hotel_id' => $one_hotel['id'],
                     'hotel_name' => $one_hotel['hotel_name'],
-                    'area_list' => $this-> get_sh_area($one_hotel['area_id']),
+                    'area_list' => $this-> get_sh_area($one_hotel['area_sh_id']),
                     'hotel_address' => $one_hotel['hotel_address'],
                 );
                 $data['list'][] = $hotel_item;
@@ -45,12 +45,14 @@ class hotel extends base {
     public function hotelCreate(){
         $hotel_name = $this->postString('hotel_name');
         $hotel_address = $this->postString('hotel_address');
-        $area_id = $this->postString('area_id');
+        $area_sh_id = $this->postString('area_id');
         $hotel_level = $this->postString('hotel_level');
-        if($hotel_name and $hotel_address and $area_id){
+        if($hotel_name and $hotel_address and $area_sh_id){
+            $area_sh = $this->db->getRow("select * from hqsen_area_sh  where id =  " . $area_sh_id);
             $sql_order['hotel_name'] = $hotel_name;
             $sql_order['hotel_address'] = $hotel_address;
-            $sql_order['area_id'] = $area_id;
+            $sql_order['area_sh_id'] = $area_sh_id;
+            $sql_order['area_id'] = isset($area_sh['link_area_id']) ? $area_sh['link_area_id'] : 0;
             $sql_order['hotel_level'] = $hotel_level;
             $sql_order['create_time'] = time();
             $sql_order['del_flag'] = 1;
@@ -67,7 +69,7 @@ class hotel extends base {
         $hotel_id = $this->postString('id');
         $hotel_name = $this->postString('hotel_name');
         $hotel_address = $this->postString('hotel_address');
-        $area_id = $this->postString('area_id');
+        $area_sh_id = $this->postString('area_id');
         $hotel_level = $this->postString('hotel_level');
         if($hotel_id and ($hotel_name or $hotel_address or $area_id)){
             $sql_order = [];
@@ -77,10 +79,12 @@ class hotel extends base {
             if($hotel_address){
                 $sql_order['hotel_address'] = $hotel_address;
             }
-            if($area_id){
-                $sql_order['area_id'] = $area_id;
+            if($area_sh_id){
+                $area_sh = $this->db->getRow("select * from hqsen_area_sh  where id =  " . $area_sh_id);
+                $sql_order['area_id'] = isset($area_sh['link_area_id']) ? $area_sh['link_area_id'] : 0;
+                $sql_order['area_sh_id'] = $area_sh_id;
             }
-            if($area_id){
+            if($hotel_level){
                 $sql_order['hotel_level'] = $hotel_level;
             }
             $this->db->update('hqsen_hotel', $sql_order, ' id = ' . $hotel_id);
@@ -110,7 +114,7 @@ class hotel extends base {
             $hotel_item = array(
                 'hotel_id' => $hotel['id'],
                 'hotel_name' => $hotel['hotel_name'],
-                'area_id' => (string)$hotel['area_id'],
+                'area_id' => (string)$hotel['area_sh_id'],
                 'hotel_address' => $hotel['hotel_address'],
                 'hotel_level' => $hotel['hotel_level'],
             );
