@@ -70,8 +70,9 @@ export const actions = {
 // ------------------------------------
 const ACTION_HANDLERS = {
   [setBasicInfo]: (state, action) => {
-    const { id } = action.payload
-    if (id) {
+    const { id, type } = action.payload
+    const disableType = ['account_info_hotel_list', 'account_info_inner_list']
+    if (id && disableType.indexOf(type) > -1) {
       action.payload.formList.map(item => { item.disabled = true })
     }
     return {
