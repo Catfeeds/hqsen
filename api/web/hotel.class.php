@@ -71,7 +71,7 @@ class hotel extends base {
         $hotel_address = $this->postString('hotel_address');
         $area_sh_id = $this->postString('area_id');
         $hotel_level = $this->postString('hotel_level');
-        if($hotel_id and ($hotel_name or $hotel_address or $area_id)){
+        if($hotel_id and ($hotel_name or $hotel_address or $area_sh_id)){
             $sql_order = [];
             if($hotel_name){
                 $sql_order['hotel_name'] = $hotel_name;

@@ -68,7 +68,7 @@ class order extends base {
                 $error_msg = '';
                 $error_count = 0;
                 foreach ($area_hotel_id_array as $one_area_hotel_id){
-                    $order_msg = $this-> insertUserKeZiOrder($sql_order['id'], $order_area_hotel_type, $one_area_hotel_id);
+                    $order_msg = $this-> insertUserKeZiOrder($sql_order['id'], $order_area_hotel_type, $one_area_hotel_id, $order_phone);
                     if($order_msg){
                         $error_msg .= $order_msg;
                         $error_count++;
@@ -98,12 +98,12 @@ class order extends base {
         $limit = 10;
         $offset = ($order_page - 1) * $limit;
         $sql_limit = " limit $offset , $limit";
-        $sql_status = ' where order_status != 0 ';
+        $sql_status = '  order_status != 0 ';
         if($order_status){
-            $sql_status = ' where order_status = ' . $order_status;
+            $sql_status = '  order_status = ' . $order_status;
         }
         $sql_status .= ' and user_id = '. $this->user['id'];
-        $order = $this->db->getRows('select * from hqsen_kezi_order ' . $sql_status . $sql_limit);
+        $order = $this->db->getRows('select * from hqsen_user_kezi_order where ' . $sql_status . $sql_limit);
         $order_list['order_list'] = [];
         if($order){
             foreach ($order as $one_order){
@@ -112,13 +112,13 @@ class order extends base {
                     'create_time' => (string)$one_order['create_time'],
                     'order_status' => (int)$one_order['order_status'],
                     'order_phone' => (string)$one_order['order_phone'],
-                    'watch_user' => (string)$one_order['watch_user'],
+                    'watch_user' => (string)$one_order['watch_user_name'],
                 );
                 $order_list['order_list'][] = $order_item;
             }
 
         }
-        $order_list['count'] = $this->db->getCount('hqsen_kezi_order', 'del_flag = 1');
+        $order_list['count'] = $this->db->getCount('hqsen_user_kezi_order', $sql_status);
         $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $order_list);
     }
 
@@ -187,7 +187,7 @@ class order extends base {
         $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $list);
     }
 
-    public function insertUserKeZiOrder($order_id, $area_hotel_type, $area_hotel_id)
+    public function insertUserKeZiOrder($order_id, $area_hotel_type, $area_hotel_id, $order_phone)
     {
         if ($area_hotel_id) {
             if ($area_hotel_type == 1) {
@@ -205,6 +205,8 @@ class order extends base {
                         $one_user_order_sql['watch_user_hotel_name'] = $one_user_data['hotel_name'];
                         $one_user_order_sql['watch_user_id'] = $one_user_data['user_id'];
                         $one_user_order_sql['kezi_order_id'] = $order_id;
+                        $one_user_order_sql['create_time'] = time();
+                        $one_user_order_sql['order_phone'] = $order_phone;
                         $rs = $this->db->insert('hqsen_user_kezi_order', $one_user_order_sql);
                         if($rs){
                             $update_sql['last_order_time'] = time();
@@ -234,6 +236,28 @@ class order extends base {
             }
             return false;
         }
+    }
+
+    public function orderFollow(){
+        $user_order_status = $this->postInt('user_order_status'); // 1有效  2无效  3签单
+        $order_follow_time = $this->postString('follow_time');
+        $order_follow_desc = $this->postString('follow_desc');
+        $order_follow_create_time = time();
+
+        if($user_order_status){
+            if($user_order_status == 2){
+                // 更新用户订单  已驳回
+            }
+        }
+
+    }
+
+    public function orderSign(){
+        $order_money = $this->postString('order_money');
+        $order_other_money = $this->postString('order_other_money');
+        $sign_using_time = $this->postInt('sign_using_time');
+        $sign_pic = $this->postString('sign_pic'); //签单凭证  json
+
     }
 
 

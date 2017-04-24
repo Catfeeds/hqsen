@@ -39,8 +39,20 @@ class kezi extends base {
                     $area = $this->db->getRow("select * from hqsen_area  where id =  " . $one_order['order_area_hotel_id']);
                     $kezi_item['area_hotel_name'] = (string)$area['area_name'];
                 } else {
-                    $hotel = $this->db->getRow("select * from hqsen_hotel  where id =  " . $one_order['order_area_hotel_id']);
-                    $kezi_item['area_hotel_name'] = (string)$hotel['hotel_name'];
+                    // 多个酒店
+                    $id_arr = explode(',', $one_order['order_area_hotel_id']);
+                    $in_id = [];
+                    foreach ($id_arr as $one_id){
+                        if($one_id){
+                            $in_id[] = intval($one_id);
+                        }
+                    }
+                    $in_id = implode(',', $in_id);
+                    $hotel = $this->db->getRows("select * from hqsen_hotel  where id in( " . $in_id . ')');
+                    $kezi_item['area_hotel_name'] = '';
+                    foreach ($hotel as $hotel_name){
+                        $kezi_item['area_hotel_name'] .= $hotel_name['hotel_name'] . '  ';
+                    }
                 }
                 $data['list'][] = $kezi_item;
             }

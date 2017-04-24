@@ -102,6 +102,7 @@ class account extends base {
                 $sql_user_date['area_id'] = $hotel['area_id'];
                 $sql_user_date['hotel_area'] = $this-> get_sh_area($hotel['area_sh_id']);
                 $sql_user_date['user_id'] = $sql_user['id'];
+                $sql_user_date['user_name'] = $sql_user['user_name'];
                 $this->db->insert('hqsen_user_data', $sql_user_date);
             }
             $this->appDie();
@@ -229,6 +230,7 @@ class account extends base {
         if($user_id){
             $sql_user['del_flag'] = 2;
             $this->db->update('hqsen_user', $sql_user, ' id = ' . $user_id);
+            $this->db->update('hqsen_user_data', $sql_user, ' id = ' . $user_id);
             $this->appDie();
         } else {
             $this->appDie($this->back_code['sys']['value_empty'], $this->back_msg['sys']['value_empty']);
