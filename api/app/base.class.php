@@ -32,6 +32,8 @@ class base{
             'order' => array(
                 'phone_type_exist' => '婚宴中已存在该手机信息，无法成功录入',
                 'kezi_order_fail' => '生成客资订单失败',
+                'dajian_order_fail' => '生成搭建信息失败',
+                'dajian_order_right' => '没有权限生成搭建信息',
             ),
         );
         $this-> back_code = array(
@@ -51,6 +53,8 @@ class base{
             'order' => array(
                 'phone_type_exist' => '995',
                 'kezi_order_fail' => '990',
+                'dajian_order_fail' => '989',
+                'dajian_order_right' => '988',
             ),
         );
 

@@ -27,6 +27,7 @@ class base{
             ),
             'user' => array(
                 'login_err' => '账号或密码错误',
+                'create_user_exist' => '创建账号已存在',
             ),
             'order' => array(
             ),
@@ -42,6 +43,7 @@ class base{
             ),
             'user' => array(
                 'login_err' => '994',
+                'create_user_exist' => '994',
             ),
             'order' => array(
             ),
@@ -70,6 +72,7 @@ class base{
     }
 
     public function appDie($back_code = 200, $back_msg = 'success', $back_data = []){
+        if (!API_DEBUG) ob_clean();
         header('Access-Control-Allow-Origin:*');
         $data['status'] = (int)$back_code;
         $data['data'] = (array)$back_data;

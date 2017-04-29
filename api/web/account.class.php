@@ -83,6 +83,22 @@ class account extends base {
         $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $data);
     }
 
+    // 区域列表
+    public function areaList(){
+        $hotel = $this->db->getRows("select *  from hqsen_area  where del_flag = 1 order by id desc " );
+        $data = [];
+        foreach ($hotel as $one_hotel){
+            if($one_hotel){
+                $hotel_item = array(
+                    'value' => $one_hotel['id'],
+                    'label' => $one_hotel['area_name'],
+                );
+                $data['list'][] = $hotel_item;
+            }
+        }
+        $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $data);
+    }
+
     public function hotelAccountAdd(){
         $user_name = $this->postString('user_name');
         $hotel_id = $this->postString('hotel_id');
@@ -183,6 +199,7 @@ class account extends base {
         $user_name = $this->postString('user_name');
         $user_type = $this->postString('user_type');
         $password = $this->postString('password');
+        $area_id = $this->postInt('area_id');
         if($user_name and $user_type and $password){
             $sql_user['user_name'] = $user_name;
             $sql_user['user_type'] = $user_type;
@@ -190,7 +207,18 @@ class account extends base {
             $sql_user['create_time'] = time();
             $sql_user['del_flag'] = 1;
             $sql_user['id'] = $this->db->insert('hqsen_user', $sql_user);
-            $this->appDie();
+            if(!$sql_user['id']){
+                $this->appDie($this->back_code['user']['create_user_exist'], $this->back_msg['user']['create_user_exist']);
+            }
+            $area = $this->db->getRow("select * from hqsen_area  where id =" . $area_id);
+            if($area){
+                $sql_user_data['area_id'] = $area['id'];
+                $sql_user_data['hotel_area'] = $area['area_name'];
+                $sql_user_data['user_id'] = $sql_user['id'];
+                $sql_user_data['user_name'] = $sql_user['user_name'];
+                $this->db->insert('hqsen_user_data', $sql_user_data);
+                $this->appDie();
+            }
         } else {
             $this->appDie($this->back_code['sys']['value_empty'], $this->back_msg['sys']['value_empty']);
         }
