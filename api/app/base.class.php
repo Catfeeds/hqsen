@@ -28,6 +28,7 @@ class base{
                 'bind_empty' => '绑定不能为空',
                 'phone_illegal' => '手机号非法',
                 'phone_code_err' => '手机验证码错误',
+                'login_err' => '账号或者密码错误',
             ),
             'order' => array(
                 'phone_type_exist' => '婚宴中已存在该手机信息，无法成功录入',
@@ -49,6 +50,7 @@ class base{
                 'bind_empty' => '996',
                 'phone_illegal' => '993',
                 'phone_code_err' => '992',
+                'login_err' => '991',
             ),
             'order' => array(
                 'phone_type_exist' => '995',

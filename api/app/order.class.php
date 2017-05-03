@@ -122,6 +122,38 @@ class order extends base {
         $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $order_list);
     }
 
+    public function orderHandleKeZiList(){
+        $order_status = $this->getInt('order_status');
+        $order_status = $order_status ? $order_status : $this->postInt('order_status');
+        $order_page = $this->getInt('order_page');
+        $order_page = $order_page ? $order_page : $this->postInt('order_page', 1);
+        $limit = 10;
+        $offset = ($order_page - 1) * $limit;
+        $sql_limit = " limit $offset , $limit";
+        $sql_status = '  order_status != 0 ';
+        if($order_status){
+            $sql_status = '  order_status = ' . $order_status;
+        }
+        $sql_status .= ' and watch_user_id = '. $this->user['id'];
+        $order = $this->db->getRows('select * from hqsen_user_kezi_order where ' . $sql_status . $sql_limit);
+        $order_list['order_list'] = [];
+        if($order){
+            foreach ($order as $one_order){
+                $order_item = array(
+                    'id' => (int)$one_order['id'],
+                    'create_time' => (string)$one_order['create_time'],
+                    'order_status' => (int)$one_order['order_status'],
+                    'order_phone' => (string)$one_order['order_phone'],
+                    'watch_user' => (string)$one_order['watch_user_name'],
+                );
+                $order_list['order_list'][] = $order_item;
+            }
+
+        }
+        $order_list['count'] = $this->db->getCount('hqsen_user_kezi_order', $sql_status);
+        $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $order_list);
+    }
+
     public function orderKeZiDetail(){
         $order_id = $this->getInt('order_id');
         $order_id = $order_id ? $order_id : $this->postInt('order_id');
@@ -297,11 +329,12 @@ class order extends base {
         $user_kezi_order_sign['order_other_money'] = $order_other_money;
         $user_kezi_order_sign['sign_using_time'] = $sign_using_time;
         $user_kezi_order_sign['sign_pic'] = $sign_pic;
+        $user_kezi_order_sign['user_kezi_order_id'] = $user_kezi_order_id;
         if($user_kezi_order_id){
             if(isset($user_kezi_order_sign['id']) and $user_kezi_order_sign['id']){
                 $this->db->update('hqsen_user_kezi_order_sign', $user_kezi_order_sign, ' id = ' . $user_kezi_order_sign['id']);
             } else {
-                $this->db->insert('hqsen_user_kezi_order_follow', $user_kezi_order_sign);
+                $this->db->insert('hqsen_user_kezi_order_sign', $user_kezi_order_sign);
             }
             $this->appDie();
         } else {
@@ -333,7 +366,7 @@ class order extends base {
 
     // 酒店账号才可以创建搭建信息
     public function createDaJian(){
-        if($this->user['user_type'] != 11){
+        if($this->user['user_type'] != 4){
             $this->appDie($this->back_code['order']['dajian_order_right'], $this->back_msg['order']['dajian_order_right']);
         }
         $customer_name = $this->postString('customer_name');
@@ -430,10 +463,10 @@ class order extends base {
                         $one_user_order_sql['watch_user_name'] = $one_user_data['user_name'];
                         $one_user_order_sql['watch_user_hotel_name'] = $one_user_data['hotel_name'];
                         $one_user_order_sql['watch_user_id'] = $one_user_data['user_id'];
-                        $one_user_order_sql['kezi_order_id'] = $order_id;
+                        $one_user_order_sql['dajian_order_id'] = $order_id;
                         $one_user_order_sql['create_time'] = time();
                         $one_user_order_sql['order_phone'] = $order_phone;
-                        $rs = $this->db->insert('hqsen_user_kezi_order', $one_user_order_sql);
+                        $rs = $this->db->insert('hqsen_user_dajian_order', $one_user_order_sql);
                         if($rs){
                             $update_sql['last_order_time'] = time();
                             $this->db->update('hqsen_user_data', $update_sql, ' user_id = ' . $one_user_data['user_id']);
