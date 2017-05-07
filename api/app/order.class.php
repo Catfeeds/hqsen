@@ -270,6 +270,8 @@ class order extends base {
                     $one_user_order_sql['watch_user_hotel_name'] = $one_user_data['hotel_name'];
                     $one_user_order_sql['watch_user_id'] = $one_user_data['user_id'];
                     $one_user_order_sql['kezi_order_id'] = $order_id;
+                    $one_user_order_sql['create_time'] = time();
+                    $one_user_order_sql['order_phone'] = $order_phone;
                     $rs = $this->db->insert('hqsen_user_kezi_order', $one_user_order_sql);
                     if($rs){
                         $update_sql['last_order_time'] = time();
@@ -341,6 +343,21 @@ class order extends base {
             $this->appDie($this->back_code['sys']['value_empty'], $this->back_msg['sys']['value_empty']);
         }
 
+    }
+
+    // 客资签单详情
+    public function keziOrderSignDetail(){
+        $user_kezi_order_id = $this->postInt('user_kezi_order_id'); // 订单ID
+        $user_kezi_order_sign = $this->db->getRow('select * from hqsen_user_kezi_order_sign where user_kezi_order_id = ' . $user_kezi_order_id );
+        $sign_item = [];
+        if ($user_kezi_order_sign){
+            $sign_item['order_money'] = $user_kezi_order_sign['order_money'];
+            $sign_item['order_other_money'] = $user_kezi_order_sign['order_other_money'];
+            $sign_item['sign_using_time'] = $user_kezi_order_sign['sign_using_time'];
+            $sign_item['sign_pic'] = $user_kezi_order_sign['sign_pic'];
+            $sign_item['user_kezi_order_id'] = $user_kezi_order_sign['user_kezi_order_id'];
+        }
+        $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $sign_item);
     }
 
     //客资 订单跟进记录列表
@@ -422,6 +439,34 @@ class order extends base {
             $this->appDie($this->back_code['sys']['value_empty'], $this->back_msg['sys']['value_empty']);
         }
 
+    }
+
+    // 搭建订单详情
+    public function orderDaJianDetail(){
+        $order_id = $this->getInt('order_id');
+        $order_id = $order_id ? $order_id : $this->postInt('order_id');
+        if($order_id){
+            $order = $this->db->getRow('select * from hqsen_dajian_order where id = ' . $order_id );
+            $order_list['order_item']['id'] = (int)0;
+            if($order){
+                $order_item = array(
+                    'id' => (int)$order['id'],
+                    'create_time' => (string)$order['create_time'],
+                    'order_phone' => (string)$order['order_phone'],
+                    'customer_name' => (string)$order['customer_name'],
+                    'order_type' => (int)$order['order_type'],
+                    'order_area_hotel_type' => (int)$order['order_area_hotel_type'],
+                    'order_area_hotel_id' => (int)$order['order_area_hotel_id'],
+                    'order_money' => (string)$order['order_money'],
+                    'use_date' => (string)$order['use_date'],
+                    'order_desc' => (string)$order['order_desc'],
+                );
+                $area = $this->db->getRow("select * from hqsen_area  where id =  " . $order['order_area_hotel_id']);
+                $order_item['order_area_hotel_name'] = (string)$area['area_name'];
+                $order_list['order_item'] = $order_item;
+            }
+            $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $order_list);
+        }
     }
 
     public function validatePhoneDaJianOrderType(){

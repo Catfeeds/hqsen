@@ -171,7 +171,7 @@ class account extends base {
         $offset = ($page - 1) * $limit;
         $sql_limit = " limit $offset , $limit";
 
-        $user = $this->db->getRows("select *,hu.id as hu_id from hqsen_user as hu left join hqsen_user_data as hud on hu.id=hud.user_id where  hu.del_flag = 1 and hu.user_type > 10 order by hu.id desc " . $sql_limit);
+        $user = $this->db->getRows("select *,hu.id as hu_id,hu.user_name as hu_user_name from hqsen_user as hu left join hqsen_user_data as hud on hu.id=hud.user_id where  hu.del_flag = 1 and hu.user_type > 10 order by hu.id desc " . $sql_limit);
         $data = [];
         foreach ($user as $one_user){
             if($one_user){
@@ -184,7 +184,7 @@ class account extends base {
                 }
                 $user_item = array(
                     'user_id' => $one_user['hu_id'],
-                    'user_name' => $one_user['user_name'],
+                    'user_name' => $one_user['hu_user_name'],
                     'user_type' => $user_type,
                     'user_status' => $one_user['user_status'],
                 );
@@ -212,13 +212,13 @@ class account extends base {
             }
             $area = $this->db->getRow("select * from hqsen_area  where id =" . $area_id);
             if($area){
-                $sql_user_data['area_id'] = $area['id'];
                 $sql_user_data['hotel_area'] = $area['area_name'];
-                $sql_user_data['user_id'] = $sql_user['id'];
-                $sql_user_data['user_name'] = $sql_user['user_name'];
-                $this->db->insert('hqsen_user_data', $sql_user_data);
-                $this->appDie();
             }
+            $sql_user_data['area_id'] = $area['id'];
+            $sql_user_data['user_id'] = $sql_user['id'];
+            $sql_user_data['user_name'] = $sql_user['user_name'];
+            $this->db->insert('hqsen_user_data', $sql_user_data);
+            $this->appDie();
         } else {
             $this->appDie($this->back_code['sys']['value_empty'], $this->back_msg['sys']['value_empty']);
         }
@@ -226,12 +226,14 @@ class account extends base {
 
     public function innerAccountDetail(){
         $user_id = $this->postInt('id');
-        $user = $this->db->getRow("select * from hqsen_user where id = " . $user_id);
+        $user = $this->db->getRow("select * from hqsen_user as hu 
+left join hqsen_user_data as hud on hu.id=hud.user_id where hu.id = " . $user_id);
         $data = [];
         if($user){
             $user_item = array(
                 'user_name' => $user['user_name'],
                 'user_type' => $user['user_type'],
+                'area_id' => $user['area_id'],
             );
             $data = $user_item;
         }
