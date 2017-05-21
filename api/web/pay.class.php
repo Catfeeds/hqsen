@@ -44,12 +44,17 @@ class pay extends base {
 
     public function payRatioDetail(){
         $pay_ratio = $this->db->getRow("select *  from hqsen_pay_ratio limit 1");
+        $item = [];
         if(!$pay_ratio){
-            $pay_ratio['kezi_user'] = 0.01;
-            $pay_ratio['kezi_hotel'] = 0.01;
-            $pay_ratio['dajian_user'] = 0.01;
+            $item['kezi_user'] = 0.01;
+            $item['kezi_hotel'] = 0.01;
+            $item['dajian_user'] = 0.01;
+        } else {
+            $item['kezi_user'] = $pay_ratio['kezi_user'];
+            $item['kezi_hotel'] = $pay_ratio['kezi_hotel'];
+            $item['dajian_user'] = $pay_ratio['dajian_user'];
         }
-        $this->appDie($this->back_code['sys']['success'], $pay_ratio);
+        $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'],$item);
     }
 
     // 客资财务 打款列表
@@ -59,13 +64,9 @@ class pay extends base {
         $offset = ($page - 1) * $limit;
         $sql_limit = " limit $offset , $limit";
         // 总经理要在财务审批通过基础上
-        $sign = $this->db->getRows("select *  from hqsen_user_kezi_order_sign  where boss_sign_status = 1 order by id desc " . $sql_limit);
+        $sign = $this->db->getRows("select *  from hqsen_user_kezi_order_sign  where boss_sign_status = 2 order by id desc " . $sql_limit);
         foreach ($sign as $one_sign){
-            $item['id'] = $one_sign['id'];
-            $item['order_money'] = $one_sign['order_money'];
-            $item['order_other_money'] = $one_sign['order_other_money'];
-            $item['sign_pic_count'] = count(json_decode($one_sign['sign_pic']));
-            $item['del_flag'] = $one_sign['del_flag'];//1初次录入 2再次录入 3审批失败
+            $user_order = $this->db->getRow("select *  from hqsen_pay_ratio limit 1");
         }
         $data['count'] = $this->db->getCount('hqsen_user_kezi_order_sign', 'del_flag != 0');
         $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $sign);

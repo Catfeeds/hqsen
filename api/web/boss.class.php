@@ -31,7 +31,7 @@ class boss extends base {
             $item['order_money'] = $one_sign['order_money'];
             $item['order_other_money'] = $one_sign['order_other_money'];
             $item['sign_pic_count'] = count(json_decode($one_sign['sign_pic']));
-            $item['sign_status'] = $one_sign['sign_status'];//1未处理 2通过 3驳回
+            $item['boss_sign_status'] = $one_sign['boss_sign_status'];//1未处理 2通过 3驳回
             $list['list'][] = $item;
         }
         $list['count'] = $this->db->getCount('hqsen_user_kezi_order_sign', 'sign_status = 2');
@@ -50,7 +50,7 @@ class boss extends base {
             $sign_follow['status_desc'] = $status_desc;
             $sign_follow['user_sign_id'] = $user_sign_id;
             $sign_follow['create_time'] = time();
-            $this->db->insert('hqsen_user_kezi_sign_follow', $sign_follow);
+            $sign_follow['id'] = $this->db->insert('hqsen_user_kezi_sign_follow', $sign_follow);
             // 审批成功  更新签单数据  不更新跟踪者订单数据 还是待审核状态
             if (isset($sign_follow['id']) and $sign_follow['id']) {
                 $order_sign['boss_sign_status'] = $sign_status;
