@@ -6,10 +6,17 @@ import MyCard from 'components//MyCard'
 import './Approve.scss'
 
 class Approve extends Component {
+  constructor () {
+    super()
+    this.state = {
+      isSubmit: undefined
+    }
+  }
 
   componentWillMount () {
     const { type } = this.props.params
-    const { id } = this.props.location.query
+    const { id, isSubmit } = this.props.location.query
+    this.setState({ isSubmit })
     this.props.getInit(type, id)
   }
 
@@ -18,14 +25,12 @@ class Approve extends Component {
   }
 
   handleSubmit (e) {
-    const { id } = this.props.location.query
     const { submitForm, form } = this.props
     e.preventDefault()
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values)
-        if (values.radio) {}
-        // submitForm(id, values, this.context.router)
+        submitForm(values, this.context.router)
       }
     })
   }
@@ -40,39 +45,44 @@ class Approve extends Component {
     return (
       <div className="approve-page">
         <MyBreadcrumb breadcrumb={basicInfo.breadcrumb} />
-        <Form>
-          { basicInfo.formList.map((item, index) => {
-            return <FormComponent
-              key={index}
-              getFieldDecorator={getFieldDecorator}
-              item={item}
-              dataSource={dataSource[item.name]}
-              defaultValue={formData[item.name]} />
-          })
-          }
-          <h1 className="approve-title">审批</h1>
-          <div className="approve-form-box">
-            { basicInfo.approveList.map((item, index) => {
+        <div className="form-data">
+          <Form>
+            { basicInfo.formList.map((item, index) => {
               return <FormComponent
                 key={index}
-                className="radio-item"
                 getFieldDecorator={getFieldDecorator}
                 item={item}
                 dataSource={dataSource[item.name]}
                 defaultValue={formData[item.name]} />
             })
             }
-          </div>
-          <Form.Item>
-            <Popconfirm title="确认提交?" onConfirm={(e) => this.handleSubmit(e)}>
-              <Button className="approve-btn" type="primary" loading={loading}>提交</Button>
-            </Popconfirm>
-            <Button className="approve-btn"
-              type="default" size="default" onClick={() => this.cancleSubmit()}>取消</Button>
-          </Form.Item>
-        </Form>
-        <h1 className="approve-title">历史审批记录</h1>
-        <MyCard />
+            { this.state.isSubmit === 'true' &&
+            <div>
+              <h1 className="approve-title">审批</h1>
+              <div className="approve-form-box">
+                { basicInfo.approveList.map((item, index) => {
+                  return <FormComponent
+                    key={index}
+                    className="radio-item"
+                    getFieldDecorator={getFieldDecorator}
+                    item={item}
+                    dataSource={dataSource[item.name]}
+                    defaultValue={formData[item.name]} />
+                })
+                }
+              </div>
+              <Form.Item>
+                <Popconfirm title="确认提交?" onConfirm={(e) => this.handleSubmit(e)}>
+                  <Button className="approve-btn" type="primary" loading={loading}>提交</Button>
+                </Popconfirm>
+                <Button className="approve-btn"
+                  type="default" size="default" onClick={() => this.cancleSubmit()}>取消</Button>
+              </Form.Item>
+            </div>}
+          </Form>
+          {formData.follow_list.length ? <h1 className="approve-title">历史审批记录</h1> : null}
+          {formData.follow_list.map((item, index) => <MyCard key={index} data={item} />)}
+        </div>
       </div>
     )
   }

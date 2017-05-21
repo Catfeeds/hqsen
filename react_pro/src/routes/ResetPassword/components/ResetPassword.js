@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import './ResetPassword.scss'
+import MyBreadcrumb from 'components/MyBreadcrumb'
 import { Input, Form, Popconfirm, Button } from 'antd'
 const FormItem = Form.Item
 
@@ -59,51 +60,54 @@ class ResetPassword extends Component {
       }
     }
     return (
-      <Form className="vertival-form">
-        <FormItem
-          {...formItemLayout}
-          label="原密码">
-          {getFieldDecorator('old_password', {
-            rules: [{
-              required: true, message: '请输入原密码！'
-            }]
-          })(
-            <Input type="password" />
-          )}
-        </FormItem>
-        <FormItem
-          {...formItemLayout}
-          label="新密码">
-          {getFieldDecorator('password', {
-            rules: [{
-              required: true, message: '请输入新密码！'
-            }, {
-              validator: this.checkConfirm
-            }]
-          })(
-            <Input type="password" />
-          )}
-        </FormItem>
-        <FormItem
-          {...formItemLayout}
-          label="再次确认密码">
-          {getFieldDecorator('re_password', {
-            rules: [{
-              required: true, message: '请确认密码！'
-            }, {
-              validator: this.checkPassword
-            }]
-          })(
-            <Input type="password" onBlur={this.handleConfirmBlur} />
-          )}
-        </FormItem>
-        <FormItem>
-          <Popconfirm title="确认提交?" onConfirm={(e) => this.handleSubmit(e)}>
-            <Button className="add-btn" type="primary" loading={loading}>提交</Button>
-          </Popconfirm>
-          <Button className="add-btn" type="default" size="default" onClick={() => this.cancleSubmit()}>取消</Button>
-        </FormItem>
-      </Form>
+      <div>
+        <MyBreadcrumb breadcrumb={['超管重置密码']} />
+        <Form className="vertival-form">
+          <FormItem
+            {...formItemLayout}
+            label="原密码">
+            {getFieldDecorator('old_password', {
+              rules: [{
+                required: true, message: '请输入原密码！'
+              }]
+            })(
+              <Input type="password" />
+            )}
+          </FormItem>
+          <FormItem
+            {...formItemLayout}
+            label="新密码">
+            {getFieldDecorator('password', {
+              rules: [{
+                required: true, message: '请输入新密码！'
+              }, {
+                validator: this.checkConfirm
+              }]
+            })(
+              <Input type="password" />
+            )}
+          </FormItem>
+          <FormItem
+            {...formItemLayout}
+            label="再次确认密码">
+            {getFieldDecorator('re_password', {
+              rules: [{
+                required: true, message: '请确认密码！'
+              }, {
+                validator: this.checkPassword
+              }]
+            })(
+              <Input type="password" onBlur={this.handleConfirmBlur} />
+            )}
+          </FormItem>
+          <FormItem>
+            <Popconfirm title="确认提交?" onConfirm={(e) => this.handleSubmit(e)}>
+              <Button className="add-btn" type="primary" loading={loading}>提交</Button>
+            </Popconfirm>
+            <Button className="add-btn" type="default" size="default" onClick={() => this.cancleSubmit()}>取消</Button>
+          </FormItem>
+        </Form>
+      </div>
     )
   }
 }

@@ -7,6 +7,8 @@ export default {
   },
   // 搭建详情
   order_info_dajian_list: {
+    listUrlKey: 'dajianList',
+    uniqueKey: 'order_id',
     breadcrumb: ['客资/搭建信息', '搭建信息列表']
   },
   // 酒店列表
@@ -21,17 +23,7 @@ export default {
     deleteUrlKey: 'deleteArea',
     listUrlKey: 'areaList',
     uniqueKey: 'area_id',
-    breadcrumb: ['基础信息设定', '客资区域信息'],
-    columnData: [{
-      name: 'area_id',
-      label: '序号'
-    }, {
-      name: 'area_name',
-      label: '区域名称'
-    }, {
-      name: 'area_list',
-      label: '包含区域'
-    }]
+    breadcrumb: ['基础信息设定', '客资区域信息']
   },
   // 注册账号列表
   account_info_register_list: {
@@ -57,159 +49,46 @@ export default {
   },
   // 客资审核列表 - 财务审批
   finance_info_kezi_contract: {
-    breadcrumb: ['基础信息设定', '客资审核列表'],
-    columnData: [{
-      name: 'date',
-      label: '序号'
-    }, {
-      name: 'name',
-      label: '合同金额'
-    }, {
-      name: 'address',
-      label: '附加款金额'
-    }, {
-      name: 'address',
-      label: '合同附件'
-    }, {
-      name: 'address',
-      label: '状态'
-    }]
+    listUrlKey: 'keziOrderList',
+    uniqueKey: 'id',
+    breadcrumb: ['财务审批', '客资审核列表']
   },
   // 搭建审核列表 - 财务审批
   finance_info_dajian_contract: {
-    breadcrumb: ['基础信息设定', '搭建审核列表'],
-    columnData: [{
-      name: 'date',
-      label: '序号'
-    }, {
-      name: 'name',
-      label: '合同金额'
-    }, {
-      name: 'address',
-      label: '审批类型'
-    }, {
-      name: 'address',
-      label: '提交审批者'
-    }, {
-      name: 'address',
-      label: '合同附件'
-    }, {
-      name: 'address',
-      label: '状态'
-    }]
+    listUrlKey: 'dajianOrderList',
+    uniqueKey: 'id',
+    breadcrumb: ['财务审批', '搭建审核列表']
   },
   // 客资审核列表 - 总经理审批
   manager_info_kezi_contract: {
-    breadcrumb: ['基础信息设定', '客资审核列表'],
-    columnData: [{
-      name: 'date',
-      label: '序号'
-    }, {
-      name: 'name',
-      label: '合同金额'
-    }, {
-      name: 'address',
-      label: '附加款金额'
-    }, {
-      name: 'address',
-      label: '合同附件'
-    }, {
-      name: 'address',
-      label: '状态'
-    }]
+    listUrlKey: 'bossKeziOrderList',
+    uniqueKey: 'id',
+    breadcrumb: ['总经理审批', '客资审核列表']
   },
   // 搭建审核列表 - 总经理审批
   manager_info_dajian_contract: {
-    breadcrumb: ['基础信息设定', '搭建审核列表'],
-    columnData: [{
-      name: 'date',
-      label: '序号'
-    }, {
-      name: 'name',
-      label: '合同金额'
-    }, {
-      name: 'address',
-      label: '审批类型'
-    }, {
-      name: 'address',
-      label: '提交审批者'
-    }, {
-      name: 'address',
-      label: '合同附件'
-    }, {
-      name: 'address',
-      label: '状态'
-    }]
+    listUrlKey: 'bossDajianOrderList',
+    uniqueKey: 'id',
+    breadcrumb: ['总经理审批', '搭建审核列表']
   },
   // 客资审核列表 - 财务打款
   remittance_info_kezi_contract: {
-    breadcrumb: ['财务打款', '客资审核列表'],
-    columnData: [{
-      name: 'date',
-      label: '序号'
-    }, {
-      name: 'name',
-      label: '合同金额'
-    }, {
-      name: 'address',
-      label: '附加款金额'
-    }, {
-      name: 'address',
-      label: '提供者账号'
-    }, {
-      name: 'address',
-      label: '提供者分成'
-    }, {
-      name: 'address',
-      label: '跟踪者账号'
-    }, {
-      name: 'address',
-      label: '跟踪者分成'
-    }, {
-      name: 'address',
-      label: '状态'
-    }]
+    listUrlKey: 'payKeziOrderList',
+    uniqueKey: 'id',
+    payCompletedKey: 'payKeziCompleted',
+    breadcrumb: ['财务打款', '客资审核列表']
   },
   // 搭建打款列表 - 财务打款
   remittance_info_dajian_contract: {
-    breadcrumb: ['财务打款', '搭建打款列表'],
-    columnData: [{
-      name: 'date',
-      label: '序号'
-    }, {
-      name: 'name',
-      label: '合同金额'
-    }, {
-      name: 'address',
-      label: '首付金额'
-    }, {
-      name: 'address',
-      label: '提供者账号'
-    }, {
-      name: 'address',
-      label: '提供者分成'
-    }, {
-      name: 'address',
-      label: '状态'
-    }]
+    listUrlKey: 'payDajianOrderList',
+    uniqueKey: 'id',
+    payCompletedKey: 'payDajianCompleted',
+    breadcrumb: ['财务打款', '搭建打款列表']
   },
   // 反馈列表
   feedback_info: {
     listUrlKey: 'feedback',
     uniqueKey: 'id',
-    breadcrumb: ['意见反馈列表'],
-    columnData: [{
-      name: 'date',
-      label: '序号'
-    }, {
-      name: 'name',
-      label: '反馈账号'
-    }, {
-      name: 'address',
-      label: '反馈内容'
-    }, {
-      name: 'address',
-      label: '联系方式'
-    }]
+    breadcrumb: ['意见反馈列表']
   }
 }

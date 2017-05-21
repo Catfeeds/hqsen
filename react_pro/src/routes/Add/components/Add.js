@@ -8,8 +8,10 @@ class Add extends Component {
   constructor () {
     super()
     this.state = {
-      showConfirm: false
+      showConfirm: false,
+      showArea: false
     }
+    this.handleChange = this.handleChange.bind(this)
   }
 
   componentWillMount () {
@@ -39,14 +41,30 @@ class Add extends Component {
   }
   cancleSubmit () {
     const { type } = this.props.params
-    this.context.router.push(`list/${type}`)
+    if (type !== 'remittance_info_remittance_ratio') {
+      this.context.router.push(`list/${type}`)
+    }
+  }
+  handleChange (name, value) {
+    console.log(name, value)
+    if (name === 'user_type') {
+      if (value === '11' || value === '12') {
+        this.props.toggleAreaSelect(false)
+      } else {
+        this.props.toggleAreaSelect(true)
+      }
+    }
   }
 
   render () {
     const { getFieldDecorator } = this.props.form
     const { basicInfo, dataSource, formData, loading } = this.props.Add
     let configData = { ...this.props.configData, ...dataSource }
-    configData.area_id = configData.config_area
+    if (basicInfo.type === 'account_info_inner_list') {
+      // configData.area_id = configData.config_area
+    } else {
+      configData.area_id = configData.config_area
+    }
     configData.user_type = configData.inner_type
     return (
       <div className="add-page">
@@ -57,6 +75,7 @@ class Add extends Component {
               key={index}
               getFieldDecorator={getFieldDecorator}
               item={item}
+              onChange={this.handleChange}
               dataSource={configData[item.name]}
               defaultValue={formData[item.name]} />
           })
@@ -87,7 +106,8 @@ Add.propTypes = {
   query: PropTypes.object,
   location: PropTypes.object,
   submitForm: PropTypes.func,
-  clearData: PropTypes.func
+  clearData: PropTypes.func,
+  toggleAreaSelect: PropTypes.func
 }
 
 

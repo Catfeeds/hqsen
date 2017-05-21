@@ -1,26 +1,85 @@
 export default {
   // 客资合同
   finance_info_kezi_contract: {
+    detailUrlKey: 'keziOrderDetail',
+    submitKey: 'keziOrderSubmit',
     breadcrumb: ['财务审批', '客资审核列表', '财务审批'],
     formList: [{
       label: '合同金额',
       type: 'text',
-      name: '1',
+      name: 'order_money',
       disabled: true
     }, {
       label: '附加款金额',
       type: 'text',
-      name: '2',
+      name: 'order_other_money',
       disabled: true
     }, {
       label: '举办时间',
       type: 'date',
-      name: '3',
+      name: 'sign_using_time',
       disabled: true
     }, {
       label: '合同附件',
       type: 'image',
-      name: 'aa'
+      name: 'sign_pic'
+    }]
+  },
+  // 总经理kezi
+  manager_info_kezi_contract:  {
+    detailUrlKey: 'bossKeziOrderDetail',
+    submitKey: 'bossKeziOrderSubmit',
+    breadcrumb: ['总经理审批', '客资审核列表', '总经理审批'],
+    formList: [{
+      label: '合同金额',
+      type: 'text',
+      name: 'order_money',
+      disabled: true
+    }, {
+      label: '附加款金额',
+      type: 'text',
+      name: 'order_other_money',
+      disabled: true
+    }, {
+      label: '举办时间',
+      type: 'date',
+      name: 'sign_using_time',
+      disabled: true
+    }, {
+      label: '合同附件',
+      type: 'image',
+      name: 'sign_pic'
+    }]
+  },
+  // 总经理搭建
+  manager_info_dajian_contract: {
+    detailUrlKey: 'bossDajianOrderDetail',
+    submitKey: 'bossDajianOrderSubmit',
+    breadcrumb: ['总经理审批', '搭建审核列表（首付）', '总经理审批'],
+    formList: [{
+      label: '合同金额',
+      type: 'text',
+      name: 'order_money',
+      disabled: true
+    }, {
+      label: '举办时间',
+      type: 'date',
+      name: 'sign_using_time',
+      disabled: true
+    }, {
+      label: '首付金额',
+      type: 'text',
+      name: 'first_order_money',
+      disabled: true
+    }, {
+      label: '首付时间',
+      type: 'date',
+      name: 'first_order_using_time',
+      disabled: true
+    }, {
+      label: '首付附件',
+      type: 'image',
+      name: 'sign_pic'
     }]
   },
   // 首付-搭建

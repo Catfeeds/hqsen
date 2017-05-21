@@ -27,6 +27,10 @@ class List extends Component {
       this.props.initData(type)
     }
   }
+  goApproveDetail (id, isSubmit) {
+    const { type } = this.props.params
+    this.context.router.push(`/approve/${type}?id=${id}&isSubmit=${isSubmit}`)
+  }
 
   gotoDetail (id) {
     const { type } = this.props.params
@@ -50,7 +54,7 @@ class List extends Component {
   }
   render () {
     const { pageInfo, resultInfo, searchInput, loading, basicInfo } = this.props.List
-    const { handleCurrentChange, changeSearchInput, deleteRow, configData, disabledRow } = this.props
+    const { handleCurrentChange, changeSearchInput, deleteRow, configData, disabledRow, payCompleted } = this.props
     const columns = {
       // 客资信息
       order_info_kezi_list: [{
@@ -93,28 +97,28 @@ class List extends Component {
       }],
       // 搭建信息
       order_info_dajian_list: [{
-        key: 'date',
-        dataIndex: '',
+        key: 'order_id',
+        dataIndex: 'order_id',
         title: '序号'
       }, {
-        key: 'key',
-        dataIndex: '',
+        key: 'customer_name',
+        dataIndex: 'customer_name',
         title: '姓名'
       }, {
-        key: 'address',
-        dataIndex: '',
+        key: 'order_phone',
+        dataIndex: 'order_phone',
         title: '手机号'
       }, {
-        key: 'jj',
-        dataIndex: '',
+        key: 'order_from',
+        dataIndex: 'order_from',
         title: '订单来源'
       }, {
-        key: '3',
-        dataIndex: '',
+        key: 'order_area_hotel_type',
+        dataIndex: 'order_area_hotel_type',
         title: '指定类型'
       }, {
-        key: '2',
-        dataIndex: '',
+        key: 'area_hotel_name',
+        dataIndex: 'area_hotel_name',
         title: '酒店/区域名称'
       }, {
         key: 'detail',
@@ -254,6 +258,314 @@ class List extends Component {
         dataIndex: 'control',
         title: '操作',
         render: (text, record) => renderControlBtn(record, true)
+      }],
+      // 财务审批——客资
+      finance_info_kezi_contract: [{
+        key: 'id',
+        dataIndex: 'id',
+        title: '序号'
+      }, {
+        key: 'order_money',
+        dataIndex: 'order_money',
+        title: '合同金额'
+      }, {
+        key: 'order_other_money',
+        dataIndex: 'order_other_money',
+        title: '附加款金额'
+      }, {
+        key: 'sign_pic_count',
+        dataIndex: 'sign_pic_count',
+        title: '合同附件',
+        render: text => <span>{text}图片</span>
+      }, {
+        key: 'sign_status',
+        dataIndex: 'sign_status',
+        title: '状态',
+        render: text => {
+          let data = ''
+          switch (text) {
+            case '0':
+              data = '未知'
+              break
+            case '1':
+              data = '未处理'
+              break
+            case '2':
+              data = '通过'
+              break
+            case '3':
+              data = '驳回'
+              break
+          }
+          return <span>{data}</span>
+        }
+      }, {
+        key: 'control',
+        dataIndex: 'control',
+        title: '操作',
+        render: (text, record) => renderApproveControl(record)
+      }],
+      // 财务审批——搭建
+      finance_info_dajian_contract: [{
+        key: 'id',
+        dataIndex: 'id',
+        title: '序号'
+      }, {
+        key: 'order_money',
+        dataIndex: 'order_money',
+        title: '合同金额'
+      }, {
+        key: 'sign_type',
+        dataIndex: 'sign_type',
+        title: '审批类型',
+        render: text => {
+          let data = ''
+          switch (text) {
+            case '1':
+              data = '首款'
+              break
+            case '2':
+              data = '中款'
+              break
+            case '3':
+              data = '尾款'
+              break
+            case '4':
+              data = '附加款'
+              break
+            case '5':
+              data = '尾款时间变更'
+              break
+          }
+          return <span>{data}</span>
+        }
+      }, {
+        key: 'user_type',
+        dataIndex: 'user_type',
+        title: '提交审批者',
+        render: (text, record) => <span>{record.sign_type === '1' ? '首销' : '二销'}</span>
+      }, {
+        key: 'sign_pic_count',
+        dataIndex: 'sign_pic_count',
+        title: '合同附件',
+        render: text => <span>{text}图片</span>
+      }, {
+        key: 'sign_status',
+        dataIndex: 'sign_status',
+        title: '状态',
+        render: text => {
+          let data = ''
+          switch (text) {
+            case '0':
+              data = '未知'
+              break
+            case '1':
+              data = '未处理'
+              break
+            case '2':
+              data = '通过'
+              break
+            case '3':
+              data = '驳回'
+              break
+          }
+          return <span>{data}</span>
+        }
+      }, {
+        key: 'control',
+        dataIndex: 'control',
+        title: '操作',
+        render: (text, record) => renderApproveControl(record)
+      }],
+      // 总经理审批——客资
+      manager_info_kezi_contract: [{
+        key: 'id',
+        dataIndex: 'id',
+        title: '序号'
+      }, {
+        key: 'order_money',
+        dataIndex: 'order_money',
+        title: '合同金额'
+      }, {
+        key: 'order_other_money',
+        dataIndex: 'order_other_money',
+        title: '附加款金额'
+      }, {
+        key: 'sign_pic_count',
+        dataIndex: 'sign_pic_count',
+        title: '合同附件',
+        render: text => <span>{text}图片</span>
+      }, {
+        key: 'boss_sign_status',
+        dataIndex: 'boss_sign_status',
+        title: '状态',
+        render: text => {
+          let data = ''
+          switch (text) {
+            case '0':
+              data = '未知'
+              break
+            case '1':
+              data = '未处理'
+              break
+            case '2':
+              data = '通过'
+              break
+            case '3':
+              data = '驳回'
+              break
+          }
+          return <span>{data}</span>
+        }
+      }, {
+        key: 'control',
+        dataIndex: 'control',
+        title: '操作',
+        render: (text, record) => renderApproveControl(record)
+      }],
+      // 总经理审批——搭建
+      manager_info_dajian_contract: [{
+        key: 'id',
+        dataIndex: 'id',
+        title: '序号'
+      }, {
+        key: 'order_money',
+        dataIndex: 'order_money',
+        title: '合同金额'
+      }, {
+        key: 'sign_type',
+        dataIndex: 'sign_type',
+        title: '审批类型',
+        render: text => {
+          let data = ''
+          switch (text) {
+            case '1':
+              data = '首款'
+              break
+            case '2':
+              data = '中款'
+              break
+            case '3':
+              data = '尾款'
+              break
+            case '4':
+              data = '附加款'
+              break
+            case '5':
+              data = '尾款时间变更'
+              break
+          }
+          return <span>{data}</span>
+        }
+      }, {
+        key: 'user_type',
+        dataIndex: 'user_type',
+        title: '提交审批者',
+        render: (text, record) => <span>{record.sign_type === '1' ? '首销' : '二销'}</span>
+      }, {
+        key: 'sign_pic_count',
+        dataIndex: 'sign_pic_count',
+        title: '合同附件',
+        render: text => <span>{text}图片</span>
+      }, {
+        key: 'boss_sign_status',
+        dataIndex: 'boss_sign_status',
+        title: '状态',
+        render: text => {
+          let data = ''
+          switch (text) {
+            case '0':
+              data = '未知'
+              break
+            case '1':
+              data = '未处理'
+              break
+            case '2':
+              data = '通过'
+              break
+            case '3':
+              data = '驳回'
+              break
+          }
+          return <span>{data}</span>
+        }
+      }, {
+        key: 'control',
+        dataIndex: 'control',
+        title: '操作',
+        render: (text, record) => renderApproveControl(record)
+      }],
+      // 打款--客资
+      remittance_info_kezi_contract: [{
+        key: 'id',
+        dataIndex: 'id',
+        title: '序号'
+      }, {
+        key: 'order_money',
+        dataIndex: 'order_money',
+        title: '合同金额'
+      }, {
+        key: 'order_other_money',
+        dataIndex: 'order_other_money',
+        title: '附加款金额'
+      }, {
+        key: 'create_user_name',
+        dataIndex: 'create_user_name',
+        title: '提供者账号'
+      }, {
+        key: 'create_user_money',
+        dataIndex: 'create_user_money',
+        title: '提供者分成'
+      }, {
+        key: 'watch_user_name',
+        dataIndex: 'watch_user_name',
+        title: '跟踪者账号'
+      }, {
+        key: 'watch_user_money',
+        dataIndex: 'watch_user_money',
+        title: '跟踪者分成'
+      }, {
+        key: 'pay_status',
+        dataIndex: 'pay_status',
+        title: '状态',
+        render: text => <span>{text === '4' ? '已打款' : '待打款'}</span>
+      }, {
+        key: 'control',
+        dataIndex: 'control',
+        title: '操作',
+        render: (text, record) => renderPayControl(record)
+      }],
+      // 打款--搭建
+      remittance_info_dajian_contract: [{
+        key: 'id',
+        dataIndex: 'id',
+        title: '序号'
+      }, {
+        key: 'order_money',
+        dataIndex: 'order_money',
+        title: '合同金额'
+      }, {
+        key: 'first_order_money',
+        dataIndex: 'first_order_money',
+        title: '首付金额'
+      }, {
+        key: 'create_user_name',
+        dataIndex: 'create_user_name',
+        title: '提供者账号'
+      }, {
+        key: 'create_user_money',
+        dataIndex: 'create_user_money',
+        title: '提供者分成'
+      }, {
+        key: 'pay_status',
+        dataIndex: 'pay_status',
+        title: '状态',
+        render: text => <span>{text === '4' ? '已打款' : '待打款'}</span>
+      }, {
+        key: 'control',
+        dataIndex: 'control',
+        title: '操作',
+        render: (text, record) => renderPayControl(record)
       }]
     }
     const renderControlBtn = (record, showDisabled) => {
@@ -277,6 +589,36 @@ class List extends Component {
         </div>
       )
     }
+    const renderApproveControl = (record) => {
+      return (
+        <div>
+          <Button
+            size="small"
+            onClick={() => this.goApproveDetail(record.id, false)}>查看信息</Button>
+          <Button
+            type="primary"
+            size="small"
+            style={{ marginLeft: 5 }}
+            onClick={() => this.goApproveDetail(record.id, true)}>
+            { record.sign_status === '3' ? '重开' : '审批' }
+          </Button>
+        </div>
+      )
+    }
+    const renderPayControl = (record) => {
+      return (
+        <div>
+          <Button size="small" style={{ marginRight: 5 }} onClick={() => this.gotoDetail(record.id)}>查看信息</Button>
+          {record.pay_status === '4' ? (
+            <span className="completed-pay">已完成</span>
+          ) : (
+            <Popconfirm title="是否完成打款?" onConfirm={() => payCompleted(record)}>
+              <Button type="primary" size="small">完成打款</Button>
+            </Popconfirm>
+          )}
+        </div>
+      )
+    }
 
     const pagination = {
       current: pageInfo.page,
@@ -293,7 +635,7 @@ class List extends Component {
         <MyBreadcrumb breadcrumb={basicInfo.breadcrumb} />
         <div className="control-box clearfix">
           <Search
-            placeholder="请输入搜索内容"
+            placeholder="账号/酒店"
             style={{ width: 200, display: basicInfo.type === 'account_info_hotel_list' ? 'block' : 'none' }}
             value={searchInput}
             onChange={(e) => changeSearchInput(e.target.value)}
@@ -321,6 +663,7 @@ class List extends Component {
 
 List.propTypes = {
   disabledRow: PropTypes.func,
+  payCompleted: PropTypes.func,
   configData: PropTypes.object,
   deleteRow: PropTypes.func,
   initData: PropTypes.func,

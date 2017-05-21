@@ -24,11 +24,13 @@ const urlKey = {
   keziDetail: 'c=kezi&f=keziDetail',
   // 搭建列表详情
   dajianList: 'c=dajian&f=dajianList',
+  dajianDetail: 'c=dajian&f=dajianDetail',
   createdajian: 'c=dajian&f=dajianCreate',
   getShanghaiArea: 'c=area&f=areaSH',
   feedback: 'c=user&f=feedback',
   // 酒店账户列表
   hotelAccountList: 'c=account&f=hotelAccountList',
+  // hotelAccountList: 'c=account&f=accountSearch',
   getHotelSelect: 'c=account&f=hotelList',
   addHotelAccount: 'c=account&f=hotelAccountAdd',
   hotelAccountDetail: 'c=account&f=hotelAccountDetail',
@@ -40,8 +42,36 @@ const urlKey = {
   innerAccountDetail: 'c=account&f=innerAccountDetail',
   innerAccountEdit: 'c=account&f=accountEdit',
   deleteInnerAccount: 'c=account&f=accountDelete',
+  getAreaList: 'c=account&f=areaList',
   // 超管重置密码
-  resetPwd: 'c=account&f=adminAccountEdit'
+  resetPwd: 'c=account&f=adminAccountEdit',
+  // 财务kezi列表
+  keziOrderList: 'c=finance&f=keziOrderSignList',
+  keziOrderDetail: 'c=finance&f=keziSignDetail',
+  keziOrderSubmit: 'c=finance&f=keziSignFollowCreate',
+  // 财务搭建
+  dajianOrderList: 'c=finance&f=dajianOrderSignList',
+  dajianOrderDetail: 'c=finance&f=dajianSignDetail',
+  dajianOrderSubmit: 'c=finance&f=dajianSignFollowCreate',
+  // 总经理审批
+  bossKeziOrderList: 'c=boss&f=keziOrderSignList',
+  bossKeziOrderDetail: 'c=boss&f=keziSignDetail',
+  bossKeziOrderSubmit: 'c=boss&f=keziSignFollowCreate',
+  // 总经理搭建
+  bossDajianOrderList: 'c=boss&f=DajianOrderSignList',
+  bossDajianOrderDetail: 'c=boss&f=DajianSignDetail',
+  bossDajianOrderSubmit: 'c=boss&f=DajianSignFollowCreate',
+  // kezi打款
+  payKeziOrderList: 'c=pay&f=keziOrderList',
+  payKeziCompleted: 'c=pay&f=keziPayOrder',
+  payKeziOrderDetail: 'c=pay&f=keziOrderDetail',
+  // dajian打款
+  payDajianOrderList: 'c=pay&f=dajianOrderList',
+  payDajianCompleted: 'c=pay&f=dajianPayOrder',
+  payDajianOrderDetail: 'c=pay&f=dajianOrderDetail',
+  // 财务打款系数
+  payDetail: 'c=pay&f=payRatioDetail',
+  paySubmit: 'c=pay&f=payRatio'
 }
 
 const formatData = (param) => {

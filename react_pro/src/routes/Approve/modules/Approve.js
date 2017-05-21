@@ -22,10 +22,16 @@ export const getInit = (type, id) => {
   }
 }
 
-export const submitForm = (id, data, router) => {
+export const submitForm = (data, router) => {
   return (dispatch, getState) => {
-    const { submitKey, type } = getState().Approve.basicInfo
-    Fetch(submitKey, data).then(response => {
+    const { submitKey, type, id } = getState().Approve.basicInfo
+    const status = type.indexOf('manager') > -1 ? 'boss_sign_status' : 'sign_status'
+    const formData = {
+      user_sign_id: id,
+      status_desc: data.status_desc,
+      [status]: data.sign_status
+    }
+    Fetch(submitKey, formData).then(response => {
       dispatch(toggleLoading(false))
       message.success('提交成功')
       router.push(`/list/${type}`)
@@ -54,7 +60,11 @@ const ACTION_HANDLERS = {
   [saveForm]: (state, action) => {
     return {
       ...state,
-      formData: action.payload
+      formData: action.payload,
+      dataSource: {
+        ...state.dataSource,
+        sign_pic: action.payload.sign_pic
+      }
     }
   },
   [toggleLoading]: (state, action) => {
@@ -73,32 +83,33 @@ const ACTION_HANDLERS = {
 // ------------------------------------
 const initialState = {
   loading: false,
-  formData: {},
+  formData: {
+    follow_list: []
+  },
   basicInfo: {
     id: '',
     formList: [],
     approveList: [{
       label: '',
       type: 'radio',
-      name: 'radio',
+      name: 'sign_status',
       rules: { required: true }
     }, {
       label: '',
       type: 'textarea',
-      name: 'name'
+      name: 'status_desc'
     }],
     breadcrumb: []
   },
   dataSource: {
-    radio: [{
+    sign_status: [{
       label: '通过',
-      value: '1'
+      value: '2'
     }, {
       label: '驳回',
-      value: '2'
+      value: '3'
     }],
-    aa: ['http://img01.sogoucdn.com/app/a/100540002/457880.jpg',
-      'http://img.ivsky.com/img/tupian/pre/201612/03/zaocan_niunai_mianbao-011.jpg']
+    sign_pic: []
   }
 }
 export default function counterReducer (state = initialState, action) {

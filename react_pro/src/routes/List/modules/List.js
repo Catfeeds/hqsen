@@ -20,7 +20,7 @@ export const handleCurrentChange = (current) => {
   return (dispatch, getState) => {
     const { searchInput, basicInfo } = getState().List
     dispatch(toggleLoading(true))
-    Fetch(basicInfo.listUrlKey, { page: current, searchInput }).then(response => {
+    Fetch(basicInfo.listUrlKey, { page: current, search_input: searchInput }).then(response => {
       dispatch(setResultInfo(current, response.data))
     }, () => { dispatch(toggleLoading(false)) })
   }
@@ -55,6 +55,18 @@ export const initData = (type) => {
   }
 }
 
+export const payCompleted = (data) => {
+  return (dispatch, getState) => {
+    const { basicInfo, pageInfo } = getState().List
+    const type = basicInfo.type === 'remittance_info_dajian_contract' ? 'user_dajian_order_id' : 'user_kezi_order_id'
+    dispatch(toggleLoading(true))
+    Fetch(basicInfo.payCompletedKey, { order_id: data[type] }).then(response => {
+      dispatch(toggleLoading(false))
+      dispatch(handleCurrentChange(pageInfo.page))
+    }, () => { dispatch(toggleLoading(false)) })
+  }
+}
+
 export const actions = {
   setBasicInfo,
   handleCurrentChange,
@@ -64,7 +76,8 @@ export const actions = {
   setInitialState,
   initData,
   deleteRow,
-  disabledRow
+  disabledRow,
+  payCompleted
 }
 
 // ------------------------------------

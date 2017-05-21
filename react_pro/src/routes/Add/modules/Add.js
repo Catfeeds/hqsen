@@ -3,6 +3,7 @@ import { message } from 'antd'
 import { createAction } from 'redux-act'
 import Fetch from 'root/Fetch'
 
+
 // ------------------------------------
 // Actions
 // ------------------------------------
@@ -11,6 +12,7 @@ export const saveForm = createAction('初始化新增数据')
 export const saveDataSource = createAction('保存列表资源')
 export const clearData = createAction('清除添加页面数据')
 export const toggleLoading = createAction('切换addLoading')
+export const toggleAreaSelect = createAction('所在区域的切换')
 
 export const getInit = (type, id) => {
   return (dispatch, getState) => {
@@ -21,7 +23,18 @@ export const getInit = (type, id) => {
       Fetch(basicInfo.detailUrlKey, { id }).then(response => {
         dispatch(toggleLoading(false))
         let data = response.data
-        data.area_list && (data.area_list = data.area_list.split(','))
+        switch (type) {
+          case 'account_info_inner_list':
+            if (data.user_type === '11' || data.user_type === '12') {
+              dispatch(toggleAreaSelect(false))
+            }
+            break
+          case 'hotel_info_area_list':
+            data.area_list && (data.area_list = data.area_list.split(','))
+            break
+          default:
+            break
+        }
         dispatch(saveForm(data))
       }, () => { dispatch(toggleLoading(false)) })
     }
@@ -33,6 +46,11 @@ export const getDataSource = (type, id) => {
     if (type === 'account_info_hotel_list') {
       Fetch('getHotelSelect').then(response => {
         dispatch(saveDataSource({ hotel_id: response.data.list }))
+        dispatch(getInit(type, id))
+      })
+    } else if (type === 'account_info_inner_list') {
+      Fetch('getAreaList').then(response => {
+        dispatch(saveDataSource({ area_id: response.data.list }))
         dispatch(getInit(type, id))
       })
     } else {
@@ -53,7 +71,9 @@ export const submitForm = (id, data, router) => {
     Fetch(url, formData).then(response => {
       dispatch(toggleLoading(false))
       message.success('提交成功')
-      router.push(`/list/${type}`)
+      if (type !== 'remittance_info_remittance_ratio') {
+        router.push(`/list/${type}`)
+      }
     }, () => { dispatch(toggleLoading(false)) })
   }
 }
@@ -62,7 +82,8 @@ export const actions = {
   getInit,
   submitForm,
   getDataSource,
-  clearData
+  clearData,
+  toggleAreaSelect
 }
 
 // ------------------------------------
@@ -70,14 +91,19 @@ export const actions = {
 // ------------------------------------
 const ACTION_HANDLERS = {
   [setBasicInfo]: (state, action) => {
-    const { id, type } = action.payload
+    const { id, type, formList } = action.payload
+    let newFormList = formList
     const disableType = ['account_info_hotel_list', 'account_info_inner_list']
     if (id && disableType.indexOf(type) > -1) {
-      action.payload.formList.map(item => { item.disabled = true })
+      // formList.map(item => { item.disabled = true })
+      newFormList = formList.map(item => ({ ...item, disabled: true }))
     }
     return {
       ...state,
-      basicInfo: action.payload
+      basicInfo: {
+        ...action.payload,
+        formList: newFormList
+      }
     }
   },
   [saveForm]: (state, action) => {
@@ -89,13 +115,26 @@ const ACTION_HANDLERS = {
   [saveDataSource]: (state, action) => {
     return {
       ...state,
-      dataSource: action.payload
+      dataSource: {
+        ...state.dataSource,
+        ...action.payload
+      }
     }
   },
   [toggleLoading]: (state, action) => {
     return {
       ...state,
       loading: action.payload
+    }
+  },
+  [toggleAreaSelect]: (state, action) => {
+    return {
+      ...state,
+      basicInfo: {
+        ...state.basicInfo,
+        formList: state.basicInfo.formList.map(item =>
+          item.name === 'area_id' ? Object.assign({}, item, { hide: action.payload }) : item)
+      }
     }
   },
   [clearData]: (state, action) => {
@@ -108,6 +147,7 @@ const ACTION_HANDLERS = {
 // ------------------------------------
 const initialState = {
   loading: false,
+  config,
   formData: {
     area_list: []
   },
@@ -117,9 +157,11 @@ const initialState = {
     breadcrumb: []
   },
   dataSource: {
-    area_list: []
+    area_list: [],
+    area_id: []
   }
 }
+
 export default function counterReducer (state = initialState, action) {
   const handler = ACTION_HANDLERS[action.type]
 

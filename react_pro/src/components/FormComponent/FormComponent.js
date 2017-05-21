@@ -9,7 +9,8 @@ import React, { Component, PropTypes } from 'react'
 
 class FormComponent extends Component {
   handleChange (e) {
-    console.log(e)
+    const { item: { name }, onChange } = this.props
+    onChange && onChange(name, e)
   }
   renderComponent () {
     const { item, dataSource } = this.props
@@ -53,7 +54,6 @@ class FormComponent extends Component {
   render () {
     const { getFieldDecorator, item, defaultValue } = this.props
     const ruleList = checkList.getFormRules(item.rules || {})
-    console.log('ruleList', ruleList)
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -65,25 +65,28 @@ class FormComponent extends Component {
       }
     }
     item.status = item.status || ''
-    // validateStatus="item.status"
-    console.log(item.status, 'status-----------')
-    return (
-      <Form.Item label={item.label} {...formItemLayout} >
-        {getFieldDecorator(item.name, {
-          initialValue: defaultValue,
-          rules: ruleList
-        })(
-           this.renderComponent()
-        )}
-      </Form.Item>
-    )
+    if (item.hide) {
+      return null
+    } else {
+      return (
+        <Form.Item label={item.label} {...formItemLayout} >
+          {getFieldDecorator(item.name, {
+            initialValue: defaultValue,
+            rules: ruleList
+          })(
+            this.renderComponent()
+          )}
+        </Form.Item>
+      )
+    }
   }
 }
 
 FormComponent.propTypes = {
   dataSource: PropTypes.array,
   item: PropTypes.object,
-  getFieldDecorator: PropTypes.func
+  getFieldDecorator: PropTypes.func,
+  onChange: PropTypes.func
 }
 
 export default FormComponent

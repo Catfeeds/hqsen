@@ -78,30 +78,32 @@ export default {
       type: 'select',
       name: 'user_type',
       rules: { required: true }
+    }, {
+      label: '所属区域',
+      type: 'select',
+      name: 'area_id',
+      hide: true
     }],
     breadcrumb: ['账号管理', '账号信息', '新增搭建账号']
   },
   // 设定打款系数
   remittance_info_remittance_ratio: {
+    detailUrlKey: 'payDetail',
+    editUrlKey: 'paySubmit',
     formList: [{
       label: '客资提供者系数',
       type: 'text',
-      name: 'name'
+      name: 'kezi_user'
     }, {
       label: '客资跟踪者系数',
       type: 'text',
-      name: 'type'
+      name: 'kezi_hotel'
     }, {
       label: '搭建提供者系数',
       type: 'text',
-      name: 'name'
+      name: 'dajian_user'
     }],
-    rules: {
-      area: [
-        { required: true, message: '请输入活动名称', trigger: 'blur' }
-      ]
-    },
-    breadcrumb: ['财务打款', '设置提供者系数']
+    breadcrumb: ['设置提供者系数']
   },
   // 超管重置密码
   account_info_password_back: {
