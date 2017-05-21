@@ -611,6 +611,8 @@ class order extends base {
         $user_dajian_order_sign['first_order_money'] = $first_order_money;
         $user_dajian_order_sign['first_order_using_time'] = $first_order_using_time;
         $user_dajian_order_sign['next_pay_time'] = $next_pay_time;
+        $user_dajian_order_sign['order_time'] = time();// 订单创建时间
+        $user_dajian_order_sign['sign_user_id'] = $this->user['id'];// 订单创建时间
         if($user_dajian_order_id){
             if(isset($user_dajian_order_sign['id']) and $user_dajian_order_sign['id']){
                 $this->db->update('hqsen_user_dajian_order_sign', $user_dajian_order_sign, ' id = ' . $user_dajian_order_sign['id']);

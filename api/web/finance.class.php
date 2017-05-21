@@ -99,12 +99,14 @@ class finance extends base {
         foreach ($sign as $one_sign){
             $item['id'] = $one_sign['id'];
             $item['order_money'] = $one_sign['order_money'];
-            $item['order_other_money'] = $one_sign['order_other_money'];
+            $item['sign_type'] = $one_sign['sign_type'];
             $item['sign_pic_count'] = count(json_decode($one_sign['sign_pic']));
-            $item['del_flag'] = $one_sign['del_flag'];//1初次录入 2再次录入 3审批失败
+            $item['del_flag'] = $one_sign['del_flag'];//0未知 1初次录入 2再次录入
+            $item['sign_status'] = $one_sign['sign_status'];//1未处理 2通过 3驳回
+            $list['list'][] = $item;
         }
-        $data['count'] = $this->db->getCount('hqsen_user_dajian_order_sign', 'del_flag != 0');
-        $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $sign);
+        $list['count'] = $this->db->getCount('hqsen_user_kezi_order_sign', 'del_flag != 0');
+        $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $list);
     }
 
 
