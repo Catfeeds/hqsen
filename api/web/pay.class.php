@@ -42,6 +42,16 @@ class pay extends base {
     }
 
 
+    public function payRatioDetail(){
+        $pay_ratio = $this->db->getRow("select *  from hqsen_pay_ratio limit 1");
+        if(!$pay_ratio){
+            $pay_ratio['kezi_user'] = 0.01;
+            $pay_ratio['kezi_hotel'] = 0.01;
+            $pay_ratio['dajian_user'] = 0.01;
+        }
+        $this->appDie($this->back_code['sys']['success'], $pay_ratio);
+    }
+
     // 客资财务 打款列表
     public function keziOrderList(){
         $page = $this->postInt('page', 1);

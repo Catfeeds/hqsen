@@ -42,18 +42,22 @@ class finance extends base {
         $user_sign_id = $this->postInt('user_sign_id');
         $status_desc = $this->postString('status_desc');
         $sign_status = $this->postString('sign_status', 1);
-        // 审批流程数据
-        $sign_follow['sign_status'] = $sign_status;
-        $sign_follow['status_desc'] = $status_desc;
-        $sign_follow['user_sign_id'] = $user_sign_id;
-        $sign_follow['create_time'] = time();
-        $sign_follow['id'] = $this->db->insert('hqsen_user_kezi_sign_follow', $sign_follow);
-        // 审批成功  更新签单数据  不更新跟踪者订单数据 还是待审核状态
-        if(isset($sign_follow['id']) and $sign_follow['id']){
-            $order_sign['sign_status'] = $sign_status;
-            $this->db->update('hqsen_user_kezi_order_sign', $order_sign, ' id = ' . $sign_follow['user_sign_id']);
+        if($user_sign_id and $sign_status){
+            // 审批流程数据
+            $sign_follow['sign_status'] = $sign_status;
+            $sign_follow['status_desc'] = $status_desc;
+            $sign_follow['user_sign_id'] = $user_sign_id;
+            $sign_follow['create_time'] = time();
+            $sign_follow['id'] = $this->db->insert('hqsen_user_kezi_sign_follow', $sign_follow);
+            // 审批成功  更新签单数据  不更新跟踪者订单数据 还是待审核状态
+            if(isset($sign_follow['id']) and $sign_follow['id']){
+                $order_sign['sign_status'] = $sign_status;
+                $this->db->update('hqsen_user_kezi_order_sign', $order_sign, ' id = ' . $sign_follow['user_sign_id']);
+            }
+            $this->appDie();
+        } else {
+            $this->appDie($this->back_code['sys']['value_empty'], $this->back_msg['sys']['value_empty']);
         }
-        $this->appDie();
     }
 
     //客资签单 详情页
