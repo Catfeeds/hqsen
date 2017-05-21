@@ -25,16 +25,17 @@ class boss extends base {
         $offset = ($page - 1) * $limit;
         $sql_limit = " limit $offset , $limit";
         // 总经理要在财务审批通过基础上
-        $sign = $this->db->getRows("select *  from hqsen_user_kezi_order_sign  where sign_status = 1 order by id desc " . $sql_limit);
+        $sign = $this->db->getRows("select *  from hqsen_user_kezi_order_sign  where sign_status = 2 order by id desc " . $sql_limit);
         foreach ($sign as $one_sign){
             $item['id'] = $one_sign['id'];
             $item['order_money'] = $one_sign['order_money'];
             $item['order_other_money'] = $one_sign['order_other_money'];
             $item['sign_pic_count'] = count(json_decode($one_sign['sign_pic']));
-            $item['del_flag'] = $one_sign['del_flag'];//1初次录入 2再次录入 3审批失败
+            $item['sign_status'] = $one_sign['sign_status'];//1未处理 2通过 3驳回
+            $list['list'][] = $item;
         }
-        $data['count'] = $this->db->getCount('hqsen_user_kezi_order_sign', 'del_flag != 0');
-        $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $sign);
+        $list['count'] = $this->db->getCount('hqsen_user_kezi_order_sign', 'sign_status = 2');
+        $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $list);
     }
 
     // 客资签单 创建总经理审批
@@ -56,6 +57,33 @@ class boss extends base {
         $this->appDie();
     }
 
+    //客资签单 详情页
+    public function keziSignDetail(){
+        $sign_id = $this->postInt('id');
+        $sign = $this->db->getRow("select *  from hqsen_user_kezi_order_sign where id=" . $sign_id);
+        $item['id'] = $sign['id'];
+        $item['order_money'] = $sign['order_money'];
+        $item['order_other_money'] = $sign['order_other_money'];
+        $item['sign_pic'] = json_decode($sign['sign_pic']);
+        $item['sign_using_time'] = $sign['sign_using_time'];
+        $item['sign_status'] = $sign['sign_status'];//1未处理 2通过 3驳回
+
+        $sign_follow_list = $this->db->getRows("select *  from hqsen_user_kezi_sign_follow where user_sign_id = $sign_id order by id desc ");
+        $follow_list = [];
+        foreach ($sign_follow_list as $one_follow){
+            if($one_follow['boss_sign_status'] > 1){
+                $one_item['status_type'] = 1;// 1总经理审核 2 财务审核
+            } else {
+                $one_item['status_type'] = 2;
+            }
+            $one_item['create_time'] = $one_follow['create_time'];
+            $one_item['status'] = $one_follow['boss_sign_status'] > 1 ? $one_follow['boss_sign_status'] : $one_follow['sign_status'];
+            $one_item['status_desc'] = $one_follow['status_desc'];
+            $follow_list[] = $one_item;
+        }
+        $item['follow_list'] = $follow_list;
+        $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $item);
+    }
 
 
 

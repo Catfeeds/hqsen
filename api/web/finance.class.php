@@ -58,13 +58,13 @@ class finance extends base {
 
     //客资签单 详情页
     public function keziSignDetail(){
-        $sign_id = $this->postInt('sign_id');
+        $sign_id = $this->postInt('id');
         $sign = $this->db->getRow("select *  from hqsen_user_kezi_order_sign where id=" . $sign_id);
         $item['id'] = $sign['id'];
         $item['order_money'] = $sign['order_money'];
         $item['order_other_money'] = $sign['order_other_money'];
-        $item['sign_pic'] = $sign['sign_pic'];
-        $item['sign_using_time'] = $sign['sign_using_time'];
+        $item['sign_pic'] = json_decode($sign['sign_pic']);
+        $item['sign_using_time'] = date('Y-m-d',$sign['sign_using_time']);
         $item['sign_status'] = $sign['sign_status'];//1未处理 2通过 3驳回
 
         $sign_follow_list = $this->db->getRows("select *  from hqsen_user_kezi_sign_follow where user_sign_id = $sign_id order by id desc ");
@@ -75,8 +75,8 @@ class finance extends base {
             } else {
                 $one_item['status_type'] = 2;
             }
-            $one_item['create_time'] = $one_follow['create_time'];
-            $one_item['boss_sign_status'] = $one_follow['boss_sign_status'];
+            $one_item['create_time'] = date('Y-m-d',$one_follow['create_time']);
+            $one_item['status'] = $one_follow['boss_sign_status'] > 1 ? $one_follow['boss_sign_status'] : $one_follow['sign_status'];
             $one_item['status_desc'] = $one_follow['status_desc'];
             $follow_list[] = $one_item;
         }
