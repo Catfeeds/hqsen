@@ -10,7 +10,7 @@
 
 namespace api\web;
 
-class finance extends base {
+class boss extends base {
 
     public function __construct()
     {
