@@ -114,6 +114,58 @@ class pay extends base {
         $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $pay_item);
     }
 
+    // 搭建财务 打款列表
+    public function dajianOrderList(){
+        $page = $this->postInt('page', 1);
+        $limit = 10;
+        $offset = ($page - 1) * $limit;
+        $sql_limit = " limit $offset , $limit";
+        // 总经理要在财务审批通过基础上
+        $sign = $this->db->getRows("select *  from hqsen_user_dajian_order_sign  where boss_sign_status = 2 and sign_type = 1 order by id desc " . $sql_limit);
+        foreach ($sign as $one_sign){
+            $user_order = $this->db->getRow("select *  from hqsen_user_dajian_order where id=" . $one_sign['user_dajian_order_id']);
+            $user_info = $this->db->getRow("select *  from hqsen_user where id=" . $one_sign['sign_user_id']);
+            $pay_item['id'] = $one_sign['id'];
+            $pay_item['user_dajian_order_id'] = $one_sign['user_dajian_order_id'];
+            $pay_item['order_money'] = $one_sign['order_money'];
+            $pay_item['first_order_money'] = $one_sign['first_order_money'];
+            $pay_item['sign_user_id'] = $one_sign['sign_user_id'];
+            $pay_item['create_user_name'] = $user_info['user_name'];
+            $pay_item['create_user_money'] = '100';
+            $pay_item['pay_status'] = $user_order['order_status'];// 1未打款 2 已打款
+            $data['list'][] = $pay_item;
+        }
+        $data['count'] = $this->db->getCount('hqsen_user_dajian_order_sign', ' boss_sign_status = 2 and sign_type = 1 ');
+        $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $data);
+    }
+
+    // 搭建财务打款操作
+    public function dajianPayOrder(){
+        $order_id = $this->postInt('order_id');
+        $user_order = $this->db->getRow("select *  from hqsen_user_dajian_order where id=" . $order_id);
+        if($user_order){
+            $user_order['order_status'] = 4;
+            $user_order['user_order_status'] = 4;
+            $this->db->update('hqsen_user_dajian_order', $user_order, ' id = ' . $user_order['id']);
+        }
+        $this->appDie();
+    }
+
+    // 搭建财务打款详情页
+    public function dajianOrderDetail(){
+        $id = $this->postInt('id');
+        $one_sign = $this->db->getRow("select *  from hqsen_user_dajian_order_sign where id=" . $id);
+        $user_order = $this->db->getRow("select *  from hqsen_user_dajian_order where id=" . $one_sign['user_dajian_order_id']);
+        //todo 获取用户支付宝
+        $pay_item['id'] = $one_sign['id'];
+        $pay_item['user_dajian_order_id'] = $one_sign['user_dajian_order_id'];
+        $pay_item['order_money'] = $one_sign['order_money'];
+        $pay_item['create_user_name'] = $user_order['user_id'];// 改成用户名字
+        $pay_item['create_user_money'] = '100';
+        $pay_item['create_user_alipay'] = 'zhifubao.cc';
+        $pay_item['first_order_money'] = $one_sign['first_order_money'];
+        $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $pay_item);
+    }
 
 
 }
