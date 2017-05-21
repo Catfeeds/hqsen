@@ -66,11 +66,52 @@ class pay extends base {
         // 总经理要在财务审批通过基础上
         $sign = $this->db->getRows("select *  from hqsen_user_kezi_order_sign  where boss_sign_status = 2 order by id desc " . $sql_limit);
         foreach ($sign as $one_sign){
-            $user_order = $this->db->getRow("select *  from hqsen_pay_ratio limit 1");
+            $user_order = $this->db->getRow("select *  from hqsen_user_kezi_order where id=" . $one_sign['user_kezi_order_id']);
+            $pay_item['id'] = $one_sign['id'];
+            $pay_item['user_kezi_order_id'] = $one_sign['user_kezi_order_id'];
+            $pay_item['order_money'] = $one_sign['order_money'];
+            $pay_item['order_other_money'] = $one_sign['order_other_money'];
+            $pay_item['create_user_name'] = $user_order['user_id'];
+            $pay_item['create_user_money'] = '100';
+            $pay_item['watch_user_name'] = $user_order['watch_user_name'];
+            $pay_item['watch_user_money'] = '100';
+            $pay_item['pay_status'] = $user_order['order_status'];// 1未打款 2 已打款
+            $data['list'][] = $pay_item;
         }
-        $data['count'] = $this->db->getCount('hqsen_user_kezi_order_sign', 'del_flag != 0');
-        $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $sign);
+        $data['count'] = $this->db->getCount('hqsen_user_kezi_order_sign', 'boss_sign_status = 2');
+        $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $data);
+    }
 
+    // 财务打款操作
+    public function keziPayOrder(){
+        $order_id = $this->postInt('order_id');
+        $user_order = $this->db->getRow("select *  from hqsen_user_kezi_order where id=" . $order_id);
+        if($user_order){
+            $user_order['order_status'] = 4;
+            $user_order['user_order_status'] = 4;
+            $this->db->update('hqsen_user_kezi_order', $user_order, ' id = ' . $user_order['id']);
+        }
+        $this->appDie();
+    }
+
+    // 客资财务打款详情页
+    public function keziOrderDetail(){
+        $id = $this->postInt('id');
+        $one_sign = $this->db->getRow("select *  from hqsen_user_kezi_order_sign where id=" . $id);
+        $user_order = $this->db->getRow("select *  from hqsen_user_kezi_order where id=" . $one_sign['user_kezi_order_id']);
+        //todo 获取用户支付宝
+        $pay_item['id'] = $one_sign['id'];
+        $pay_item['user_kezi_order_id'] = $one_sign['user_kezi_order_id'];
+        $pay_item['order_money'] = $one_sign['order_money'];
+        $pay_item['order_other_money'] = $one_sign['order_other_money'];
+        $pay_item['create_user_name'] = $user_order['user_id'];// 改成用户名字
+        $pay_item['create_user_money'] = '100';
+        $pay_item['create_user_alipay'] = 'zhifubao.cc';
+        $pay_item['watch_user_name'] = $user_order['watch_user_name'];
+        $pay_item['watch_user_money'] = '100';
+        $pay_item['watch_user_alipay'] = 'zhifubao.cc';
+        $pay_item['pay_status'] = $user_order['order_status'];// 1未打款 2 已打款
+        $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $pay_item);
     }
 
 
