@@ -347,6 +347,9 @@ class order extends base {
         if($user_kezi_order_id){
             if(isset($user_kezi_order_sign['id']) and $user_kezi_order_sign['id']){
                 $this->db->update('hqsen_user_kezi_order_sign', $user_kezi_order_sign, ' id = ' . $user_kezi_order_sign['id']);
+                // 处理跟踪者和提供者订单状态
+                $user_order['order_status'] = 2;
+                $this->db->update('hqsen_user_kezi_order', $user_order, ' id = ' . $user_kezi_order_sign['user_kezi_order_id']);
             } else {
                 $this->db->insert('hqsen_user_kezi_order_sign', $user_kezi_order_sign);
             }
