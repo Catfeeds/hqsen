@@ -39,9 +39,11 @@ class feedback extends base {
 
     public function accountEdit(){
         $user_id = $this->postString('id');
+        $old_password = $this->postString('old_password');
         $password = $this->postString('password');
         $re_password = $this->postString('re_password');
-        if($user_id  and $password and $password == $re_password){
+        $user = $this->db->getRow("select * from hqsen_user where id = " . $this->user['id']);
+        if($old_password and md5($old_password) == $user['password'] and $password and $password == $re_password){
             $sql_user['password'] = md5($password);
             $this->db->update('hqsen_user', $sql_user, ' id = ' . $user_id);
             $this->appDie();
