@@ -540,7 +540,7 @@ class order extends base {
         if ($area_hotel_id) {
             if ($area_hotel_type == 1) {
                 // 区域信息  自动分配首销账号 user_id=11
-                $user_data = $this->db->getRows("
+                $user_data = $this->db->getRow("
                     select hud.* from hqsen_user as hu 
                     left join hqsen_user_data as hud on hu.id=hud.user_id 
                     where hu.user_type=11
