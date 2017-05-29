@@ -328,11 +328,13 @@ class order extends base {
         $order_other_money = $this->postString('order_other_money');
         $sign_using_time = $this->postInt('sign_using_time');
         $sign_pic = $this->postString('sign_pic'); //签单凭证  json
+        $sign_pic_arr = explode(',', $sign_pic);
+        $sign_pic_json = json_encode($sign_pic_arr);
         $user_kezi_order_sign = $this->db->getRow('select * from hqsen_user_kezi_order_sign where user_kezi_order_id = ' . $user_kezi_order_id );
         $user_kezi_order_sign['order_money'] = $order_money;
         $user_kezi_order_sign['order_other_money'] = $order_other_money;
         $user_kezi_order_sign['sign_using_time'] = $sign_using_time;
-        $user_kezi_order_sign['sign_pic'] = $sign_pic;
+        $user_kezi_order_sign['sign_pic'] = $sign_pic_json;
         $user_kezi_order_sign['user_kezi_order_id'] = $user_kezi_order_id;
         if($user_kezi_order_id){
             if(isset($user_kezi_order_sign['id']) and $user_kezi_order_sign['id']){
@@ -356,7 +358,7 @@ class order extends base {
             $sign_item['order_money'] = $user_kezi_order_sign['order_money'];
             $sign_item['order_other_money'] = $user_kezi_order_sign['order_other_money'];
             $sign_item['sign_using_time'] = $user_kezi_order_sign['sign_using_time'];
-            $sign_item['sign_pic'] = $user_kezi_order_sign['sign_pic'];
+            $sign_item['sign_pic'] = implode(',' ,json_decode($user_kezi_order_sign['sign_pic']));
             $sign_item['user_kezi_order_id'] = $user_kezi_order_sign['user_kezi_order_id'];
         }
         $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $sign_item);

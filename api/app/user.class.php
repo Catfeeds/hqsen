@@ -126,6 +126,10 @@ class user extends base{
     // 云片发短信
     public function getPhoneCode(){
         $mobile = isset($_POST['mobile']) ? (string)$_POST['mobile'] : '';
+        $data['code'] = intval(1000);
+        $data['phone'] = $mobile;
+        $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $data);
+
         if($mobile){
             header("Content-Type:text/html;charset=utf-8");
             $apikey = "b181d90efe2155f5fe3d74b468c0a136"; //修改为您的apikey(https://www.yunpian.com)登陆官网后获取
