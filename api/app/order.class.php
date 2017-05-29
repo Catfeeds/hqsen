@@ -187,6 +187,14 @@ class order extends base {
                     $order_item['order_area_hotel_name'] = (string)$user_order['watch_user_hotel_name'];
                 }
                 $order_list['order_item'] = $order_item;
+                $one_item = $this->db->getRow("select * from hqsen_user_kezi_order_follow where user_kezi_order_id = $order_id order by id desc");
+                if($one_item){
+                    $follow_item['order_follow_time'] = $one_item['order_follow_time'];
+                    $follow_item['order_follow_desc'] = $one_item['order_follow_desc'];
+                    $follow_item['order_follow_create_time'] = $one_item['order_follow_create_time'];
+                    $follow_item['user_order_status'] = $one_item['user_order_status'];
+                    $order_list['order_follow'] = $follow_item;
+                }
             }
             $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $order_list);
         }
