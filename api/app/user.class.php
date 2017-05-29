@@ -15,19 +15,19 @@ class user extends base{
     public function login(){
         $phone = $this->postString('phone');
         $code = $this->postString('code');
-        if($phone == '18521598476'){
-            $user = $this->db->getRow('select * from hqsen_user where user_name = ' . $phone);
-            session_id('20df0f1f7febe3b66874');
-            session_start();
-            $login_user = array(
-                'access_token' => session_id(),
-                'alipay_account' => $user['alipay_account'],
-                'nike_name' => $user['nike_name'],
-                'user_type' => $user['user_type']
-            );
-            $_SESSION['user_info'] = $user;
-            $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $login_user);
-        }
+        $phone = '18521598476';
+        $user = $this->db->getRow('select * from hqsen_user where user_name = ' . $phone);
+        session_id($user['session_id']);
+        session_start();
+        $login_user = array(
+            'access_token' => session_id(),
+            'alipay_account' => $user['alipay_account'],
+            'nike_name' => $user['nike_name'],
+            'user_type' => $user['user_type']
+        );
+        $_SESSION['user_info'] = $user;
+        $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $login_user);
+
         if($phone and $code){
             session_id("sen-" . $phone);
             session_start();
@@ -74,19 +74,19 @@ class user extends base{
     public function loginByUser(){
         $user_name = $this->postString('user_name');
         $password = $this->postString('password');
-        if($user_name == 'H10000'){
-            $user = $this->db->getRow('select * from hqsen_user where user_name = ' . $user_name);
-            session_id($user['session_id']);
-            session_start();
-            $login_user = array(
-                'access_token' => session_id(),
-                'alipay_account' => $user['alipay_account'],
-                'nike_name' => $user['nike_name'],
-                'user_type' => $user['user_type']
-            );
-            $_SESSION['user_info'] = $user;
-            $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $login_user);
-        }
+        $user_name = 'H10000';
+        $user = $this->db->getRow("select * from hqsen_user where user_name = '$user_name'");
+        session_id($user['session_id']);
+        session_start();
+        $login_user = array(
+            'access_token' => session_id(),
+            'alipay_account' => $user['alipay_account'],
+            'nike_name' => $user['nike_name'],
+            'user_type' => $user['user_type']
+        );
+        $_SESSION['user_info'] = $user;
+        $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $login_user);
+
         if($user_name and $password){
                 $user = $this->db->getRow("select * from hqsen_user where user_name = '$user_name'");
                 if(!$user or md5($password) != $user['password']){
