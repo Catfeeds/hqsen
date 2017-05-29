@@ -37,5 +37,19 @@ class feedback extends base {
     }
 
 
+    public function accountEdit(){
+        $user_id = $this->postString('id');
+        $password = $this->postString('password');
+        $re_password = $this->postString('re_password');
+        if($user_id  and $password and $password == $re_password){
+            $sql_user['password'] = md5($password);
+            $this->db->update('hqsen_user', $sql_user, ' id = ' . $user_id);
+            $this->appDie();
+        } else {
+            $this->appDie($this->back_code['sys']['value_empty'], $this->back_msg['sys']['value_empty']);
+        }
+    }
+
+
 
 }
