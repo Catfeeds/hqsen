@@ -76,12 +76,15 @@ class user extends base{
         $password = $this->postString('password');
         $user_name = 'H10000';
         $user = $this->db->getRow("select * from hqsen_user where user_name = '$user_name'");
+        $user_data = $this->db->getRow("select * from hqsen_user_data where user_id = " . $user['id']);
         session_id($user['session_id']);
         session_start();
         $login_user = array(
             'access_token' => session_id(),
             'alipay_account' => $user['alipay_account'],
             'nike_name' => $user['nike_name'],
+            'hotel_name' => $user_data['hotel_name'],
+            'hotel_id' => $user_data['hotel_id'],
             'user_type' => $user['user_type']
         );
         $_SESSION['user_info'] = $user;
