@@ -88,7 +88,7 @@ class pay extends base {
         $user_order = $this->db->getRow("select *  from hqsen_user_kezi_order where id=" . $order_id);
         if($user_order){
             $user_order['order_status'] = 4;
-            $user_order['user_order_status'] = 4;
+            $user_order['user_order_status'] = 3;
             $this->db->update('hqsen_user_kezi_order', $user_order, ' id = ' . $user_order['id']);
         }
         $this->appDie();

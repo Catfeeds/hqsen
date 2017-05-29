@@ -111,7 +111,7 @@ class order extends base {
                 $order_item = array(
                     'id' => (int)$one_order['id'],
                     'create_time' => (string)$one_order['create_time'],
-                    'order_status' => (int)$one_order['order_status'],
+                    'order_status' => (int)$one_order['user_order_status'],// 需要返回提供者状态   不搞给错了
                     'order_phone' => (string)$one_order['order_phone'],
                     'watch_user' => (string)$one_order['watch_user_name'],
                 );
