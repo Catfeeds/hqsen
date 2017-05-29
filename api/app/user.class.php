@@ -116,8 +116,14 @@ class user extends base{
     public function alipayBind(){
         $this->loginInit();
         $alipay = $this->postString('alipay');
+        $bank_name = $this->postString('bank_name');
+        $bank_user = $this->postString('bank_user');
+        $bank_account = $this->postString('bank_account');
         if($alipay){
             $update_user['alipay_account'] = $alipay;
+            $update_user['bank_name'] = $bank_name;
+            $update_user['bank_user'] = $bank_user;
+            $update_user['bank_account'] = $bank_account;
             $this->db->update('hqsen_user', $update_user, ' user_name = ' . $this->user['user_name']);
             $this->appDie();
         } else {

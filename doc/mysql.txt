@@ -18,4 +18,4 @@ CREATE TABLE `hqsen_user` (
 ) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 需要缓存 hqsen_area_sh  这个表数据
-http://www.pmdaniu.com/rp/view?id=VHcHZQNkVWQBNAQ2ASlVMA
+http://www.pmdaniu.com/rp/view?id=V3RSMAtrVWZQYwU3AipRNA
