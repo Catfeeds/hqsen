@@ -15,23 +15,10 @@ class user extends base{
     public function login(){
         $phone = $this->postString('phone');
         $code = $this->postString('code');
-        $phone = '18521598476';
-        $user = $this->db->getRow('select * from hqsen_user where user_name = ' . $phone);
-        session_id($user['session_id']);
-        session_start();
-        $login_user = array(
-            'access_token' => session_id(),
-            'alipay_account' => $user['alipay_account'],
-            'nike_name' => $user['nike_name'],
-            'user_type' => $user['user_type']
-        );
-        $_SESSION['user_info'] = $user;
-        $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $login_user);
-
         if($phone and $code){
             session_id("sen-" . $phone);
             session_start();
-            if($phone == '15068159662' or (isset($_SESSION['code']) and $_SESSION['code'] == $code)){
+            if(isset($_SESSION['code']) and $_SESSION['code'] == $code){
                 $user = $this->db->getRow('select * from hqsen_user where user_name = ' . $phone);
                 if(!$user){
                     $user['user_name'] = $phone;
@@ -49,18 +36,21 @@ class user extends base{
                     };
                 }
                 session_destroy();//销毁一个会话中的全部数据
-                // todo 删除每次登录的session 只保留最后一次
-                $user['session_id'] = substr(md5($user['id'] . time()), 0, 20);
+
+                $user['last_login_time'] = time();
+                $user['session_id'] = md5($user['id'] . $user['last_login_time']);
+                // todo 注释使用最后登陆时间
+                $user['session_id'] = md5($user['id'] . $user['last_login_time']);
                 $this->db->update('hqsen_user', $user, ' id = ' . $user['id']);
-                session_id($user['session_id']);
-                session_start();
+//                session_id($user['session_id']);
+//                session_start();
                 $login_user = array(
                     'access_token' => session_id(),
                     'alipay_account' => $user['alipay_account'],
                     'nike_name' => $user['nike_name'],
                     'user_type' => $user['user_type']
                 );
-                $_SESSION['user_info'] = $user;
+//                $_SESSION['user_info'] = $user;
                 $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $login_user);
             } else {
                 $this->appDie($this->back_code['user']['phone_code_err'], $this->back_msg['user']['phone_code_err']);
@@ -74,39 +64,29 @@ class user extends base{
     public function loginByUser(){
         $user_name = $this->postString('user_name');
         $password = $this->postString('password');
-        $user_name = 'H10000';
-        $user = $this->db->getRow("select * from hqsen_user where user_name = '$user_name'");
-        $user_data = $this->db->getRow("select * from hqsen_user_data where user_id = " . $user['id']);
-        session_id($user['session_id']);
-        session_start();
-        $login_user = array(
-            'access_token' => session_id(),
-            'alipay_account' => $user['alipay_account'],
-            'nike_name' => $user['nike_name'],
-            'hotel_name' => $user_data['hotel_name'],
-            'hotel_id' => $user_data['hotel_id'],
-            'user_type' => $user['user_type']
-        );
-        $_SESSION['user_info'] = $user;
-        $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $login_user);
-
         if($user_name and $password){
-                $user = $this->db->getRow("select * from hqsen_user where user_name = '$user_name'");
-                if(!$user or md5($password) != $user['password']){
+            $user = $this->db->getRow("select * from hqsen_user where user_name = '$user_name'");
+            if(!$user or md5($password) != $user['password']){
                     $this->appDie($this->back_code['user']['login_err'], $this->back_msg['user']['login_err']);
-                }
-                // todo 删除每次登录的session 只保留最后一次
-                $user['session_id'] = substr(md5($user['id'] . time()), 0, 20);
-                session_id($user['session_id']);
-                session_start();
-                $login_user = array(
-                    'access_token' => session_id(),
-                    'alipay_account' => $user['alipay_account'],
-                    'nike_name' => $user['nike_name'],
-                    'user_type' => $user['user_type']
-                );
-                $_SESSION['user_info'] = $user;
-                $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $login_user);
+            }
+            $user_data = $this->db->getRow("select * from hqsen_user_data where user_id = " . $user['id']);
+            $user['last_login_time'] = time();
+            $user['session_id'] = md5($user['id'] . $user['last_login_time']);
+            // todo 注释使用最后登陆时间
+            $user['session_id'] = md5($user['id'] . $user['last_login_time']);
+            $this->db->update('hqsen_user', $user, ' id = ' . $user['id']);
+//            session_id($user['session_id']);
+//            session_start();
+            $login_user = array(
+                'access_token' => session_id(),
+                'alipay_account' => $user['alipay_account'],
+                'nike_name' => $user['nike_name'],
+                'hotel_name' => $user_data['hotel_name'],
+                'hotel_id' => $user_data['hotel_id'],
+                'user_type' => $user['user_type']
+            );
+//            $_SESSION['user_info'] = $user;
+            $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $login_user);
         } else {
             $this->appDie($this->back_code['sys']['value_empty'], $this->back_msg['sys']['value_empty']);
         }
