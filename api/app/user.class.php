@@ -47,6 +47,7 @@ class user extends base{
                 $login_user = array(
                     'access_token' => session_id(),
                     'alipay_account' => $user['alipay_account'],
+                    'bank_account' => $user['bank_account'],
                     'nike_name' => $user['nike_name'],
                     'user_type' => $user['user_type']
                 );
@@ -78,8 +79,9 @@ class user extends base{
 //            session_id($user['session_id']);
 //            session_start();
             $login_user = array(
-                'access_token' => session_id(),
+                'access_token' => $user['session_id'],
                 'alipay_account' => $user['alipay_account'],
+                'bank_account' => $user['bank_account'],
                 'nike_name' => $user['nike_name'],
                 'hotel_name' => $user_data['hotel_name'],
                 'hotel_id' => $user_data['hotel_id'],
