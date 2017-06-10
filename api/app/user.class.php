@@ -117,15 +117,12 @@ class user extends base{
     // 云片发短信
     public function getPhoneCode(){
         $mobile = isset($_POST['mobile']) ? (string)$_POST['mobile'] : '';
-        $data['code'] = intval(1000);
-        $data['phone'] = $mobile;
-        $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $data);
-
         if($mobile){
             header("Content-Type:text/html;charset=utf-8");
             $apikey = "b181d90efe2155f5fe3d74b468c0a136"; //修改为您的apikey(https://www.yunpian.com)登陆官网后获取
             if(preg_match("/^1[34578]{1}\d{9}$/",$mobile)){
                 $rand_text = rand(1000,9999);
+                $rand_text = 1000;
 //                $text="验证码：" . $rand_text;
                 $ch = curl_init();
 
@@ -147,8 +144,8 @@ class user extends base{
                 $send_data = array('tpl_id'=>'1755704','tpl_value'=>('#code#').'='.urlencode($rand_text),'apikey'=>$apikey,'mobile'=>$mobile);
                 curl_setopt ($ch, CURLOPT_URL, 'https://sms.yunpian.com/v2/sms/tpl_single_send.json');
                 curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($send_data));
-                $json_data = curl_exec($ch);
-                $array = json_decode($json_data,true);
+//                $json_data = curl_exec($ch);
+//                $array = json_decode($json_data,true);
 //                if(isset($array['msg']) and  $array['msg'] == '发送成功'){
                     $data['code'] = $rand_text;
                     $data['phone'] = $mobile;
