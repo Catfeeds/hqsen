@@ -179,18 +179,64 @@ class user extends base{
             $hotel = $this->db->getRows("select * from hqsen_hotel as hh left join hqsen_hotel_data as hhd on hh.id = hhd.id where hh.area_sh_id = $area_sh_id and hh.is_data = 1");
         }
         $data = [];
-        foreach ($hotel as $one_hotel){
-            $item['hotel_name'] = (string)$one_hotel['hotel_name'];
-            $item['hotel_low'] = (string)$one_hotel['hotel_low'];
-            $item['hotel_high'] = (string)$one_hotel['hotel_high'];
-            $item['hotel_max_desk'] = (string)$one_hotel['hotel_max_desk'];
-            $item['area_sh_name'] = (string)$this->get_sh_area($one_hotel['area_sh_id']);
-            $item['hotel_type'] = (string)$one_hotel['hotel_type'];
-            $item['hotel_phone'] = (string)$one_hotel['hotel_phone'];
-            $item['hotel_image'] = (string)$one_hotel['hotel_image'];
-            $data[] = $item;
+        if($hotel){
+            foreach ($hotel as $one_hotel){
+                $item['hotel_id'] = (string)$one_hotel['id'];
+                $item['hotel_name'] = (string)$one_hotel['hotel_name'];
+                $item['hotel_low'] = (string)$one_hotel['hotel_low'];
+                $item['hotel_high'] = (string)$one_hotel['hotel_high'];
+                $item['hotel_max_desk'] = (string)$one_hotel['hotel_max_desk'];
+                $item['area_sh_name'] = (string)$this->get_sh_area($one_hotel['area_sh_id']);
+                $item['hotel_type'] = (string)$one_hotel['hotel_type'];
+                $item['hotel_phone'] = (string)$one_hotel['hotel_phone'];
+                $item['hotel_image'] = $one_hotel['hotel_image'] ? json_decode($one_hotel['hotel_image'], true)[0] : '';
+                $data[] = $item;
+            }
         }
         $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $data);
+    }
+
+    public function mainHotelDetail(){
+        $hotel_id = $this->postInt('hotel_id');
+        $one_hotel = $this->db->getRow("select * from hqsen_hotel as hh 
+                  left join hqsen_hotel_data as hhd on hh.id = hhd.id 
+                  where hh.id = $hotel_id");
+        $item['hotel_name'] = (string)$one_hotel['hotel_name'];
+        $item['hotel_low'] = (string)$one_hotel['hotel_low'];
+        $item['hotel_high'] = (string)$one_hotel['hotel_high'];
+        $item['hotel_max_desk'] = (string)$one_hotel['hotel_max_desk'];
+        $item['area_sh_name'] = (string)$this->get_sh_area($one_hotel['area_sh_id']);
+        $item['hotel_type'] = (string)$one_hotel['hotel_type'];
+        $item['hotel_phone'] = (string)$one_hotel['hotel_phone'];
+        $item['hotel_image'] = $one_hotel['hotel_image'] ? json_decode($one_hotel['hotel_image'], true)[0] : '';
+        $item['hotel_images'] = $one_hotel['hotel_image'] ? json_decode($one_hotel['hotel_image'], true) : [];
+        $item['hotel_address'] = (string)$one_hotel['hotel_address'];
+
+        $hotel_room = $this->db->getRows("select * from hqsen_hotel_room where hotel_id = $hotel_id and del_flag =1");
+        if($hotel_room){
+            foreach ($hotel_room as $one_room){
+                $room_item['room_image'] = $one_room['room_image'] ? json_decode($one_room['room_image'], true) : [];
+                $room_item['room_name'] = (string)$one_room['room_name'];
+                $room_item['room_max_desk'] = (string)$one_room['room_max_desk'];
+                $room_item['room_high'] = (string)$one_room['room_high'];
+                $room_item['room_lz'] = (string)$one_room['room_lz'];
+
+                $room_item['room_min_desk'] = (string)$one_room['room_min_desk'];
+                $room_item['room_best_desk'] = (string)$one_room['room_best_desk'];
+                $room_item['room_m'] = (string)$one_room['room_m'];
+                $item['room_list'][] = $room_item;
+            }
+        }
+
+        $hotel_menu = $this->db->getRows("select * from hqsen_hotel_menu where hotel_id = $hotel_id and del_flag = 1");
+        if($hotel_menu){
+            foreach ($hotel_menu  as $one_menu){
+                $menu_item['menu_name'] = (string)$one_menu['menu_name'];
+                $menu_item['menu_money'] = (string)$one_menu['menu_money'];
+                $item['menu_list'][] = $menu_item;
+            }
+        }
+        $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $item);
     }
 
     public function getShArea()
