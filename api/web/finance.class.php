@@ -28,9 +28,9 @@ class finance extends base {
         foreach ($sign as $one_sign){
             $item['id'] = $one_sign['id'];
             $item['order_money'] = $one_sign['order_money'];
-            $item['order_other_money'] = $one_sign['order_other_money'];
+            $item['order_other_money'] = $one_sign['order_other_money'];// 客资附加款  去掉不用 0607
             $item['sign_pic_count'] = count(json_decode($one_sign['sign_pic']));
-            $item['sign_status'] = $one_sign['sign_status'];//1未处理 2通过 3驳回
+            $item['sign_status'] = $one_sign['sign_status'];//1未处理 2通过 3驳回 4总经理驳回 5待修改
             $list['list'][] = $item;
         }
         $list['count'] = $this->db->getCount('hqsen_user_kezi_order_sign', 'del_flag != 0');

@@ -64,6 +64,10 @@ class boss extends base {
                         $this->db->update('hqsen_user_kezi_order', $user_order, ' id = ' . $sign['user_kezi_order_id']);
                     }
                 }
+                if($sign_status == 3){
+                    $order_sign['sign_status'] = 4; // 签单信息更改为总经理驳回
+                    $this->db->update('hqsen_user_kezi_order_sign', $order_sign, ' id = ' . $sign_follow['user_sign_id']);
+                }
             }
             $this->appDie();
         } else {

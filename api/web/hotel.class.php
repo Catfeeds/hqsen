@@ -47,6 +47,7 @@ class hotel extends base {
         $hotel_address = $this->postString('hotel_address');
         $area_sh_id = $this->postString('area_id');
         $hotel_level = $this->postString('hotel_level');
+        $weight = $this->postString('weight');
         if($hotel_name and $hotel_address and $area_sh_id){
             $area_sh = $this->db->getRow("select * from hqsen_area_sh  where id =  " . $area_sh_id);
             $sql_order['hotel_name'] = $hotel_name;
@@ -54,6 +55,7 @@ class hotel extends base {
             $sql_order['area_sh_id'] = $area_sh_id;
             $sql_order['area_id'] = isset($area_sh['link_area_id']) ? $area_sh['link_area_id'] : 0;
             $sql_order['hotel_level'] = $hotel_level;
+            $sql_order['weight'] = $weight;
             $sql_order['create_time'] = time();
             $sql_order['del_flag'] = 1;
             $this->db->insert('hqsen_hotel', $sql_order);
@@ -71,6 +73,7 @@ class hotel extends base {
         $hotel_address = $this->postString('hotel_address');
         $area_sh_id = $this->postString('area_id');
         $hotel_level = $this->postString('hotel_level');
+        $weight = $this->postString('weight');
         if($hotel_id and ($hotel_name or $hotel_address or $area_sh_id)){
             $sql_order = [];
             if($hotel_name){
@@ -78,6 +81,9 @@ class hotel extends base {
             }
             if($hotel_address){
                 $sql_order['hotel_address'] = $hotel_address;
+            }
+            if($weight){
+                $sql_order['weight'] = $weight;
             }
             if($area_sh_id){
                 $area_sh = $this->db->getRow("select * from hqsen_area_sh  where id =  " . $area_sh_id);
