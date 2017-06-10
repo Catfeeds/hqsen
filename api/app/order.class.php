@@ -500,7 +500,8 @@ class order extends base {
         $order_id = $this->getInt('order_id');
         $order_id = $order_id ? $order_id : $this->postInt('order_id');
         if($order_id){
-            $order = $this->db->getRow('select * from hqsen_dajian_order where id = ' . $order_id );
+            $user_order = $this->db->getRow('select * from hqsen_user_dajian_order where id = ' . $order_id );
+            $order = $this->db->getRow('select * from hqsen_dajian_order where id = ' . $user_order['dajian_order_id'] );
             $order_list['order_item']['id'] = (int)0;
             if($order){
                 $order_item = array(
