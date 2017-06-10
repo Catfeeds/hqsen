@@ -45,7 +45,7 @@ class user extends base{
 //                session_id($user['session_id']);
 //                session_start();
                 $login_user = array(
-                    'access_token' => session_id(),
+                    'access_token' => $user['session_id'],
                     'alipay_account' => $user['alipay_account'],
                     'bank_account' => $user['bank_account'],
                     'nike_name' => $user['nike_name'],
