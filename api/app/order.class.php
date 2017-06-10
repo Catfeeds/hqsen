@@ -98,7 +98,7 @@ class order extends base {
         $order_page = $order_page ? $order_page : $this->postInt('order_page', 1);
         $limit = 10;
         $offset = ($order_page - 1) * $limit;
-        $sql_limit = " limit $offset , $limit";
+        $sql_limit = " order by update_time asc limit $offset , $limit";
         $sql_status = '  user_order_status != 0 ';
         if($order_status){
             $sql_status = '  user_order_status = ' . $order_status;
@@ -131,7 +131,7 @@ class order extends base {
         $order_page = $order_page ? $order_page : $this->postInt('order_page', 1);
         $limit = 10;
         $offset = ($order_page - 1) * $limit;
-        $sql_limit = " limit $offset , $limit";
+        $sql_limit = "  order by update_time asc limit $offset , $limit";
         $sql_status = '  order_status != 0 ';
         if($order_status){
             $sql_status = '  order_status = ' . $order_status;
@@ -257,6 +257,7 @@ class order extends base {
                         $one_user_order_sql['watch_user_id'] = $one_user_data['user_id'];
                         $one_user_order_sql['kezi_order_id'] = $order_id;
                         $one_user_order_sql['create_time'] = time();
+                        $one_user_order_sql['update_time'] = time();
                         $one_user_order_sql['order_phone'] = $order_phone;
                         $rs = $this->db->insert('hqsen_user_kezi_order', $one_user_order_sql);
                         if($rs){
@@ -281,6 +282,7 @@ class order extends base {
                     $one_user_order_sql['watch_user_id'] = $one_user_data['user_id'];
                     $one_user_order_sql['kezi_order_id'] = $order_id;
                     $one_user_order_sql['create_time'] = time();
+                    $one_user_order_sql['update_time'] = time();
                     $one_user_order_sql['order_phone'] = $order_phone;
                     $rs = $this->db->insert('hqsen_user_kezi_order', $one_user_order_sql);
                     if($rs){
@@ -463,7 +465,7 @@ class order extends base {
         $order_page = $order_page ? $order_page : $this->postInt('order_page', 1);
         $limit = 10;
         $offset = ($order_page - 1) * $limit;
-        $sql_limit = " limit $offset , $limit";
+        $sql_limit = "  order by update_time asc  limit $offset , $limit";
         $sql_status = '  order_status != 0 ';
         if($order_status){
             $sql_status = '  order_status = ' . $order_status;
@@ -561,6 +563,7 @@ class order extends base {
                     $one_user_order_sql['watch_user_id'] = $user_data['user_id'];
                     $one_user_order_sql['dajian_order_id'] = $order_id;
                     $one_user_order_sql['create_time'] = time();
+                    $one_user_order_sql['update_time'] = time();
                     $one_user_order_sql['order_phone'] = $order_phone;
                     $rs = $this->db->insert('hqsen_user_dajian_order', $one_user_order_sql);
                     if($rs){
@@ -589,6 +592,7 @@ class order extends base {
             $order_follow['order_follow_create_time'] = time();
             $order_follow['user_order_status'] = $user_order_status;
             $order_follow['id'] = $this->db->insert('hqsen_user_dajian_order_follow', $order_follow);
+            $sql_order['update_time'] = intval($order_follow_time);
             if($user_order_status == 2){ // 无效驳回
                 // 更新用户订单  已驳回
                 $sql_order['order_status'] = 5;
