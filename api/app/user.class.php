@@ -101,12 +101,12 @@ class user extends base{
         $bank_name = $this->postString('bank_name');
         $bank_user = $this->postString('bank_user');
         $bank_account = $this->postString('bank_account');
-        if($alipay){
+        if($alipay or $bank_name){
             $update_user['alipay_account'] = $alipay;
             $update_user['bank_name'] = $bank_name;
             $update_user['bank_user'] = $bank_user;
             $update_user['bank_account'] = $bank_account;
-            $this->db->update('hqsen_user', $update_user, ' user_name = ' . $this->user['user_name']);
+            $this->db->update('hqsen_user', $update_user, ' id = ' . $this->user['id']);
             $this->appDie();
         } else {
             $this->appDie($this->back_code['user']['bind_empty'], $this->back_msg['user']['bind_empty']);
@@ -169,5 +169,33 @@ class user extends base{
         }
     }
 
+    public function mainList(){
+        $list_type = $this->postInt('list_type');
+        if($list_type == 1){
+
+        } else {
+            $area_sh_id = $this->postInt('area_sh_id');
+            $hotel = $this->db->getRows("select * from hqsen_hotel as hh left join hqsen_hotel_data as hhd on hh.id = hhd.id where hh.area_sh_id = $area_sh_id and hh.is_data = 1");
+            $data = [];
+            foreach ($hotel as $one_hotel){
+                $item['hotel_name'] = (string)$one_hotel['hotel_name'];
+                $item['hotel_low'] = (string)$one_hotel['hotel_low'];
+                $item['hotel_high'] = (string)$one_hotel['hotel_high'];
+                $item['hotel_max_desk'] = (string)$one_hotel['hotel_max_desk'];
+                $item['area_sh_name'] = (string)$this->get_sh_area($one_hotel['area_sh_id']);
+                $item['hotel_type'] = (string)$one_hotel['hotel_type'];
+                $item['hotel_phone'] = (string)$one_hotel['hotel_phone'];
+                $item['hotel_image'] = (string)$one_hotel['hotel_image'];
+                $data[] = $item;
+            }
+            $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $data);
+        }
+
+    }
+
+    public function getShArea()
+    {
+        $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $this->get_sh_area());
+    }
 
 }

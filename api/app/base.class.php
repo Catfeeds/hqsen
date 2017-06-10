@@ -100,5 +100,31 @@ class base{
         return isset($_POST[$post_key]) ? (string)$_POST[$post_key] : (string)$default;
     }
 
+    // 默认返回所有区域  有ID 返回对应的所有区域名字 映射表和mysql hqsen_area_sh 对应
+    public function get_sh_area($sh_area_id = 0){
+        $sh_area = array(
+            '1'=>'浦东新区',
+            '2'=>'卢湾区',
+            '3'=>'黄浦区',
+            '4'=>'虹口区',
+            '5'=>'杨浦区',
+            '6'=>'闸北区',
+            '7'=>'普陀区',
+            '8'=>'长宁区',
+            '9'=>'静安区',
+            '10'=>'徐汇区',
+            '11'=>'南汇区',
+            '12'=>'闵行区',
+            '13'=>'奉贤区',
+            '14'=>'金山区',
+            '15'=>'松江区',
+            '16'=>'青浦区',
+            '17'=>'嘉定区',
+            '18'=>'宝山区',
+            '19'=>'崇明县',
+        );
+        $return = isset($sh_area[$sh_area_id]) ?  $sh_area[$sh_area_id] : $sh_area;
+        return $return;
+    }
 
 }
