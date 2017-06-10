@@ -539,7 +539,7 @@ class order extends base {
     {
         if ($area_hotel_id) {
             if ($area_hotel_type == 1) {
-                // 区域信息  自动分配首销账号 user_id=11
+                // 区域信息  自动分配首销账号 user_type=11
                 $user_data = $this->db->getRow("
                     select hud.* from hqsen_user as hu 
                     left join hqsen_user_data as hud on hu.id=hud.user_id 
@@ -553,21 +553,19 @@ class order extends base {
                     $error_message = '区域:' . $area['area_name'] . '搭建信息创建失败';
                     return $error_message;
                 }
-                foreach ($user_data as $one_user_data) {
-                    $one_user_order_sql = [];
-                    if ($one_user_data) {
-                        $one_user_order_sql['user_id'] = $this->user['id'];
-                        $one_user_order_sql['watch_user_name'] = $one_user_data['user_name'];
-                        $one_user_order_sql['watch_user_hotel_name'] = $one_user_data['hotel_name'];
-                        $one_user_order_sql['watch_user_id'] = $one_user_data['user_id'];
-                        $one_user_order_sql['dajian_order_id'] = $order_id;
-                        $one_user_order_sql['create_time'] = time();
-                        $one_user_order_sql['order_phone'] = $order_phone;
-                        $rs = $this->db->insert('hqsen_user_dajian_order', $one_user_order_sql);
-                        if($rs){
-                            $update_sql['last_order_time'] = time();
-                            $this->db->update('hqsen_user_data', $update_sql, ' user_id = ' . $one_user_data['user_id']);
-                        }
+                $one_user_order_sql = [];
+                if ($user_data) {
+                    $one_user_order_sql['user_id'] = $this->user['id'];
+                    $one_user_order_sql['watch_user_name'] = $user_data['user_name'];
+                    $one_user_order_sql['watch_user_hotel_name'] = $user_data['hotel_name'];
+                    $one_user_order_sql['watch_user_id'] = $user_data['user_id'];
+                    $one_user_order_sql['dajian_order_id'] = $order_id;
+                    $one_user_order_sql['create_time'] = time();
+                    $one_user_order_sql['order_phone'] = $order_phone;
+                    $rs = $this->db->insert('hqsen_user_dajian_order', $one_user_order_sql);
+                    if($rs){
+                        $update_sql['last_order_time'] = time();
+                        $this->db->update('hqsen_user_data', $update_sql, ' user_id = ' . $user_data['user_id']);
                     }
                 }
             }
