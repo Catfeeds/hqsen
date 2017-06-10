@@ -55,5 +55,51 @@ class feedback extends base {
     }
 
 
+    public function wallet(){
+        $data['my_account']['alipay'] = $this->user['alipay_account'];
+        $data['my_account']['bank_name'] = $this->user['bank_name'];
+        $data['my_account']['bank_user'] = $this->user['bank_user'];
+        $data['my_account']['bank_account'] = $this->user['bank_account'];
+        // 获取客资提供者身份 账号信息
+        $unpay = $this->db->getRow('select sum(hukos.order_money) as s from hqsen_user_kezi_order as huko 
+left join hqsen_user_kezi_order_sign as hukos on hukos.user_kezi_order_id=huko.id 
+where huko.user_order_status = 2 and huko.user_id = ' . $this->user['id']);
+
+        $pay = $this->db->getRow('select sum(hukos.order_money) as s from hqsen_user_kezi_order as huko 
+left join hqsen_user_kezi_order_sign as hukos on hukos.user_kezi_order_id=huko.id 
+where huko.user_order_status = 3 and huko.user_id = ' . $this->user['id']);
+
+        $data['my_money']['unpay'] = intval($unpay['s']);
+        $data['my_money']['pay'] = intval($pay['s']);
+
+        // 获取客资跟踪者 和 搭建提供者账号信息 如果是酒店账号
+        if($this->user['user_type'] == 4){
+            $watch_unpay = $this->db->getRow('select sum(hukos.order_money) as s from hqsen_user_kezi_order as huko 
+left join hqsen_user_kezi_order_sign as hukos on hukos.user_kezi_order_id=huko.id 
+where huko.user_order_status = 2 and huko.watch_user_id = ' . $this->user['id']);
+
+            $watch_pay = $this->db->getRow('select sum(hukos.order_money) as s from hqsen_user_kezi_order as huko 
+left join hqsen_user_kezi_order_sign as hukos on hukos.user_kezi_order_id=huko.id 
+where huko.user_order_status = 3 and huko.watch_user_id = ' . $this->user['id']);
+
+            $data['my_money']['unpay'] = $data['my_money']['unpay'] + intval($watch_unpay['s']);
+            $data['my_money']['pay'] = $data['my_money']['pay'] + intval($watch_pay['s']);
+
+            $dajian_unpay = $this->db->getRow('select sum(hukos.order_money) as s from hqsen_user_dajian_order as huko 
+left join hqsen_user_dajian_order_sign as hukos on hukos.user_dajian_order_id=huko.id 
+where huko.user_order_status = 2 and huko.user_id = ' . $this->user['id']);
+
+            $dajian_pay = $this->db->getRow('select sum(hukos.order_money) as s from hqsen_user_dajian_order as huko 
+left join hqsen_user_dajian_order_sign as hukos on hukos.user_dajian_order_id=huko.id 
+where huko.user_order_status = 3 and huko.user_id = ' . $this->user['id']);
+
+            $data['my_money']['unpay'] = $data['my_money']['unpay'] + intval($dajian_unpay['s']);
+            $data['my_money']['pay'] = $data['my_money']['pay'] + intval($dajian_pay['s']);
+        }
+        $data['my_money']['all'] = $data['my_money']['unpay'] + $data['my_money']['pay'];
+        $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $data);
+    }
+
+
 
 }

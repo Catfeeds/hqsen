@@ -85,6 +85,8 @@ class user extends base{
                 'nike_name' => $user['nike_name'],
                 'hotel_name' => $user_data['hotel_name'],
                 'hotel_id' => $user_data['hotel_id'],
+                'area_id' => $user_data['area_id'],
+                'hotel_area' => $user_data['hotel_area'],
                 'user_type' => $user['user_type']
             );
 //            $_SESSION['user_info'] = $user;
