@@ -46,7 +46,7 @@ class feedback extends base {
             $sql_user['password'] = md5($password);
 //            $sql_user['session_id'] =  md5($user['id'] . $user['last_login_time']);
             $this->db->update('hqsen_user', $sql_user, ' id = ' . $this->user['id']);
-            $data['access_token'] = $sql_user['session_id'];
+//            $data['access_token'] = $sql_user['session_id'];
 //            $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $data);
             $this->appDie();
         } else {
