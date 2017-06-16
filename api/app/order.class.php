@@ -45,7 +45,7 @@ class order extends base {
         $watch_user = $this->postString('watch_user');
         $order_desc = $this->postString('order_desc');
         if($order_type and $order_phone and $order_area_hotel_type and $order_area_hotel_id){
-            $order = $this->db->getRow('select * from hqsen_kezi_order where order_type = ' . $order_type . ' and order_phone = '. $order_phone);
+            $order = $this->db->getRow('select * from hqsen_kezi_order where  del_flag = 1 and order_type = ' . $order_type . ' and order_phone = '. $order_phone);
             if($order){
                 $this->appDie($this->back_code['order']['phone_type_exist'], $this->back_msg['order']['phone_type_exist']);
             } else {
@@ -412,7 +412,7 @@ class order extends base {
         $use_date = $this->postString('use_date');
         $order_desc = $this->postString('order_desc');
         if($order_type and $order_phone and $order_area_hotel_type and $order_area_hotel_id){
-            $order = $this->db->getRow('select * from hqsen_dajian_order where order_type = ' . $order_type . ' and order_phone = '. $order_phone);
+            $order = $this->db->getRow('select * from hqsen_dajian_order where del_flag = 1 and order_type = ' . $order_type . ' and order_phone = '. $order_phone);
             if($order){
                 $this->appDie($this->back_code['order']['phone_type_exist'], $this->back_msg['order']['phone_type_exist']);
             } else {
