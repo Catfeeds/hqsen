@@ -642,6 +642,25 @@ class order extends base {
 
     }
 
+    public function dajianOrderSignDetail(){
+        $user_dajian_order_id = $this->postInt('user_dajian_order_id'); // 订单ID
+        if($user_dajian_order_id){
+            $user_dajian_order_sign = $this->db->getRow('select * from hqsen_user_dajian_order_sign where user_dajian_order_id = ' . $user_dajian_order_id );
+            if($user_dajian_order_sign){
+                $sign_item['order_money'] = $user_dajian_order_sign['order_money'];
+                $sign_item['sign_using_time'] = $user_dajian_order_sign['sign_using_time'];
+                $sign_item['first_order_money'] = $user_dajian_order_sign['first_order_money'];
+                $sign_item['first_order_using_time'] = $user_dajian_order_sign['first_order_using_time'];
+                $sign_item['sign_pic'] = $user_dajian_order_sign['sign_pic'];
+                $sign_item['next_pay_time'] = $user_dajian_order_sign['next_pay_time'] ;
+                $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $sign_item);
+            }
+            $this->appDie();
+        } else {
+            $this->appDie($this->back_code['sys']['value_empty'], $this->back_msg['sys']['value_empty']);
+        }
+    }
+
     // 二销账号才可以创建客资签单其他详情
     public function dajianOrderSignOther(){
         // todo 修改可以创建多条

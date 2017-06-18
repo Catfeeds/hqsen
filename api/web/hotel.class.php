@@ -171,7 +171,7 @@ class hotel extends base {
                 'hotel_max_desk' => $hotel['hotel_max_desk'],
                 'hotel_type' => $hotel['hotel_type'],
                 'hotel_phone' => $hotel['hotel_phone'],
-                'hotel_image' => $hotel['hotel_image'],
+                'hotel_image' => $hotel['hotel_image'] ? json_decode($hotel['hotel_image'], true) : [],
             );
             $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $hotel_item);
         } else {
@@ -217,7 +217,8 @@ class hotel extends base {
     }
 
     public function hotelMenuList(){
-        $hotel = $this->db->getRows("select *  from hqsen_hotel_menu where del_flag=1");
+        $hotel_id = $this->postInt('id');
+        $hotel = $this->db->getRows("select *  from hqsen_hotel_menu where del_flag=1 and hotel_id = " . $hotel_id);
         $data = [];
         foreach ($hotel as $one_hotel){
             if($one_hotel){
@@ -241,8 +242,8 @@ class hotel extends base {
             $sql_order['hotel_id'] = $hotel_id;
             $sql_order['menu_name'] = $menu_name;
             $sql_order['menu_money'] = $menu_money;
-            $this->db->insert('hqsen_hotel_menu', $sql_order);
-            $this->appDie();
+            $sql_order['id'] = $this->db->insert('hqsen_hotel_menu', $sql_order);
+            $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $sql_order);
         } else {
             $this->appDie($this->back_code['sys']['value_empty'], $this->back_msg['sys']['value_empty']);
         }
@@ -344,7 +345,7 @@ class hotel extends base {
     }
 
 
-    // 编辑酒店
+    // 编辑酒店宴会厅
     public function hotelRoomEdit(){
         $id = $this->postString('id');
         $room_name = $this->postString('room_name');
@@ -356,8 +357,8 @@ class hotel extends base {
         $room_image = $this->postString('room_image');
         $room_high = $this->postString('room_high');
         $hotel_id = $this->postString('hotel_id');
-        if($hotel_id){
-            $sql_order = [];
+        $sql_order = $this->db->getRow("select * from hqsen_hotel_room  where id =  " . $id);
+        if($sql_order){
             if($room_name){
                 $sql_order['room_name'] = $room_name;
             }
@@ -382,7 +383,7 @@ class hotel extends base {
             if($room_high){
                 $sql_order['room_high'] = $room_high;
             }
-            $this->db->update('hqsen_hotel_room', $sql_order, ' id = ' . $hotel_id);
+            $this->db->update('hqsen_hotel_room', $sql_order, ' id = ' . $id);
             $this->appDie();
         } else {
             $this->appDie($this->back_code['sys']['value_empty'], $this->back_msg['sys']['value_empty']);
@@ -395,12 +396,33 @@ class hotel extends base {
         $data = [];
         foreach ($hotel as $one_hotel){
             if($one_hotel){
+                $hotel_detail = $this->db->getRow("select *  from hqsen_hotel where id=" . $one_hotel['hotel_id']);
                 $hotel_menu = array(
                     'id' => $one_hotel['id'],
                     'hotel_id' => $one_hotel['hotel_id'],
+                    'hotel_name' => $hotel_detail['hotel_name'],
+                    'area_list' => $this-> get_sh_area($hotel_detail['area_sh_id']),
                     'hotel_weight' => $one_hotel['hotel_weight'],
                 );
                 $data['list'][] = $hotel_menu;
+            }
+        }
+        $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $data);
+    }
+
+    public function getHotelListByAreaId(){
+        $id = $this->postInt('id');
+        $hotel = $this->db->getRows("select *  from hqsen_hotel  where del_flag = 1 and area_sh_id = $id" );
+        $data = [];
+        foreach ($hotel as $one_hotel){
+            if($one_hotel){
+                $hotel_item = array(
+                    'hotel_id' => $one_hotel['id'],
+                    'hotel_name' => $one_hotel['hotel_name'],
+                    'area_list' => $this-> get_sh_area($one_hotel['area_sh_id']),
+                    'hotel_address' => $one_hotel['hotel_address'],
+                );
+                $data['list'][] = $hotel_item;
             }
         }
         $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $data);
