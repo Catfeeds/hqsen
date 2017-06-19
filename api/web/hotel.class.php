@@ -153,6 +153,8 @@ class hotel extends base {
             } else {
                 $this->db->insert('hqsen_hotel_data', $sql_order);
             }
+            $update_hotel_data['is_data'] = 1;
+            $this->db->update('hqsen_hotel', $update_hotel_data, ' id = ' . $hotel_id);
             $this->appDie();
         } else {
             $this->appDie($this->back_code['sys']['value_empty'], $this->back_msg['sys']['value_empty']);
@@ -267,8 +269,9 @@ class hotel extends base {
     }
 
     public function hotelRoomList(){
-        $hotel = $this->db->getRows("select *  from hqsen_hotel_room where del_flag=1");
-        $data = [];
+        $hotel_id = $this->postInt('id');
+        $hotel = $this->db->getRows("select *  from hqsen_hotel_room where del_flag=1 and hotel_id = $hotel_id");
+        $data['list'] = [];
         foreach ($hotel as $one_hotel_room){
             if($one_hotel_room){
                 $hotel_menu = array(
@@ -307,7 +310,7 @@ class hotel extends base {
             $sql_order['room_best_desk'] = $room_best_desk;
             $sql_order['room_m'] = $room_m;
             $sql_order['room_lz'] = $room_lz;
-            $sql_order['room_image'] = $room_image;
+            $sql_order['room_image'] = $room_image ? $room_image : '';
             $sql_order['room_high'] = $room_high;
             $this->db->insert('hqsen_hotel_room', $sql_order);
             $this->appDie();
@@ -398,7 +401,7 @@ class hotel extends base {
 
 
     public function hotelRecList(){
-        $hotel = $this->db->getRows("select *  from hqsen_hotel_rec where del_flag=1");
+        $hotel = $this->db->getRows("select *  from hqsen_hotel_rec where del_flag=1 order by id desc ");
         $data = [];
         foreach ($hotel as $one_hotel){
             if($one_hotel){
