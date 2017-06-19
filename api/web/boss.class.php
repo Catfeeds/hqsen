@@ -153,7 +153,7 @@ class boss extends base {
         $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $item);
     }
 
-    // 客资签单 创建总经理审批
+    // 搭建首销签单 创建总经理审批
     public function dajianSignFollowCreate()
     {
         $user_sign_id = $this->postInt('user_sign_id');
@@ -169,6 +169,27 @@ class boss extends base {
             // 审批成功  更新签单数据  不更新跟踪者订单数据 还是待审核状态
             if (isset($sign_follow['id']) and $sign_follow['id']) {
                 $order_sign['boss_sign_status'] = $sign_status;
+                $this->db->update('hqsen_user_dajian_order_sign', $order_sign, ' id = ' . $sign_follow['user_sign_id']);
+            }
+            // 总经理通过  创建二销
+            if($sign_status == 2){
+                $sign = $this->db->getRow("select *  from hqsen_user_dajian_order_sign where id=" . $user_sign_id);
+                if($sign){
+                    $user_order['order_status'] = 3;
+                    $user_order['user_order_status'] = 2;
+                    $this->db->update('hqsen_user_dajian_order', $user_order, ' id = ' . $sign['user_dajian_order_id']);
+                }
+                // 生成二销订单
+                $sec_sign = $this->db->getRow("select *  from hqsen_user_dajian_order_other_sign where user_dajian_order_id=" . $sign['user_dajian_order_id']);
+                if(!$sec_sign){
+                    $user_dajian_order_sign['sign_type'] = 1;
+                    $user_dajian_order_sign['user_dajian_order_id'] = $sign['user_dajian_order_id'];
+                    $user_dajian_order_sign['order_time'] = $sign['next_pay_time']; // 首销下次支付时间
+                    $this->db->insert('hqsen_user_dajian_order_other_sign', $user_dajian_order_sign);
+                }
+            }
+            if($sign_status == 3){
+                $order_sign['sign_status'] = 4; // 签单信息更改为总经理驳回
                 $this->db->update('hqsen_user_dajian_order_sign', $order_sign, ' id = ' . $sign_follow['user_sign_id']);
             }
             $this->appDie();

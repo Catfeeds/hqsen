@@ -505,7 +505,7 @@ class order extends base {
             $order_list['order_item']['id'] = (int)0;
             if($order){
                 $order_item = array(
-                    'id' => (int)$order['id'],
+                    'id' => (int)$order_id,
                     'create_time' => (string)$order['create_time'],
                     'order_phone' => (string)$order['order_phone'],
                     'customer_name' => (string)$order['customer_name'],
