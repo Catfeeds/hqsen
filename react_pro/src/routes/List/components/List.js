@@ -108,6 +108,24 @@ class List extends Component {
         return '通过'
       case '3':
         return '驳回'
+      case '4':
+        return '总经理驳回'
+      case '5':
+        return '待修改'
+    }
+  }
+  getSignType (text) {
+    switch (text) {
+      case '1':
+        return '首款'
+      case '2':
+        return '中款'
+      case '3':
+        return '尾款'
+      case '4':
+        return '附加款'
+      case '5':
+        return '尾款时间变更'
     }
   }
 
@@ -412,10 +430,7 @@ class List extends Component {
           key: 'sign_status',
           dataIndex: 'sign_status',
           title: '状态',
-          render: text => {
-            let data = this.getStatus(text)
-            return <span>{data}</span>
-          }
+          render: text => <span>{this.getStatus(text)}</span>
         },
         {
           key: 'control',
@@ -440,27 +455,7 @@ class List extends Component {
           key: 'sign_type',
           dataIndex: 'sign_type',
           title: '审批类型',
-          render: text => {
-            let data = ''
-            switch (text) {
-              case '1':
-                data = '首款'
-                break
-              case '2':
-                data = '中款'
-                break
-              case '3':
-                data = '尾款'
-                break
-              case '4':
-                data = '附加款'
-                break
-              case '5':
-                data = '尾款时间变更'
-                break
-            }
-            return <span>{data}</span>
-          }
+          render: text => <span>{this.getSignType(text)}</span>
         },
         {
           key: 'user_type',
@@ -545,27 +540,7 @@ class List extends Component {
           key: 'sign_type',
           dataIndex: 'sign_type',
           title: '审批类型',
-          render: text => {
-            let data = ''
-            switch (text) {
-              case '1':
-                data = '首款'
-                break
-              case '2':
-                data = '中款'
-                break
-              case '3':
-                data = '尾款'
-                break
-              case '4':
-                data = '附加款'
-                break
-              case '5':
-                data = '尾款时间变更'
-                break
-            }
-            return <span>{data}</span>
-          }
+          render: text => <span>{this.getSignType(text)}</span>
         },
         {
           key: 'user_type',

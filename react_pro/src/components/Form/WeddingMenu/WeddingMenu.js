@@ -19,13 +19,15 @@ class WeddingMenu extends Component {
     this.cancleWeddingMenu = this.cancleWeddingMenu.bind(this)
     this.showModal = this.showModal.bind(this)
   }
+
   componentDidMount () {
     this.getHotelMenuList()
   }
+
   getHotelMenuList () {
     Fetch('hotelMenuList', { id: this.props.hoteId }).then(res => {
       this.setState({
-        wedingList: res.data.list
+        wedingList: res.data.list || []
       })
     })
   }
@@ -51,6 +53,7 @@ class WeddingMenu extends Component {
       this.setState({ errorTip: '请输入完整数据！' })
     }
   }
+
   cancleWeddingMenu () {
     this.setState({
       visible: false,
@@ -59,15 +62,18 @@ class WeddingMenu extends Component {
       errorTip: ''
     })
   }
+
   showModal () {
     this.setState({ visible: true })
   }
+
   saveModalValue (e, name) {
     const value = e.target.value
     this.setState({
       [name]: value
     })
   }
+
   removeWeddingItem (id) {
     Fetch('hotelMenuDelete', { id }).then(res => {
       this.setState({
@@ -82,12 +88,13 @@ class WeddingMenu extends Component {
       <div className="wedding-menu">
         <Button size="small" icon="plus" onClick={this.showModal}>添加</Button>
         <ul>
-          {wedingList.map((item, index) =>
-            <li key={index} className="wedding-item">
-              {item.menu_name} ： &nbsp;&nbsp;￥{item.menu_money}/桌
-              <Icon className="remove-weding" type="close" onClick={() => this.removeWeddingItem(item.id)} />
-            </li>
-          )}
+          {wedingList &&
+            wedingList.map((item, index) =>
+              <li key={index} className="wedding-item">
+                {item.menu_name} ： &nbsp;&nbsp;￥{item.menu_money}/桌
+                <Icon className="remove-weding" type="close" onClick={() => this.removeWeddingItem(item.id)} />
+              </li>
+            )}
         </ul>
         <Modal
           title="添加婚宴"
