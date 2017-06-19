@@ -83,7 +83,16 @@ class user extends base{
         $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $data);
     }
 
-
+    public function uploadPic(){
+        $url = '';
+        if(isset($_FILES['file']["name"])){
+            move_uploaded_file($_FILES['file']['tmp_name'], API_PATH . "/upload/" . time() . $_FILES["file"]["name"]);
+            $url = 'meiui.me' . "/upload/" . time() . $_FILES["file"]["name"];
+            $url = 'http://sendevimg.oss-cn-zhangjiakou.aliyuncs.com/user-dir/300%403x.png';
+        }
+        $data['url'] = $url;
+        $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $data);
+    }
 
 
 

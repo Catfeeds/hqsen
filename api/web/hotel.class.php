@@ -171,7 +171,7 @@ class hotel extends base {
                 'hotel_max_desk' => $hotel['hotel_max_desk'],
                 'hotel_type' => $hotel['hotel_type'],
                 'hotel_phone' => $hotel['hotel_phone'],
-                'hotel_image' => $hotel['hotel_image'] ? json_decode($hotel['hotel_image'], true) : [],
+                'hotel_image' => $hotel['hotel_image'],
             );
             $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $hotel_item);
         } else {
@@ -417,10 +417,8 @@ class hotel extends base {
         foreach ($hotel as $one_hotel){
             if($one_hotel){
                 $hotel_item = array(
-                    'hotel_id' => $one_hotel['id'],
-                    'hotel_name' => $one_hotel['hotel_name'],
-                    'area_list' => $this-> get_sh_area($one_hotel['area_sh_id']),
-                    'hotel_address' => $one_hotel['hotel_address'],
+                    'value' => $one_hotel['id'],
+                    'label' => $one_hotel['hotel_name'],
                 );
                 $data['list'][] = $hotel_item;
             }
