@@ -164,15 +164,21 @@ class hotel extends base {
         $hotel_id = $this->postString('id');
         if($hotel_id){
             $hotel = $this->db->getRow("select * from hqsen_hotel_data  where id =  " . $hotel_id);
-            $hotel_item = array(
-                'hotel_id' => $hotel['id'],
-                'hotel_low' => $hotel['hotel_low'],
-                'hotel_high' => (string)$hotel['hotel_high'],
-                'hotel_max_desk' => $hotel['hotel_max_desk'],
-                'hotel_type' => $hotel['hotel_type'],
-                'hotel_phone' => $hotel['hotel_phone'],
-                'hotel_image' => $hotel['hotel_image'],
-            );
+            if($hotel){
+                $hotel_item = array(
+                    'hotel_id' => $hotel['id'],
+                    'hotel_low' => $hotel['hotel_low'],
+                    'hotel_high' => (string)$hotel['hotel_high'],
+                    'hotel_max_desk' => $hotel['hotel_max_desk'],
+                    'hotel_type' => $hotel['hotel_type'],
+                    'hotel_phone' => $hotel['hotel_phone'],
+                    'hotel_image' => $hotel['hotel_image'] ? $hotel['hotel_image'] : json_encode([]),
+                );
+            } else {
+                $hotel_item = array(
+                    'hotel_id' => $hotel_id,
+                );
+            }
             $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $hotel_item);
         } else {
             $this->appDie($this->back_code['sys']['value_empty'], $this->back_msg['sys']['value_empty']);
@@ -219,7 +225,7 @@ class hotel extends base {
     public function hotelMenuList(){
         $hotel_id = $this->postInt('id');
         $hotel = $this->db->getRows("select *  from hqsen_hotel_menu where del_flag=1 and hotel_id = " . $hotel_id);
-        $data = [];
+        $data['list'] = [];
         foreach ($hotel as $one_hotel){
             if($one_hotel){
                 $hotel_menu = array(
