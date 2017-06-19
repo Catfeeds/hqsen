@@ -6,32 +6,42 @@ import config from './config'
 // ------------------------------------
 // Actions
 // ------------------------------------
-
-export const setBasicInfo = createAction('获取基础信息', (type) => ({ ...config[type], type }))
+export const saveId = createAction('保存id')
+export const setBasicInfo = createAction('获取基础信息', type => ({ ...config[type], type }))
 export const setResultInfo = createAction('获取结果数据', (current, data) => ({ current, data }))
 export const toggleLoading = createAction('切换loading')
 export const changeSearchInput = createAction('记录输入框数据')
 export const setInitialState = createAction('初始化数据')
 export const setDisableRow = createAction('禁用数据', (id, updateStatus) => ({ id, updateStatus }))
 // 分页
-export const handleCurrentChange = (current) => {
+export const handleCurrentChange = current => {
   return (dispatch, getState) => {
-    const { searchInput, basicInfo } = getState().List
+    const { searchInput, basicInfo, searchId } = getState().List
     dispatch(toggleLoading(true))
-    Fetch(basicInfo.listUrlKey, { page: current, search_input: searchInput }).then(response => {
-      dispatch(setResultInfo(current, response.data))
-    }, () => { dispatch(toggleLoading(false)) })
+    Fetch(basicInfo.listUrlKey, { page: current, search_input: searchInput, id: searchId }).then(
+      response => {
+        dispatch(setResultInfo(current, response.data))
+      },
+      () => {
+        dispatch(toggleLoading(false))
+      }
+    )
   }
 }
 // 删除行
-export const deleteRow = (id) => {
+export const deleteRow = id => {
   return (dispatch, getState) => {
     const { basicInfo, pageInfo } = getState().List
     dispatch(toggleLoading(true))
-    Fetch(basicInfo.deleteUrlKey, { id }).then(response => {
-      message.success('删除成功')
-      dispatch(handleCurrentChange(pageInfo.page))
-    }, () => { dispatch(toggleLoading(false)) })
+    Fetch(basicInfo.deleteUrlKey, { id }).then(
+      response => {
+        message.success('删除成功')
+        dispatch(handleCurrentChange(pageInfo.page))
+      },
+      () => {
+        dispatch(toggleLoading(false))
+      }
+    )
   }
 }
 // 禁用行
@@ -39,29 +49,40 @@ export const disabledRow = (id, userStatus) => {
   let updateStatus = userStatus === '1' ? '2' : '1'
   return (dispatch, getState) => {
     const { basicInfo } = getState().List
-    Fetch(basicInfo.disableUrlKey, { id, user_status: updateStatus }).then(response => {
-      dispatch(setDisableRow(id, updateStatus))
-    }, () => { dispatch(toggleLoading(false)) })
+    Fetch(basicInfo.disableUrlKey, { id, user_status: updateStatus }).then(
+      response => {
+        dispatch(setDisableRow(id, updateStatus))
+      },
+      () => {
+        dispatch(toggleLoading(false))
+      }
+    )
   }
 }
 // 初始化
-export const initData = (type) => {
+export const initData = (type, id) => {
   return (dispatch, getState) => {
     dispatch(setInitialState())
+    dispatch(saveId(id))
     dispatch(setBasicInfo(type))
     dispatch(handleCurrentChange(1))
   }
 }
 // 完成打款
-export const payCompleted = (data) => {
+export const payCompleted = data => {
   return (dispatch, getState) => {
     const { basicInfo, pageInfo } = getState().List
     const type = basicInfo.type === 'remittance_info_dajian_contract' ? 'user_dajian_order_id' : 'user_kezi_order_id'
     dispatch(toggleLoading(true))
-    Fetch(basicInfo.payCompletedKey, { order_id: data[type] }).then(response => {
-      dispatch(toggleLoading(false))
-      dispatch(handleCurrentChange(pageInfo.page))
-    }, () => { dispatch(toggleLoading(false)) })
+    Fetch(basicInfo.payCompletedKey, { order_id: data[type] }).then(
+      response => {
+        dispatch(toggleLoading(false))
+        dispatch(handleCurrentChange(pageInfo.page))
+      },
+      () => {
+        dispatch(toggleLoading(false))
+      }
+    )
   }
 }
 
@@ -75,19 +96,22 @@ export const actions = {
   initData,
   deleteRow,
   disabledRow,
-  payCompleted
+  payCompleted,
+  saveId
 }
 
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  [setBasicInfo]: (state, action) => {
-    return {
-      ...state,
-      basicInfo: action.payload
-    }
-  },
+  [saveId]: (state, action) => ({
+    ...state,
+    searchId: action.payload
+  }),
+  [setBasicInfo]: (state, action) => ({
+    ...state,
+    basicInfo: action.payload
+  }),
   [setResultInfo]: (state, action) => {
     const { data, current } = action.payload
     return {
@@ -100,7 +124,9 @@ const ACTION_HANDLERS = {
       loading: false
     }
   },
-  [toggleLoading]: (state, action) => { return { ...state, loading: action.payload } },
+  [toggleLoading]: (state, action) => {
+    return { ...state, loading: action.payload }
+  },
   [changeSearchInput]: (state, action) => {
     return {
       ...state,
@@ -148,6 +174,7 @@ const initialState = {
     breadcrumb: []
   },
   searchInput: '',
+  searchId: '',
   loading: false
 }
 export default function counterReducer (state = initialState, action) {

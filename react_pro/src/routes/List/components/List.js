@@ -20,7 +20,8 @@ class List extends Component {
     columns: PropTypes.array,
     params: PropTypes.object,
     type: PropTypes.string,
-    location: PropTypes.object
+    location: PropTypes.object,
+    saveId: PropTypes.func
   }
 
   static contextTypes = {
@@ -42,16 +43,17 @@ class List extends Component {
   }
 
   componentWillMount () {
-    const { setBasicInfo, handleCurrentChange, params: { type } } = this.props
+    const { setBasicInfo, saveId, handleCurrentChange, params: { type }, location: { query } } = this.props
+    saveId(query.id)
     setBasicInfo(type)
     handleCurrentChange(1)
   }
 
   componentWillReceiveProps (nextProps) {
-    const { List: { basicInfo }, initData } = this.props
+    const { List: { basicInfo }, initData, location: { query } } = this.props
     const type = nextProps.params.type
     if (type !== basicInfo.type) {
-      initData(type)
+      initData(type, query.id)
     }
   }
 
@@ -65,21 +67,13 @@ class List extends Component {
     this.context.router.push(`/detail/${type}?id=${id}`)
   }
 
-  editRow (id) {
+  addRow (id) {
     const { type } = this.props.params
+    const paramId = id ? `?id=${id}` : ''
     if (type === 'wedding_list') {
-      this.context.router.push(`/add/${type}?id=${id}&hotelId=${this.props.location.query.id}`)
+      this.context.router.push(`/add/${type}${paramId}${id ? '?' : '&'}hotelId=${this.props.location.query.id}`)
     } else {
-      this.context.router.push(`/add/${type}?id=${id}`)
-    }
-  }
-
-  addRow () {
-    const { type } = this.props.params
-    if (type === 'wedding_list') {
-      this.context.router.push(`/add/${type}?hotelId=${this.props.location.query.id}`)
-    } else {
-      this.context.router.push(`/add/${type}`)
+      this.context.router.push(`/add/${type}${paramId}`)
     }
   }
 
@@ -767,7 +761,7 @@ class List extends Component {
             ghost
             shape="circle"
             style={{ marginRight: 5 }}
-            onClick={() => this.editRow(id)}
+            onClick={() => this.addRow(id)}
           />
           <Popconfirm title="确定删除该条数据?" onConfirm={() => deleteRow(id)}>
             <Button type="danger" icon="delete" ghost shape="circle" />
