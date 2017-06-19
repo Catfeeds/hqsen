@@ -90,5 +90,19 @@ export default {
     listUrlKey: 'feedback',
     uniqueKey: 'id',
     breadcrumb: ['意见反馈列表']
+  },
+  // 宴会厅设置
+  wedding_list: {
+    deleteUrlKey: 'hotelRoomDelete',
+    listUrlKey: 'hotelRoomList',
+    uniqueKey: 'id',
+    breadcrumb: ['酒店列表', '宴会厅设置']
+  },
+  // 首页推荐配置
+  hotel_rec_list: {
+    deleteUrlKey: 'hotelRecDelete',
+    listUrlKey: 'hotelRecList',
+    uniqueKey: 'id',
+    breadcrumb: ['酒店列表', '宴会厅设置']
   }
 }

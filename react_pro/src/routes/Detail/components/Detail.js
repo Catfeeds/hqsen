@@ -5,16 +5,27 @@ import FormComponent from 'components/FormComponent'
 import './Detail.scss'
 
 class Detail extends Component {
-
+  static propTypes = {
+    configData: PropTypes.object,
+    form: PropTypes.object,
+    getFieldDecorator:PropTypes.func,
+    Detail: PropTypes.object,
+    basicInfo: PropTypes.object,
+    location: PropTypes.object,
+    params: PropTypes.object,
+    getInit: PropTypes.func
+  }
   componentWillMount () {
     const { type } = this.props.params
     const { id } = this.props.location.query
     this.props.getInit(type, id)
   }
   render () {
-    const { getFieldDecorator } = this.props.form
-    const { basicInfo, formData } = this.props.Detail
-    const { configData } = this.props
+    const {
+      configData,
+      Detail: { basicInfo, formData },
+      form: { getFieldDecorator }
+    } = this.props
     return (
       <div className="detail-page">
         <MyBreadcrumb breadcrumb={basicInfo.breadcrumb} />
@@ -32,17 +43,6 @@ class Detail extends Component {
       </div>
     )
   }
-}
-
-Detail.propTypes = {
-  configData: PropTypes.object,
-  form: PropTypes.object,
-  getFieldDecorator:PropTypes.func,
-  Detail: PropTypes.object,
-  basicInfo: PropTypes.object,
-  location: PropTypes.object,
-  params: PropTypes.object,
-  getInit: PropTypes.func
 }
 
 export default Form.create()(Detail)

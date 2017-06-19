@@ -4,7 +4,17 @@ import './Layout.scss'
 import '../../styles/core.scss'
 
 class Layout extends Component {
+  static propTypes = {
+    params: PropTypes.object,
+    saveHeadKey: PropTypes.func,
+    layout: PropTypes.object,
+    getConfigData: PropTypes.func,
+    children : PropTypes.element.isRequired
+  }
 
+  static contextTypes = {
+    router: React.PropTypes.object.isRequired
+  }
   componentWillMount () {
     const token = sessionStorage.getItem('access_token')
     window.onload = () => {
@@ -23,8 +33,7 @@ class Layout extends Component {
   }
 
   render () {
-    const { children, saveHeadKey } = this.props
-    const { configData, headKey } = this.props.layout
+    const { children, saveHeadKey, layout: { configData, headKey } } = this.props
     return (
       <div className='content-wrapper'>
         <Header menu={configData.user_security} saveHeadKey={saveHeadKey} headKey={headKey} />
@@ -35,19 +44,5 @@ class Layout extends Component {
     )
   }
 }
-
-Layout.propTypes = {
-  params: PropTypes.object,
-  saveHeadKey: PropTypes.func,
-  layout: PropTypes.object,
-  getConfigData: PropTypes.func,
-  children : PropTypes.element.isRequired
-}
-
-
-Layout.contextTypes = {
-  router: React.PropTypes.object.isRequired
-}
-
 
 export default Layout

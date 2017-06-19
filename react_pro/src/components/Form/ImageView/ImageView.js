@@ -1,30 +1,23 @@
 import React, { Component, PropTypes } from 'react'
 import './ImageView.scss'
-import ViewImage from '../ViewImage'
-// import Viewer from 'viewerjs'
-// import '../../../node_modules/viewerjs/dist/viewer.min.css'
+import ViewImage from '../../ViewImage'
 
 class ImageView extends Component {
-  componentDidMount () {
-    // debugger
-    // new Viewer(document.querySelector('.image-scroll-box'))
+  static propTypes = {
+    data: PropTypes.array
   }
-
   render () {
+    const { data } = this.props
     return (
       <ul className="image-scroll-box">
-        {this.props.data.map((item, index) =>
+        {data ? data.map((item, index) =>
           <li key={index} className="scroll-image-item" onClick={() => ViewImage({ source: item })}>
             <img className="scroll-image" src={item} />
           </li>
-        )}
+        ) : '暂无附件！'}
       </ul>
     )
   }
-}
-
-ImageView.propTypes = {
-  data: PropTypes.array
 }
 
 export default ImageView

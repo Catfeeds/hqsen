@@ -4,16 +4,38 @@ import './Header.scss'
 const SubMenu = Menu.SubMenu
 
 class Header extends Component {
+  static propTypes = {
+    headKey: PropTypes.string,
+    saveHeadKey: PropTypes.func,
+    menu: PropTypes.array,
+    router: PropTypes.object
+  }
+
+  static contextTypes = {
+    router: PropTypes.object.isRequired
+  }
+
+  constructor () {
+    super()
+    this.loginOut = this.loginOut.bind(this)
+    this.handleClick = this.handleClick.bind(this)
+  }
+
   handleClick (e) {
-    console.log(e.key)
-    this.props.saveHeadKey(e.key)
-    if (e.key === 'account_info_password_back') {
-      this.context.router.push('reset-password')
-    } else if (e.key === 'remittance_info_remittance_ratio') {
-      this.context.router.push(`add/${e.key}?id=0`)
-    } else {
-      this.context.router.push(`/list/${e.key}`)
+    const key = e.key
+    this.props.saveHeadKey(key)
+    let path = ''
+    switch (key) {
+      case 'account_info_password_back':
+        path = 'reset-password'
+        break
+      case 'remittance_info_remittance_ratio':
+        path = `add/${key}?id=0`
+        break
+      default:
+        path = `/list/${key}`
     }
+    this.context.router.push(path)
   }
   loginOut () {
     sessionStorage.removeItem('access_token')
@@ -25,15 +47,19 @@ class Header extends Component {
     const dropdownMenu = (
       <Menu>
         <Menu.Item>
-          <span onClick={() => this.loginOut()}>登出</span>
+          <span onClick={this.loginOut}>登出</span>
         </Menu.Item>
       </Menu>
     )
     return (
       <Row>
         <Col sm={22}>
-          <Menu className="my-header"
-            mode="horizontal" theme="light" selectedKeys={[headKey]} onClick={(e) => this.handleClick(e)}>
+          <Menu
+            className="my-header"
+            mode="horizontal"
+            theme="light"
+            selectedKeys={[headKey]}
+            onClick={this.handleClick}>
             { menu.map(item => {
               if (item.child) {
                 return (
@@ -58,17 +84,6 @@ class Header extends Component {
       </Row>
     )
   }
-}
-
-Header.propTypes = {
-  headKey: PropTypes.string,
-  saveHeadKey: PropTypes.func,
-  menu: PropTypes.array,
-  router: PropTypes.object
-}
-
-Header.contextTypes = {
-  router: PropTypes.object.isRequired
 }
 
 export default Header

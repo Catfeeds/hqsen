@@ -3,6 +3,11 @@ import { Icon } from 'antd'
 import './ViewImage.scss'
 
 class ViewImage extends Component {
+  static propTypes = {
+    source: PropTypes.string,
+    onClose: PropTypes.func
+  }
+
   constructor (props) {
     super(props)
     this.state = {
@@ -58,9 +63,11 @@ class ViewImage extends Component {
         })
         break
       case 'scaleLow':
-        this.setState({
-          scaleIfo: scaleIfo - 0.2
-        })
+        if (scaleIfo > 0.3) {
+          this.setState({
+            scaleIfo: scaleIfo - 0.2
+          })
+        }
         break
       case 'rotate':
         this.setState({
@@ -94,11 +101,6 @@ class ViewImage extends Component {
       </div>
     )
   }
-}
-
-ViewImage.propTypes = {
-  source: PropTypes.string,
-  onClose: PropTypes.func
 }
 
 export default ViewImage

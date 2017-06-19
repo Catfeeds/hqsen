@@ -2,7 +2,8 @@ import 'es6-promise'
 import axios from 'axios'
 import { Modal } from 'antd'
 
-const urlKey = {
+export const domain = 'http://dev.meiui.me/index.php?m=web&'
+export const urlKey = {
   login: 'c=user&f=login',
   registerList: 'c=account&f=registerAccountList',
   configData: 'c=user&f=configData',
@@ -13,6 +14,23 @@ const urlKey = {
   editHotel: 'c=hotel&f=hotelEdit',
   deleteHotel: 'c=hotel&f=hotelDelete',
   hotelDetail: 'c=hotel&f=hotelDetail',
+  hotelDataCreate: 'c=hotel&f=hotelDataCreate',
+  hotelDataDetail: 'c=hotel&f=hotelDataDetail',
+  hotelMenuList: 'c=hotel&f=hotelMenuList',
+  hotelMenuCreate: 'c=hotel&f=hotelMenuCreate',
+  hotelMenuDelete: 'c=hotel&f=hotelMenuDelete',
+  uploadPic: 'c=user&f=uploadPic',
+  // 宴会厅
+  hotelRoomList: 'c=hotel&f=hotelRoomList',
+  hotelRoomCreate: 'c=hotel&f=hotelRoomCreate',
+  hotelRoomDetail: 'c=hotel&f=hotelRoomDetail',
+  hotelRoomEdit: 'c=hotel&f=hotelRoomEdit',
+  hotelRoomDelete: 'c=hotel&f=hotelRoomDelete',
+  // 酒店推荐
+  hotelRecList: 'c=hotel&f=hotelRecList',
+  hotelRecCreate: 'c=hotel&f=hotelRecCreate',
+  hotelRecDelete: 'c=hotel&f=hotelRecDelete',
+  getHotelListByAreaId: 'c=hotel&f=getHotelListByAreaId',
   // area
   areaList: 'c=area&f=areaList',
   createArea: 'c=area&f=areaCreate',
@@ -74,7 +92,7 @@ const urlKey = {
   paySubmit: 'c=pay&f=payRatio'
 }
 
-const formatData = (param) => {
+const formatData = param => {
   let newData = ''
   for (let key in param) {
     newData += `${key}=${param[key]}&`
@@ -85,7 +103,6 @@ const formatData = (param) => {
 export default function Fetch (url, data = {}, method = 'post', showLoading = false) {
   // 开启loding
   let loadingInstance
-  let domain = 'http://dev.meiui.me/index.php?m=web&'
   const token = sessionStorage.getItem('access_token') || ''
 
   if (method === 'get') {
@@ -101,50 +118,49 @@ export default function Fetch (url, data = {}, method = 'post', showLoading = fa
   })
   const defer = new Promise((resolve, reject) => {
     instance[method](`${domain}${urlKey[url]}`, data)
-    .then(response => response.data)
-    .then(response => {
-      if (response.status === 200) {
-        resolve(response)
-      } else if (response.message === '登录失效请重新登录') {
-        // 登录失效
-        Modal.error({
-          title: '错误提示',
-          content: response.message
-        })
-        setTimeout(() => {
-          window.location.href = '#/login'
-        }, 3000)
-      } else {
-        Modal.error({
-          title: '错误提示',
-          content: response.message
-        })
-        reject(response, true)
-      }
-    })
-    .catch((error) => {
-      reject(error, false)
-      showLoading && loadingInstance.close()
-      if (error.response) {
-        // 请求已发出，但服务器响应的状态码不在 2xx 范围内
-        Modal.error({
-          title: '错误提示',
-          content: '网络响应错误'
-        })
-      } else if (error.message.indexOf('timeout') > -1) {
-        Modal.error({
-          title: '错误提示',
-          content: '网络请求超时'
-        })
-      } else {
-        Modal.error({
-          title: '错误提示',
-          content: '接口异常'
-        })
-      }
-      console.log(error.config)
-    })
+      .then(response => response.data)
+      .then(response => {
+        if (response.status === 200) {
+          resolve(response)
+        } else if (response.message === '登录失效请重新登录') {
+          // 登录失效
+          Modal.error({
+            title: '错误提示',
+            content: response.message
+          })
+          setTimeout(() => {
+            window.location.href = '#/login'
+          }, 3000)
+        } else {
+          Modal.error({
+            title: '错误提示',
+            content: response.message
+          })
+          reject(response, true)
+        }
+      })
+      .catch(error => {
+        reject(error, false)
+        showLoading && loadingInstance.close()
+        if (error.response) {
+          // 请求已发出，但服务器响应的状态码不在 2xx 范围内
+          Modal.error({
+            title: '错误提示',
+            content: '网络响应错误'
+          })
+        } else if (error.message.indexOf('timeout') > -1) {
+          Modal.error({
+            title: '错误提示',
+            content: '网络请求超时'
+          })
+        } else {
+          Modal.error({
+            title: '错误提示',
+            content: '接口异常'
+          })
+        }
+        console.log(error.config)
+      })
   })
   return defer
 }
-

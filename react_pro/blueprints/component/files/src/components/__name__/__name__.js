@@ -1,7 +1,9 @@
 import React, { Component, PropTypes } from 'react'
-import classes from './<%= pascalEntityName %>.scss'
+import './<%= pascalEntityName %>.scss'
 
 class <%= pascalEntityName %> extends Component {
+  static propTypes = {
+  }
   render () {
     return (
       <div className={classes['<%= pascalEntityName %>']}>
@@ -11,7 +13,5 @@ class <%= pascalEntityName %> extends Component {
   }
 }
 
-<%= pascalEntityName %>.propTypes = {
-}
 
 export default <%= pascalEntityName %>

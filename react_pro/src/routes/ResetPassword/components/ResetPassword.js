@@ -5,6 +5,17 @@ import { Input, Form, Popconfirm, Button } from 'antd'
 const FormItem = Form.Item
 
 class ResetPassword extends Component {
+  static propTypes = {
+    form: PropTypes.object,
+    id: PropTypes.string,
+    submitForm: PropTypes.func,
+    ResetPassword: PropTypes.object,
+    loading: PropTypes.bool
+  }
+
+  static contextTypes = {
+    router: React.PropTypes.object.isRequired
+  }
   constructor (props) {
     super(props)
     this.state = {
@@ -13,6 +24,8 @@ class ResetPassword extends Component {
     this.handleConfirmBlur = this.handleConfirmBlur.bind(this)
     this.checkConfirm = this.checkConfirm.bind(this)
     this.checkPassword = this.checkPassword.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
+    this.cancleSubmit = this.cancleSubmit.bind(this)
   }
   handleConfirmBlur (e) {
     const value = e.target.value
@@ -44,11 +57,14 @@ class ResetPassword extends Component {
     })
   }
   cancleSubmit () {
-    this.context.router.push(`list`)
+    // this.context.router.push(`list`)
+    this.context.router.goBack()
   }
   render () {
-    const { getFieldDecorator } = this.props.form
-    const { loading } = this.props.ResetPassword
+    const {
+      form: { getFieldDecorator },
+      ResetPassword: { loading }
+    } = this.props
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -101,23 +117,15 @@ class ResetPassword extends Component {
             )}
           </FormItem>
           <FormItem>
-            <Popconfirm title="确认提交?" onConfirm={(e) => this.handleSubmit(e)}>
+            <Popconfirm title="确认提交?" onConfirm={this.handleSubmit}>
               <Button className="add-btn" type="primary" loading={loading}>提交</Button>
             </Popconfirm>
-            <Button className="add-btn" type="default" size="default" onClick={() => this.cancleSubmit()}>取消</Button>
+            <Button className="add-btn" type="default" size="default" onClick={this.cancleSubmit}>取消</Button>
           </FormItem>
         </Form>
       </div>
     )
   }
-}
-
-ResetPassword.propTypes = {
-  form: PropTypes.object,
-  id: PropTypes.string,
-  submitForm: PropTypes.func,
-  ResetPassword: PropTypes.object,
-  loading: PropTypes.bool
 }
 
 export default Form.create()(ResetPassword)

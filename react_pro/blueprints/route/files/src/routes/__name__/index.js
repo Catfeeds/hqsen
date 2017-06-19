@@ -10,7 +10,7 @@ export default (store) => ({
         and embed an async module loader (jsonp) when bundling   */
     require.ensure([], (require) => {
       /*  Add the reducer to the store on key 'counter'  */
-      injectReducer(store, { key: '<%= pascalEntityName %>', reducer })
+      injectReducer(store, { key: '<%= camelEntityName %>', reducer })
 
       /*  Return getComponent   */
       cb(null, <%= pascalEntityName %>)

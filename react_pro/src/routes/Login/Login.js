@@ -5,6 +5,15 @@ const FormItem = Form.Item
 import './Login.scss'
 
 class Login extends Component {
+  static propTypes = {
+    form: PropTypes.object,
+    loginForm: PropTypes.func,
+    getFieldDecorator: PropTypes.func
+  }
+
+  static contextTypes = {
+    router: PropTypes.object.isRequired
+  }
 
   handleSubmit (e) {
     e.preventDefault()
@@ -49,16 +58,6 @@ class Login extends Component {
       </div>
     )
   }
-}
-
-Login.propTypes = {
-  form: PropTypes.object,
-  loginForm: PropTypes.func,
-  getFieldDecorator: PropTypes.func
-}
-
-Login.contextTypes = {
-  router: PropTypes.object.isRequired
 }
 
 export default Form.create()(Login)

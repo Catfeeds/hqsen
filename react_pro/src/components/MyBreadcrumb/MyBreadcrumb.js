@@ -3,6 +3,9 @@ import './MyBreadcrumb.scss'
 import { Breadcrumb } from 'antd'
 
 class MyBreadcrumb extends Component {
+  static propTypes = {
+    breadcrumb: PropTypes.array
+  }
   render () {
     return (
       <Breadcrumb>
@@ -10,10 +13,6 @@ class MyBreadcrumb extends Component {
       </Breadcrumb>
     )
   }
-}
-
-MyBreadcrumb.propTypes = {
-  breadcrumb: PropTypes.array
 }
 
 export default MyBreadcrumb

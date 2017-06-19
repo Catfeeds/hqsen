@@ -13,7 +13,7 @@ export const getInit = (type, id) => {
     const basicInfo = config[type]
     dispatch(setBasicInfo({ ...basicInfo, type }))
     if (basicInfo.detailUrlKey) {
-      Fetch(basicInfo.detailUrlKey, { id }).then(response => {     
+      Fetch(basicInfo.detailUrlKey, { id }).then(response => {
         dispatch(saveForm(response.data))
       })
     }

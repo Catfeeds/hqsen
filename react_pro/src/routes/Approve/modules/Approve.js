@@ -106,8 +106,11 @@ const initialState = {
       label: '通过',
       value: '2'
     }, {
-      label: '驳回',
+      label: '不通过',
       value: '3'
+    }, {
+      label: '待修改',
+      value: '4'
     }],
     sign_pic: []
   }

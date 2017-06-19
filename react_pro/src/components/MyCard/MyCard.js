@@ -2,6 +2,9 @@ import React, { Component, PropTypes } from 'react'
 import './MyCard.scss'
 
 class MyCard extends Component {
+  static propTypes = {
+    data: PropTypes.object
+  }
   render () {
     const { data } = this.props
     return (
@@ -16,9 +19,6 @@ class MyCard extends Component {
       </div>
     )
   }
-}
-
-MyCard.propTypes = {
 }
 
 export default MyCard

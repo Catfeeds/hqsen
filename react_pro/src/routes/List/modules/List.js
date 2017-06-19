@@ -13,10 +13,8 @@ export const toggleLoading = createAction('切换loading')
 export const changeSearchInput = createAction('记录输入框数据')
 export const setInitialState = createAction('初始化数据')
 export const setDisableRow = createAction('禁用数据', (id, updateStatus) => ({ id, updateStatus }))
-
-
+// 分页
 export const handleCurrentChange = (current) => {
-  console.log('change---------------')
   return (dispatch, getState) => {
     const { searchInput, basicInfo } = getState().List
     dispatch(toggleLoading(true))
@@ -25,7 +23,7 @@ export const handleCurrentChange = (current) => {
     }, () => { dispatch(toggleLoading(false)) })
   }
 }
-
+// 删除行
 export const deleteRow = (id) => {
   return (dispatch, getState) => {
     const { basicInfo, pageInfo } = getState().List
@@ -36,7 +34,7 @@ export const deleteRow = (id) => {
     }, () => { dispatch(toggleLoading(false)) })
   }
 }
-
+// 禁用行
 export const disabledRow = (id, userStatus) => {
   let updateStatus = userStatus === '1' ? '2' : '1'
   return (dispatch, getState) => {
@@ -46,7 +44,7 @@ export const disabledRow = (id, userStatus) => {
     }, () => { dispatch(toggleLoading(false)) })
   }
 }
-
+// 初始化
 export const initData = (type) => {
   return (dispatch, getState) => {
     dispatch(setInitialState())
@@ -54,7 +52,7 @@ export const initData = (type) => {
     dispatch(handleCurrentChange(1))
   }
 }
-
+// 完成打款
 export const payCompleted = (data) => {
   return (dispatch, getState) => {
     const { basicInfo, pageInfo } = getState().List

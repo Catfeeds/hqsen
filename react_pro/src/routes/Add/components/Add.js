@@ -4,7 +4,29 @@ import MyBreadcrumb from 'components/MyBreadcrumb'
 import FormComponent from 'components/FormComponent'
 import ConfirmComponent from './ConfirmComponent'
 import './Add.scss'
+
 class Add extends Component {
+  static propTypes = {
+    Add: PropTypes.object,
+    form: PropTypes.object,
+    basicInfo: PropTypes.object,
+    configData: PropTypes.object,
+    formData: PropTypes.object,
+    getDataSource: PropTypes.func,
+    type: PropTypes.string,
+    id: PropTypes.string,
+    params: PropTypes.object,
+    query: PropTypes.object,
+    location: PropTypes.object,
+    submitForm: PropTypes.func,
+    clearData: PropTypes.func,
+    toggleAreaSelect: PropTypes.func,
+    getRecHotelList: PropTypes.func
+  }
+
+  static contextTypes = {
+    router: React.PropTypes.object.isRequired
+  }
   constructor () {
     super()
     this.state = {
@@ -12,6 +34,8 @@ class Add extends Component {
       showArea: false
     }
     this.handleChange = this.handleChange.bind(this)
+    this.cancleSubmit = this.cancleSubmit.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
   }
 
   componentWillMount () {
@@ -29,24 +53,20 @@ class Add extends Component {
   }
 
   handleSubmit (e) {
-    const { id } = this.props.location.query
+    const { query } = this.props.location
     const { submitForm, form } = this.props
     e.preventDefault()
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values)
-        submitForm(id, values, this.context.router)
+        submitForm(query, values, this.context.router)
       }
     })
   }
   cancleSubmit () {
-    const { type } = this.props.params
-    if (type !== 'remittance_info_remittance_ratio') {
-      this.context.router.push(`list/${type}`)
-    }
+    this.context.router.goBack()
   }
   handleChange (name, value) {
-    console.log(name, value)
     if (name === 'user_type') {
       if (value === '11' || value === '12') {
         this.props.toggleAreaSelect(false)
@@ -54,15 +74,19 @@ class Add extends Component {
         this.props.toggleAreaSelect(true)
       }
     }
+    if (name === 'config_area') {
+      // 酒店推荐修改区域获取酒店
+      this.props.getRecHotelList(value)
+    }
   }
 
   render () {
-    const { getFieldDecorator } = this.props.form
-    const { basicInfo, dataSource, formData, loading } = this.props.Add
+    const {
+      form: { getFieldDecorator, setFieldsValue },
+      Add: { basicInfo, dataSource, formData, loading }
+    } = this.props
     let configData = { ...this.props.configData, ...dataSource }
-    if (basicInfo.type === 'account_info_inner_list') {
-      // configData.area_id = configData.config_area
-    } else {
+    if (basicInfo.type !== 'account_info_inner_list') {
       configData.area_id = configData.config_area
     }
     configData.user_type = configData.inner_type
@@ -70,49 +94,31 @@ class Add extends Component {
       <div className="add-page">
         <MyBreadcrumb breadcrumb={basicInfo.breadcrumb} />
         <Form className="vertival-form">
-          { basicInfo.formList.map((item, index) => {
-            return <FormComponent
-              key={index}
-              getFieldDecorator={getFieldDecorator}
-              item={item}
-              onChange={this.handleChange}
-              dataSource={configData[item.name]}
-              defaultValue={formData[item.name]} />
-          })
-          }
-          { this.state.showConfirm && basicInfo.type && <ConfirmComponent form={this.props.form} id={basicInfo.id} />}
+          {basicInfo.formList.map((item, index) => {
+            return (
+              <FormComponent
+                key={index}
+                id={basicInfo.id}
+                setFieldsValue={setFieldsValue}
+                getFieldDecorator={getFieldDecorator}
+                item={item}
+                onChange={this.handleChange}
+                dataSource={configData[item.name]}
+                defaultValue={formData[item.name]}
+              />
+            )
+          })}
+          {this.state.showConfirm && basicInfo.type && <ConfirmComponent form={this.props.form} id={basicInfo.id} />}
           <Form.Item>
-            <Popconfirm title="确认提交?" onConfirm={(e) => this.handleSubmit(e)}>
+            <Popconfirm title="确认提交?" onConfirm={this.handleSubmit}>
               <Button className="add-btn" type="primary" loading={loading}>提交</Button>
             </Popconfirm>
-            <Button className="add-btn" type="default" size="default" onClick={() => this.cancleSubmit()}>取消</Button>
+            <Button className="add-btn" type="default" size="default" onClick={this.cancleSubmit}>取消</Button>
           </Form.Item>
         </Form>
       </div>
     )
   }
-}
-
-Add.propTypes = {
-  Add: PropTypes.object,
-  form: PropTypes.object,
-  basicInfo: PropTypes.object,
-  configData: PropTypes.object,
-  formData: PropTypes.object,
-  getDataSource: PropTypes.func,
-  type: PropTypes.string,
-  id: PropTypes.string,
-  params: PropTypes.object,
-  query: PropTypes.object,
-  location: PropTypes.object,
-  submitForm: PropTypes.func,
-  clearData: PropTypes.func,
-  toggleAreaSelect: PropTypes.func
-}
-
-
-Add.contextTypes = {
-  router: React.PropTypes.object.isRequired
 }
 
 export default Form.create()(Add)

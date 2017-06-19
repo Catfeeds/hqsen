@@ -3,7 +3,6 @@ import { message } from 'antd'
 import { createAction } from 'redux-act'
 import Fetch from 'root/Fetch'
 
-
 // ------------------------------------
 // Actions
 // ------------------------------------
@@ -20,61 +19,84 @@ export const getInit = (type, id) => {
     dispatch(setBasicInfo({ ...basicInfo, type, id }))
     if (id) {
       dispatch(toggleLoading(true))
-      Fetch(basicInfo.detailUrlKey, { id }).then(response => {
-        dispatch(toggleLoading(false))
-        let data = response.data
-        switch (type) {
-          case 'account_info_inner_list':
-            if (data.user_type === '11' || data.user_type === '12') {
-              dispatch(toggleAreaSelect(false))
-            }
-            break
-          case 'hotel_info_area_list':
-            data.area_list && (data.area_list = data.area_list.split(','))
-            break
-          default:
-            break
+      Fetch(basicInfo.detailUrlKey, { id }).then(
+        response => {
+          dispatch(toggleLoading(false))
+          let data = response.data
+          switch (type) {
+            case 'account_info_inner_list':
+              if (data.user_type === '11' || data.user_type === '12') {
+                dispatch(toggleAreaSelect(false))
+              }
+              break
+            case 'hotel_info_area_list':
+              data.area_list && (data.area_list = data.area_list.split(','))
+              break
+          }
+          dispatch(saveForm(data))
+        },
+        () => {
+          dispatch(toggleLoading(false))
         }
-        dispatch(saveForm(data))
-      }, () => { dispatch(toggleLoading(false)) })
+      )
     }
   }
 }
 // eslint-disable-line
 export const getDataSource = (type, id) => {
   return (dispatch, getState) => {
-    if (type === 'account_info_hotel_list') {
-      Fetch('getHotelSelect').then(response => {
-        dispatch(saveDataSource({ hotel_id: response.data.list }))
-        dispatch(getInit(type, id))
-      })
-    } else if (type === 'account_info_inner_list') {
-      Fetch('getAreaList').then(response => {
-        dispatch(saveDataSource({ area_id: response.data.list }))
-        dispatch(getInit(type, id))
-      })
-    } else {
-      Fetch('getShanghaiArea', { id }).then(response => {
-        dispatch(saveDataSource({ area_list: response.data.area_sh }))
-        dispatch(getInit(type, id))
-      })
+    switch (type) {
+      case 'account_info_hotel_list':
+        Fetch('getHotelSelect').then(response => {
+          dispatch(saveDataSource({ hotel_id: response.data.list }))
+          dispatch(getInit(type, id))
+        })
+        break
+      case 'account_info_inner_list':
+        Fetch('getAreaList').then(response => {
+          dispatch(saveDataSource({ area_id: response.data.list }))
+          dispatch(getInit(type, id))
+        })
+        break
+      default:
+        Fetch('getShanghaiArea', { id }).then(response => {
+          dispatch(saveDataSource({ area_list: response.data.area_sh }))
+          dispatch(getInit(type, id))
+        })
     }
   }
 }
 
-export const submitForm = (id, data, router) => {
+export const submitForm = (query, data, router) => {
   return (dispatch, getState) => {
     const { editUrlKey, createUrlKey, type } = getState().Add.basicInfo
+    const { id, hotelId } = query
     const url = id ? editUrlKey : createUrlKey
-    const formData = id ? { ...data, id } : { ...data }
+    let formData = id ? { ...data, id } : { ...data }
+    if (type === 'wedding_list') {
+      formData = { ...formData, hotel_id: hotelId }
+    }
     dispatch(toggleLoading(true))
-    Fetch(url, formData).then(response => {
-      dispatch(toggleLoading(false))
-      message.success('提交成功')
-      if (type !== 'remittance_info_remittance_ratio') {
-        router.push(`/list/${type}`)
+    Fetch(url, formData).then(
+      response => {
+        dispatch(toggleLoading(false))
+        message.success('提交成功')
+        router.goBack()
+        // if (type !== 'remittance_info_remittance_ratio') {
+        // }
+      },
+      () => {
+        dispatch(toggleLoading(false))
       }
-    }, () => { dispatch(toggleLoading(false)) })
+    )
+  }
+}
+// 酒店推荐获取酒店
+export const getRecHotelList = id => {
+  return (dispatch, getState) => {
+    Fetch('getHotelListByAreaId', { id }).then(response => {
+      dispatch(saveDataSource({ hotel_id: response.data.list }))
+    })
   }
 }
 
@@ -83,7 +105,8 @@ export const actions = {
   submitForm,
   getDataSource,
   clearData,
-  toggleAreaSelect
+  toggleAreaSelect,
+  getRecHotelList
 }
 
 // ------------------------------------
@@ -132,8 +155,9 @@ const ACTION_HANDLERS = {
       ...state,
       basicInfo: {
         ...state.basicInfo,
-        formList: state.basicInfo.formList.map(item =>
-          item.name === 'area_id' ? Object.assign({}, item, { hide: action.payload }) : item)
+        formList: state.basicInfo.formList.map(
+          item => (item.name === 'area_id' ? Object.assign({}, item, { hide: action.payload }) : item)
+        )
       }
     }
   },

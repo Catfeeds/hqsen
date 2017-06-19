@@ -1,0 +1,23 @@
+.m5 {
+  margin: 5px 0;
+}
+
+.remove-weding {
+  display: none;
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+.wedding-item {
+  &:hover {
+    .remove-weding {
+      display: inline-block;
+    }
+  }
+}
+
+.error-tip {
+  color: #b90c0c;
+  text-align: right;
+  height: 18px;
+}
