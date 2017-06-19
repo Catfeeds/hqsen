@@ -110,7 +110,7 @@ const initialState = {
       value: '3'
     }, {
       label: '待修改',
-      value: '4'
+      value: '5'
     }],
     sign_pic: []
   }
