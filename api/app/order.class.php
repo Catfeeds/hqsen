@@ -467,30 +467,73 @@ class order extends base {
         $offset = ($order_page - 1) * $limit;
         $sql_limit = "  order by update_time asc  limit $offset , $limit";
         $sql_status = '  order_status != 0 ';
-        if($order_status){
-            $sql_status = '  order_status = ' . $order_status;
-        }
-        // todo 首销 二销 分别处理
+        // 11 首销 12 二销 其他 type 默认提供者
         if($this->user['user_type'] == 11){
-            $sql_status .= ' and watch_user_id = '. $this->user['id'];
-        } else {
-            $sql_status .= ' and user_id = '. $this->user['id'];
-        }
-        $order = $this->db->getRows('select * from hqsen_user_dajian_order where ' . $sql_status . $sql_limit);
-        $order_list['order_list'] = [];
-        if($order){
-            foreach ($order as $one_order){
-                $order_item = array(
-                    'id' => (int)$one_order['id'],
-                    'create_time' => (string)$one_order['create_time'],
-                    'order_status' => (int)$one_order['order_status'],
-                    'order_phone' => (string)$one_order['order_phone'],
-                    'watch_user' => (string)$one_order['watch_user_name'],
-                );
-                $order_list['order_list'][] = $order_item;
+            if($order_status){
+                $sql_status = '  order_status = ' . $order_status;
             }
+            $sql_status .= ' and watch_user_id = '. $this->user['id'];
 
+            $order = $this->db->getRows('select * from hqsen_user_dajian_order where ' . $sql_status . $sql_limit);
+            $order_list['order_list'] = [];
+            if($order){
+                foreach ($order as $one_order){
+                    $order_item = array(
+                        'id' => (int)$one_order['id'],
+                        'create_time' => (string)$one_order['create_time'],
+                        'order_status' => (int)$one_order['order_status'],
+                        'order_phone' => (string)$one_order['order_phone'],
+                        'watch_user' => (string)$one_order['watch_user_name'],
+                    );
+                    $order_list['order_list'][] = $order_item;
+                }
+
+            }
+        } elseif($this->user['user_type'] == 12){
+            if($order_status){
+                $sql_status = '  erxiao_order_status = ' . $order_status;
+            }
+            $sql_status .= ' and erxiao_user_id = '. $this->user['id'];
+
+            $order = $this->db->getRows('select * from hqsen_user_dajian_order where ' . $sql_status . $sql_limit);
+            $order_list['order_list'] = [];
+            if($order){
+                foreach ($order as $one_order){
+                    $order_item = array(
+                        'id' => (int)$one_order['id'],
+                        'create_time' => (string)$one_order['create_time'],
+                        'order_status' => (int)$one_order['erxiao_order_status'],
+                        'erxiao_sign_type' => (int)$one_order['erxiao_sign_type'],
+                        'order_phone' => (string)$one_order['order_phone'],
+                        'watch_user' => (string)$one_order['watch_user_name'],
+                    );
+                    $order_list['order_list'][] = $order_item;
+                }
+
+            }
+        } else {
+            if($order_status){
+                $sql_status = '  user_order_status = ' . $order_status;
+            }
+            $sql_status .= ' and user_id = '. $this->user['id'];
+
+            $order = $this->db->getRows('select * from hqsen_user_dajian_order where ' . $sql_status . $sql_limit);
+            $order_list['order_list'] = [];
+            if($order){
+                foreach ($order as $one_order){
+                    $order_item = array(
+                        'id' => (int)$one_order['id'],
+                        'create_time' => (string)$one_order['create_time'],
+                        'order_status' => (int)$one_order['user_order_status'],
+                        'order_phone' => (string)$one_order['order_phone'],
+                        'watch_user' => (string)$one_order['watch_user_name'],
+                    );
+                    $order_list['order_list'][] = $order_item;
+                }
+
+            }
         }
+
         $order_list['count'] = $this->db->getCount('hqsen_user_dajian_order', $sql_status);
         $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $order_list);
     }
@@ -665,11 +708,13 @@ class order extends base {
     public function dajianOrderSignOther(){
         // todo 修改可以创建多条
         $user_dajian_order_id = $this->postInt('user_dajian_order_id'); // 订单ID
-        $sign_type = $this->postInt('sign_type');// 1 中款 2尾款 3附加款
+        $sign_type = $this->postInt('sign_type');// 1 中款 2尾款 3附加款 4尾款时间
         $order_other_money = $this->postString('order_money');
         $order_other_time = $this->postInt('order_time');
         $order_other_sign_pic = $this->postString('order_sign_pic'); //签单凭证  json
-        $user_dajian_order_sign = $this->db->getRow('select * from hqsen_user_dajian_order_other_sign where user_dajian_order_id = ' . $user_dajian_order_id );
+        if($sign_type != 3){
+            $user_dajian_order_sign = $this->db->getRow('select * from hqsen_user_dajian_order_other_sign where user_dajian_order_id = ' . $user_dajian_order_id . ' and  sign_type = ' . $sign_type );
+        }
         $user_dajian_order_sign['sign_type'] = $sign_type;
         $user_dajian_order_sign['user_dajian_order_id'] = $user_dajian_order_id;
         $user_dajian_order_sign['order_money'] = $order_other_money;
@@ -677,15 +722,43 @@ class order extends base {
         $user_dajian_order_sign['order_sign_pic'] = $order_other_sign_pic;
         if($user_dajian_order_id){
             if(isset($user_dajian_order_sign['id']) and $user_dajian_order_sign['id']){
-                $this->db->update('hqsen_user_dajian_order_other_sign', $user_dajian_order_sign, ' id = ' . $user_dajian_order_sign['id']);
+                $this->db->update('hqsen_user_dajian_order_other_sign', $user_dajian_order_sign, ' sign_type = ' . $sign_type . ' and id = ' . $user_dajian_order_sign['id']);
             } else {
+                $user_dajian_order_sign['create_time'] = time();
                 $this->db->insert('hqsen_user_dajian_order_other_sign', $user_dajian_order_sign);
             }
+            $order_type_sql['erxiao_sign_type'] = $sign_type;
+            $this->db->update('hqsen_user_dajian_order', $order_type_sql, ' id = ' . $user_dajian_order_id);
             $this->appDie();
         } else {
             $this->appDie($this->back_code['sys']['value_empty'], $this->back_msg['sys']['value_empty']);
         }
 
+    }
+
+    public function dajianOrderSignOtherList(){
+        // todo 修改可以创建多条
+        $user_dajian_order_id = $this->postInt('user_dajian_order_id'); // 订单ID
+        $user_dajian_order_sign = $this->db->getRow('select * from hqsen_user_dajian_order_sign where user_dajian_order_id = ' . $user_dajian_order_id);
+        $other_signs = $this->db->getRows('select * from hqsen_user_dajian_order_other_sign where user_dajian_order_id = ' . $user_dajian_order_id . ' order by create_time asc');
+
+        $sign_item['order_money'] = $user_dajian_order_sign['order_money'];
+        $sign_item['sign_using_time'] = $user_dajian_order_sign['sign_using_time'];
+        $sign_item['first_order_money'] = $user_dajian_order_sign['first_order_money'];
+        $sign_item['first_order_using_time'] = $user_dajian_order_sign['first_order_using_time'];
+        $sign_item['sign_pic'] = $user_dajian_order_sign['sign_pic'];
+        $sign_item['next_pay_time'] = $user_dajian_order_sign['next_pay_time'] ;
+        $list['first_order_info'] = $user_dajian_order_sign;
+        $list['second_order_info'] = [];
+
+        foreach ($other_signs as $one_other_sign){
+            $other_sign_item['sign_type'] = $one_other_sign['sign_type'];
+            $other_sign_item['order_money'] = $one_other_sign['order_money'];
+            $other_sign_item['order_time'] = $one_other_sign['order_time'];
+            $other_sign_item['order_sign_pic'] = $one_other_sign['order_sign_pic'];
+            $list['second_order_info'][] = $other_sign_item;
+        }
+        $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $list);
     }
 
     // 搭建订单日志列表

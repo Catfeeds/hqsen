@@ -177,15 +177,10 @@ class boss extends base {
                 if($sign){
                     $user_order['order_status'] = 3;
                     $user_order['user_order_status'] = 2;
+                    $user_order['erxiao_order_status'] = 1;
+                    $user_order['erxiao_user_id'] = 62;// 写死二销 ex001
+                    $user_order['erxiao_sign_type'] = 1;// 二销签单状态1 中款 2尾款 3附加款 4尾款时间
                     $this->db->update('hqsen_user_dajian_order', $user_order, ' id = ' . $sign['user_dajian_order_id']);
-                }
-                // 生成二销订单
-                $sec_sign = $this->db->getRow("select *  from hqsen_user_dajian_order_other_sign where user_dajian_order_id=" . $sign['user_dajian_order_id']);
-                if(!$sec_sign){
-                    $user_dajian_order_sign['sign_type'] = 1;
-                    $user_dajian_order_sign['user_dajian_order_id'] = $sign['user_dajian_order_id'];
-                    $user_dajian_order_sign['order_time'] = $sign['next_pay_time']; // 首销下次支付时间
-                    $this->db->insert('hqsen_user_dajian_order_other_sign', $user_dajian_order_sign);
                 }
             }
             if($sign_status == 3){
