@@ -175,9 +175,11 @@ class boss extends base {
             if($sign_status == 2){
                 $sign = $this->db->getRow("select *  from hqsen_user_dajian_order_sign where id=" . $user_sign_id);
                 if($sign){
+                    //
                     $user_order['order_status'] = 3;
                     $user_order['user_order_status'] = 2;
-                    $user_order['erxiao_order_status'] = 1;
+                    // 二销信息
+                    $user_order['erxiao_order_status'] = 1;//  0首销还未通过 1待处理 2待审核 3已完结
                     $user_order['erxiao_user_id'] = 62;// 写死二销 ex001
                     $user_order['erxiao_sign_type'] = 1;// 二销签单状态1 中款 2尾款 3附加款 4尾款时间
                     $this->db->update('hqsen_user_dajian_order', $user_order, ' id = ' . $sign['user_dajian_order_id']);

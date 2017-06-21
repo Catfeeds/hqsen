@@ -107,7 +107,7 @@ class finance extends base {
     }
 
 
-    // 搭建订单列表
+    // 首销搭建 订单列表
     public function dajianOrderSignList(){
         $page = $this->postInt('page', 1);
         $limit = 10;
@@ -117,10 +117,10 @@ class finance extends base {
         foreach ($sign as $one_sign){
             $item['id'] = $one_sign['id'];
             $item['order_money'] = $one_sign['order_money'];
-            $item['sign_type'] = $one_sign['sign_type'];
+            $item['sign_type'] = $one_sign['sign_type'];// 1首款 2 中款 3尾款 4附加款 5尾款时间变更
             $item['sign_pic_count'] = count(json_decode($one_sign['sign_pic']));
             $item['del_flag'] = $one_sign['del_flag'];//0未知 1初次录入 2再次录入
-            $item['sign_status'] = $one_sign['sign_status'];//1未处理 2通过 3驳回
+            $item['sign_status'] = $one_sign['sign_status'];//财务审核 0未知 1未处理 2通过 3驳回 4 总经理驳回 5待修改
             $list['list'][] = $item;
         }
         $list['count'] = $this->db->getCount('hqsen_user_kezi_order_sign', 'del_flag != 0');

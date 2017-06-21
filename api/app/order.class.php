@@ -491,7 +491,7 @@ class order extends base {
             }
         } elseif($this->user['user_type'] == 12){
             if($order_status){
-                $sql_status = '  erxiao_order_status = ' . $order_status;
+                $sql_status = ' erxiao_order_status = ' . $order_status;
             }
             $sql_status .= ' and erxiao_user_id = '. $this->user['id'];
 
@@ -678,6 +678,9 @@ class order extends base {
             } else {
                 $this->db->insert('hqsen_user_dajian_order_sign', $user_dajian_order_sign);
             }
+            // 更新首销订单 关于二销信息
+            $order_type_sql['order_status'] = 2;
+            $this->db->update('hqsen_user_dajian_order', $order_type_sql, ' id = ' . $user_dajian_order_id);
             $this->appDie();
         } else {
             $this->appDie($this->back_code['sys']['value_empty'], $this->back_msg['sys']['value_empty']);
@@ -725,10 +728,17 @@ class order extends base {
                 $this->db->update('hqsen_user_dajian_order_other_sign', $user_dajian_order_sign, ' sign_type = ' . $sign_type . ' and id = ' . $user_dajian_order_sign['id']);
             } else {
                 $user_dajian_order_sign['create_time'] = time();
-                $this->db->insert('hqsen_user_dajian_order_other_sign', $user_dajian_order_sign);
+                $user_dajian_order_sign['id'] = $this->db->insert('hqsen_user_dajian_order_other_sign', $user_dajian_order_sign);
             }
+            // 更新首销订单 关于二销信息
             $order_type_sql['erxiao_sign_type'] = $sign_type;
             $this->db->update('hqsen_user_dajian_order', $order_type_sql, ' id = ' . $user_dajian_order_id);
+            // 更新首销签单  关于二销信息
+            $erxiao_sign_sql['sign_type'] = $sign_type;
+            $erxiao_sign_sql['sign_other_sign_id'] = $user_dajian_order_sign['id'];
+            $erxiao_sign_sql['sign_user_id'] = $this->user['id'];
+            $this->db->update('hqsen_user_dajian_order_sign', $erxiao_sign_sql, ' user_dajian_order_id = ' . $user_dajian_order_id);
+
             $this->appDie();
         } else {
             $this->appDie($this->back_code['sys']['value_empty'], $this->back_msg['sys']['value_empty']);
@@ -736,6 +746,7 @@ class order extends base {
 
     }
 
+    // 付款记录
     public function dajianOrderSignOtherList(){
         // todo 修改可以创建多条
         $user_dajian_order_id = $this->postInt('user_dajian_order_id'); // 订单ID
