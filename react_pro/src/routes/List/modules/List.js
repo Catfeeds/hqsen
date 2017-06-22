@@ -20,6 +20,8 @@ export const handleCurrentChange = current => {
     dispatch(toggleLoading(true))
     Fetch(basicInfo.listUrlKey, { page: current, search_input: searchInput, id: searchId }).then(
       response => {
+        console.log(basicInfo.listUrlKey)
+        console.log({ page: current, search_input: searchInput, id: searchId })
         dispatch(setResultInfo(current, response.data))
       },
       () => {

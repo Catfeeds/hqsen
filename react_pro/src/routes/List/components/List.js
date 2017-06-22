@@ -71,7 +71,7 @@ class List extends Component {
     const { type } = this.props.params
     const paramId = id ? `?id=${id}` : ''
     if (type === 'wedding_list') {
-      this.context.router.push(`/add/${type}${paramId}${id ? '?' : '&'}hotelId=${this.props.location.query.id}`)
+      this.context.router.push(`/add/${type}${paramId}${id ? '&' : '?'}hotelId=${this.props.location.query.id}`)
     } else {
       this.context.router.push(`/add/${type}${paramId}`)
     }

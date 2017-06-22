@@ -10,10 +10,12 @@ export const setBasicInfo = createAction('获取新增基础信息')
 export const saveForm = createAction('初始化新增数据')
 export const clearData = createAction('清除添加页面数据')
 export const toggleLoading = createAction('切换addLoading')
+export const saveChoose = createAction('保存单选框')
 
 export const getInit = (type, id) => {
   return (dispatch, getState) => {
     const basicInfo = config[type]
+    dispatch(saveChoose(type))
     dispatch(setBasicInfo({ ...basicInfo, type, id }))
     Fetch(basicInfo.detailUrlKey, { id }).then(response => {
       let data = response.data
@@ -31,11 +33,16 @@ export const submitForm = (data, router) => {
       status_desc: data.status_desc,
       [status]: data.sign_status
     }
-    Fetch(submitKey, formData).then(response => {
-      dispatch(toggleLoading(false))
-      message.success('提交成功')
-      router.push(`/list/${type}`)
-    }, () => { dispatch(toggleLoading(false)) })
+    Fetch(submitKey, formData).then(
+      response => {
+        dispatch(toggleLoading(false))
+        message.success('提交成功')
+        router.push(`/list/${type}`)
+      },
+      () => {
+        dispatch(toggleLoading(false))
+      }
+    )
   }
 }
 
@@ -49,11 +56,37 @@ export const actions = {
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
+  [saveChoose]: (state, action) => {
+    let data = [
+      {
+        label: '通过',
+        value: '2'
+      },
+      {
+        label: '不通过',
+        value: '3'
+      }
+    ]
+    if (action.payload === 'finance_info_kezi_contract' || action.payload === 'finance_info_dajian_contract') {
+      data.push({
+        label: '待修改',
+        value: '5'
+      })
+    }
+    return {
+      ...state,
+      dataSource: {
+        ...state.dataSource,
+        sign_status: data
+      }
+    }
+  },
   [setBasicInfo]: (state, action) => {
     return {
       ...state,
       basicInfo: {
-        ...state.basicInfo, ...action.payload
+        ...state.basicInfo,
+        ...action.payload
       }
     }
   },
@@ -89,29 +122,23 @@ const initialState = {
   basicInfo: {
     id: '',
     formList: [],
-    approveList: [{
-      label: '',
-      type: 'radio',
-      name: 'sign_status',
-      rules: { required: true }
-    }, {
-      label: '',
-      type: 'textarea',
-      name: 'status_desc'
-    }],
+    approveList: [
+      {
+        label: '',
+        type: 'radio',
+        name: 'sign_status',
+        rules: { required: true }
+      },
+      {
+        label: '',
+        type: 'textarea',
+        name: 'status_desc'
+      }
+    ],
     breadcrumb: []
   },
   dataSource: {
-    sign_status: [{
-      label: '通过',
-      value: '2'
-    }, {
-      label: '不通过',
-      value: '3'
-    }, {
-      label: '待修改',
-      value: '5'
-    }],
+    sign_status: [],
     sign_pic: []
   }
 }
