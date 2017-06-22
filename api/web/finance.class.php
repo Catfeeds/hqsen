@@ -71,6 +71,14 @@ class finance extends base {
                         $this->db->update('hqsen_user_kezi_order', $user_order, ' id = ' . $sign['user_kezi_order_id']);
                     }
                 }
+                if($sign_status == 5){
+                    $sign = $this->db->getRow("select *  from hqsen_user_kezi_order_sign where id=" . $user_sign_id);
+                    if($sign){
+                        $user_order['order_status'] = 5;
+                        $user_order['user_order_status'] = 1;
+                        $this->db->update('hqsen_user_kezi_order', $user_order, ' id = ' . $sign['user_kezi_order_id']);
+                    }
+                }
             }
             $this->appDie();
         } else {

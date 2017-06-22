@@ -332,7 +332,7 @@ class hotel extends base {
 
     // 酒店描述详情
     public function hotelRoomDetail(){
-        $hotel_id = $this->postString('id');
+        $hotel_id = $this->postInt('id');
         if($hotel_id){
             $one_hotel_room = $this->db->getRow("select * from hqsen_hotel_room  where id =  " . $hotel_id);
             $hotel_item = array(
