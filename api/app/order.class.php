@@ -732,6 +732,7 @@ class order extends base {
             }
             // 更新首销订单 关于二销信息
             $order_type_sql['erxiao_sign_type'] = $sign_type;
+            $order_type_sql['erxiao_order_status'] = 2;
             $this->db->update('hqsen_user_dajian_order', $order_type_sql, ' id = ' . $user_dajian_order_id);
             // 更新首销签单  关于二销信息
             $erxiao_sign_sql['sign_type'] = $sign_type;
