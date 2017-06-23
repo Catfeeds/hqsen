@@ -137,7 +137,7 @@ class finance extends base {
             $item['sign_other_sign_status'] = $one_sign['sign_other_sign_status'];//财务审核 0未知 1未处理 2通过 3驳回 4 总经理驳回 5待修改
             $list['list'][] = $item;
         }
-        $list['count'] = $this->db->getCount('hqsen_user_kezi_order_sign', 'del_flag != 0');
+        $list['count'] = $this->db->getCount('hqsen_user_dajian_order_sign', 'del_flag != 0');
         $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $list);
     }
 
