@@ -42,6 +42,10 @@ class finance extends base {
         $user_sign_id = $this->postInt('user_sign_id');
         $status_desc = $this->postString('status_desc');
         $sign_status = $this->postString('sign_status', 1);
+
+        if($status_desc == 'undefined'){
+            $status_desc = '';
+        }
         if($user_sign_id and $sign_status){
             // 审批流程数据
             $sign_follow['sign_status'] = $sign_status;
@@ -101,9 +105,9 @@ class finance extends base {
         $follow_list = [];
         foreach ($sign_follow_list as $one_follow){
             if($one_follow['boss_sign_status'] > 1){
-                $one_item['status_type'] = 1;// 1总经理审核 2 财务审核
+                $one_item['status_type'] = (string)1;// 1总经理审核 2 财务审核
             } else {
-                $one_item['status_type'] = 2;
+                $one_item['status_type'] = (string)2;
             }
             $one_item['create_time'] = date('Y-m-d',$one_follow['create_time']);
             $one_item['status'] = $one_follow['boss_sign_status'] > 1 ? $one_follow['boss_sign_status'] : $one_follow['sign_status'];
