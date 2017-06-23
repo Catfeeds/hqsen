@@ -15,10 +15,10 @@ class order extends base {
     public function __construct()
     {
         parent::__construct();
-        $this-> loginInit();
+        $this-> loginInit();// 需要登录态
     }
 
-    //
+    // 验证手机是否可以创建客资订单
     public function validatePhoneOrderType(){
         $order_type = $this->postInt('order_type');
         $order_phone = $this->postInt('order_phone');
@@ -33,6 +33,7 @@ class order extends base {
         }
     }
 
+    // 创建客资订单
     public function createKeZi(){
         $customer_name = $this->postString('customer_name');
         $order_type = $this->postInt('order_type');
@@ -67,17 +68,21 @@ class order extends base {
                 $area_hotel_id_array = array_filter($area_hotel_id_array);
                 $error_msg = '';
                 $error_count = 0;
+                // 创建客资订单成功之后   分配给选择的酒店 或者选择区域下的酒店 的酒店账号
                 foreach ($area_hotel_id_array as $one_area_hotel_id){
+                    // 针对酒店账号   生成一个针对酒店账号的客资订单
                     $order_msg = $this-> insertUserKeZiOrder($sql_order['id'], $order_area_hotel_type, $one_area_hotel_id, $order_phone);
                     if($order_msg){
                         $error_msg .= $order_msg;
                         $error_count++;
                     }
                 }
+                // 如果没有一个酒店账号创建成功订单  那么删除订单
                 if($error_count >= count($area_hotel_id_array)) {
                     $del_order['del_flag'] = 2;
                     $this->db->update('hqsen_kezi_order', $del_order, ' id = ' . $sql_order['id']);
                 }
+                // 出现一个酒店错误  就报错
                 if($error_msg){
                     $this->appDie($this->back_code['order']['kezi_order_fail'], $error_msg);
                 } else {
@@ -92,7 +97,7 @@ class order extends base {
 
     // 提供方 客资信息列表
     public function orderKeZiList(){
-        $order_status = $this->getInt('order_status');
+        $order_status = $this->getInt('order_status');// 客资提供者状态 1跟进中 2待结算 3已结算 4已取消
         $order_status = $order_status ? $order_status : $this->postInt('order_status');
         $order_page = $this->getInt('order_page');
         $order_page = $order_page ? $order_page : $this->postInt('order_page', 1);
@@ -103,7 +108,7 @@ class order extends base {
         if($order_status){
             $sql_status = '  user_order_status = ' . $order_status;
         }
-        $sql_status .= ' and user_id = '. $this->user['id'];
+        $sql_status .= ' and user_id = '. $this->user['id'];// 以注册用户纬度获取  客资列表信息
         $order = $this->db->getRows('select * from hqsen_user_kezi_order where ' . $sql_status . $sql_limit);
         $order_list['order_list'] = [];
         if($order){
@@ -119,13 +124,13 @@ class order extends base {
             }
 
         }
-        $order_list['count'] = $this->db->getCount('hqsen_user_kezi_order', $sql_status);
+        $order_list['count'] = $this->db->getCount('hqsen_user_kezi_order', $sql_status); // 总的订单数
         $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $order_list);
     }
 
     // 跟踪方  客资信息列表
     public function orderHandleKeZiList(){
-        $order_status = $this->getInt('order_status');
+        $order_status = $this->getInt('order_status'); // 客资跟踪者订单状态1待处理 2待审核 3待结算 4已结算 5已驳回 6已取消
         $order_status = $order_status ? $order_status : $this->postInt('order_status');
         $order_page = $this->getInt('order_page');
         $order_page = $order_page ? $order_page : $this->postInt('order_page', 1);
@@ -156,6 +161,7 @@ class order extends base {
         $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $order_list);
     }
 
+    // 客资订单详情
     public function orderKeZiDetail(){
         $order_id = $this->getInt('order_id');
         $order_id = $order_id ? $order_id : $this->postInt('order_id');

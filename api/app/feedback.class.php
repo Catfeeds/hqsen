@@ -4,7 +4,7 @@
  * Author: monkey<my455628442@gmail.com>
  * Date: 2017/3/20 0020
  * Time: 10:16
- * File Using:order 接口订单类api user
+ * File Using:order 意见反馈接口
  */
 
 
@@ -15,10 +15,10 @@ class feedback extends base {
     public function __construct()
     {
         parent::__construct();
-        $this-> loginInit();
+        $this-> loginInit();// 需要登录态
     }
 
-    //
+    // 创建意见反馈
     public function create(){
         $feedback_main = $this->postString('content');
         $feedback_phone = $this->postString('phone');
@@ -37,6 +37,7 @@ class feedback extends base {
     }
 
 
+    // 账号密码修改
     public function accountEdit(){
         $old_password = $this->postString('old_password');
         $password = $this->postString('password');
@@ -44,10 +45,7 @@ class feedback extends base {
         $user = $this->db->getRow("select * from hqsen_user where id = " . $this->user['id']);
         if($old_password and md5($old_password) == $user['password'] and $password and $password == $re_password){
             $sql_user['password'] = md5($password);
-//            $sql_user['session_id'] =  md5($user['id'] . $user['last_login_time']);
             $this->db->update('hqsen_user', $sql_user, ' id = ' . $this->user['id']);
-//            $data['access_token'] = $sql_user['session_id'];
-//            $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $data);
             $this->appDie();
         } else {
             $this->appDie($this->back_code['sys']['value_empty'], $this->back_msg['sys']['value_empty']);
@@ -55,6 +53,7 @@ class feedback extends base {
     }
 
 
+    // 个人佣金
     public function wallet(){
         $data['my_account']['alipay'] = $this->user['alipay_account'];
         $data['my_account']['bank_name'] = $this->user['bank_name'];

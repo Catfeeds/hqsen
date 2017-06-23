@@ -2,9 +2,9 @@
 /**
  * Api View framework (AV视图框架).
  * Author: monkey<my455628442@gmail.com>
- * Date: 2016/6/16 0020
+ * Date: 2017/3/20 0020
  * Time: 10:16
- * File Using:市场部报表接口
+ * File Using:app 基础类
  */
 
 namespace api\app;
@@ -79,8 +79,9 @@ class base{
 
     }
 
+    // 所有的接口返回调用
     public function appDie($back_code = 1000, $back_msg = '请求成功', $back_data = []){
-        if (!API_DEBUG) ob_clean();
+        if (!API_DEBUG) ob_clean(); // 不是调试状态  清理任何输出态
         $data['status'] = (int)$back_code;
         $data['data'] = (array)$back_data;
         $data['message'] = (string)$back_msg;
