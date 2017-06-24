@@ -31,6 +31,8 @@ class hotel extends base {
                 $hotel_item = array(
                     'hotel_id' => $one_hotel['id'],
                     'hotel_name' => $one_hotel['hotel_name'],
+                    'hotel_level' => $one_hotel['hotel_level'],
+                    'weight' => $one_hotel['weight'],
                     'area_list' => $this-> get_sh_area($one_hotel['area_sh_id']),
                     'hotel_address' => $one_hotel['hotel_address'],
                 );

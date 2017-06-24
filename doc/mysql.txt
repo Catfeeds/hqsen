@@ -23,8 +23,4 @@ http://www.pmdaniu.com/rp/view?id=V3RSMAtrVWZQYwU3AipRNA
 
 // 同步 客资完成
 
-// 同步 酒店三天
-
-// 酒店添加
-
-// 财务功能
+// 同步 酒店三天 客资

@@ -21,17 +21,22 @@ class account extends base {
     // 注册账号列表
     public function registerAccountList(){
         $page = $this->postInt('page', 1);
+        $search_input = $this->postString('search_input');
         $limit = 10;
         $offset = ($page - 1) * $limit;
         $sql_limit = " limit $offset , $limit";
-
-        $user = $this->db->getRows("select * from hqsen_user where  del_flag = 1 and user_type = 3 " . $sql_limit);
+        $search_sql = '';
+        if($search_input){
+            $search_sql = " and user_name like %$search_input%" ;
+        }
+        $user = $this->db->getRows("select * from hqsen_user where  del_flag = 1 and user_type = 3 $search_sql " . $sql_limit);
         $data = [];
         foreach ($user as $one_user){
             if($one_user){
                 $user_item = array(
                     'user_id' => $one_user['id'],
                     'user_name' => $one_user['user_name'],
+                    'create_time' => date('Y-m-d' , $one_user['create_time']),
                     'alipay_account' => $one_user['alipay_account'],
                 );
                 $data['list'][] = $user_item;
