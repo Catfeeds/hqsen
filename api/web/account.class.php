@@ -27,10 +27,10 @@ class account extends base {
         $sql_limit = " limit $offset , $limit";
         $search_sql = '';
         if($search_input){
-            $search_sql = " and user_name like %$search_input%" ;
+            $search_sql = " and user_name like '%$search_input%'" ;
         }
         $user = $this->db->getRows("select * from hqsen_user where  del_flag = 1 and user_type = 3 $search_sql " . $sql_limit);
-        $data = [];
+        $data['list'] = [];
         foreach ($user as $one_user){
             if($one_user){
                 $user_item = array(

@@ -21,10 +21,16 @@ class hotel extends base {
     // 酒店列表
     public function hotelList(){
         $page = $this->postInt('page', 1);
+        $search_input = $this->postString('search_input');
         $limit = 10;
         $offset = ($page - 1) * $limit;
         $sql_limit = " limit $offset , $limit";
-        $hotel = $this->db->getRows("select *  from hqsen_hotel  where del_flag = 1 order by id desc " . $sql_limit);
+        $search_sql = '';
+        if($search_input){
+            $area_id = array_search($search_input, $this-> get_sh_area());
+            $search_sql = " and area_sh_id = '$area_id'" ;
+        }
+        $hotel = $this->db->getRows("select *  from hqsen_hotel  where del_flag = 1 $search_sql order by id desc " . $sql_limit);
         $data = [];
         foreach ($hotel as $one_hotel){
             if($one_hotel){
