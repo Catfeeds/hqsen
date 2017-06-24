@@ -807,5 +807,64 @@ class order extends base {
         }
     }
 
+    public function dajianOrderOtherSignDetail(){
+        $user_dajian_order_id = $this->postInt('user_dajian_order_id'); // 订单ID
+        if($user_dajian_order_id){
+            $user_dajian_order_sign = $this->db->getRow('select * from hqsen_user_dajian_order_sign where user_dajian_order_id = ' . $user_dajian_order_id );
+            if($user_dajian_order_sign){
+                $user_dajian_order_other_sign = $this->db->getRow('select * from hqsen_user_dajian_order_other_sign where id = ' . $user_dajian_order_sign['sign_other_sign_id'] );
+                if($user_dajian_order_other_sign){
+                    $item = [];
+                    if($user_dajian_order_other_sign['sign_type'] == 1){
+                        $item['title'] = '中款明细';
+                        $item['first_input_note'] = '中款金额';
+                        $item['first_input_content'] = $user_dajian_order_other_sign['order_money'];
+                        $item['second_input_note'] = '支付时间';
+                        $item['second_input_content'] = $user_dajian_order_other_sign['order_time'];
+                        $item['third_input_note'] = '中款凭证';
+                        $item['third_input_content'] = $user_dajian_order_other_sign['order_sign_pic'];
+
+                    }
+                    if($user_dajian_order_other_sign['sign_type'] == 2){
+                        $item['title'] = '中款明细';
+                        $item['first_input_note'] = '尾款金额';
+                        $item['first_input_content'] = $user_dajian_order_other_sign['order_money'];
+                        $item['second_input_note'] = '支付时间';
+                        $item['second_input_content'] = $user_dajian_order_other_sign['order_time'];
+                        $item['third_input_note'] = '尾款凭证';
+                        $item['third_input_content'] = $user_dajian_order_other_sign['order_sign_pic'];
+
+                    }
+                    if($user_dajian_order_other_sign['sign_type'] == 3){
+                        $item['title'] = '中款明细';
+                        $item['first_input_note'] = '附加款金额';
+                        $item['first_input_content'] = $user_dajian_order_other_sign['order_money'];
+                        $item['second_input_note'] = '支付时间';
+                        $item['second_input_content'] = $user_dajian_order_other_sign['order_time'];
+                        $item['third_input_note'] = '附加款凭证';
+                        $item['third_input_content'] = $user_dajian_order_other_sign['order_sign_pic'];
+
+                    }
+                    if($user_dajian_order_other_sign['sign_type'] == 4){
+                        $item['title'] = '申请时间';
+                        $item['first_input_note'] = '原时间';
+                        $item['first_input_content'] = $user_dajian_order_sign['sign_using_time'];
+                        $item['second_input_note'] = '申请时间';
+                        $item['second_input_content'] = $user_dajian_order_other_sign['order_time'];
+                        $item['third_input_note'] = (string)'';
+                        $item['third_input_content'] = (string)'';
+                    }
+                    if($item){
+                        $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $item);
+                    }
+
+                }
+            }
+            $this->appDie();
+        } else {
+            $this->appDie($this->back_code['sys']['value_empty'], $this->back_msg['sys']['value_empty']);
+        }
+    }
+
 
 }
