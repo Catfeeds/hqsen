@@ -322,8 +322,9 @@ class order extends base {
             $order_follow['user_order_status'] = $user_order_status;
             $order_follow['id'] = $this->db->insert('hqsen_user_kezi_order_follow', $order_follow);
             if($user_order_status == 2){ // 无效驳回
-                // 更新用户订单  已驳回
-                $sql_order['order_status'] = 5;
+                // 更新用户订单  已取消
+                $sql_order['order_status'] = 6;
+                $sql_order['user_order_status'] = 4;
                 $this->db->update('hqsen_user_kezi_order', $sql_order, ' id = ' . $user_kezi_order_id);
             } else if($user_order_status == 3){
                 // 更新用户订单  待审核
@@ -643,9 +644,10 @@ class order extends base {
             $order_follow['user_order_status'] = $user_order_status;
             $order_follow['id'] = $this->db->insert('hqsen_user_dajian_order_follow', $order_follow);
             $sql_order['update_time'] = intval($order_follow_time);
-            if($user_order_status == 2){ // 无效驳回
-                // 更新用户订单  已驳回
-                $sql_order['order_status'] = 5;
+            if($user_order_status == 2){ // 已取消
+                // 更新用户订单  已取消
+                $sql_order['order_status'] = 6;
+                $sql_order['user_order_status'] = 4;
                 $this->db->update('hqsen_user_dajian_order', $sql_order, ' id = ' . $user_kezi_order_id);
             } else if($user_order_status == 3){
                 // 更新用户订单  待审核
