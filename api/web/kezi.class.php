@@ -23,8 +23,9 @@ class kezi extends base {
         $page = $this->postInt('page', 1);
         $limit = 10;
         $offset = ($page - 1) * $limit;
+        $order_by = ' order by id desc ';
         $sql_limit = " limit $offset , $limit";
-        $order = $this->db->getRows("select * from hqsen_kezi_order  where del_flag = 1 " . $sql_limit);
+        $order = $this->db->getRows("select * from hqsen_kezi_order  where del_flag = 1 $order_by " . $sql_limit);
         $data = [];
         foreach ($order as $one_order){
             if($one_order){
@@ -33,6 +34,7 @@ class kezi extends base {
                     'customer_name' => $one_order['customer_name'],
                     'order_phone' => $one_order['order_phone'],
                     'order_type' => $one_order['order_type'],
+                    'create_time' => date('Y-m-d', $one_order['create_time']),
                 );
                 // 如果是1 表示是区域  如果是2 表示是酒店
                 if($one_order['order_area_hotel_type'] == 1){

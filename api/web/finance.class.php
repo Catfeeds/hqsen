@@ -151,7 +151,7 @@ class finance extends base {
         $item['order_money'] = $sign['order_money'];
         $item['sign_using_time'] = date('Y-m-d',$sign['sign_using_time']);
         $item['first_order_money'] = $sign['first_order_money'];
-        $item['first_order_using_time'] = $sign['first_order_using_time'];
+        $item['first_order_using_time'] = date('Y-m-d',$sign['first_order_using_time']);
         $item['sign_pic'] = json_decode($sign['sign_pic']);
         $item['sign_status'] = $sign['sign_status'];//1未处理 2通过 3驳回
         $sign_follow_list = $this->db->getRows("select *  from hqsen_user_dajian_sign_follow where user_sign_id = $sign_id order by id desc ");
@@ -171,15 +171,15 @@ class finance extends base {
 
         if($sign_other_sign_id){
             $other_sign = $this->db->getRow("select *  from hqsen_user_dajian_order_other_sign where id=" . $sign_other_sign_id);
-            $other_item['id'] = $other_sign['id'];
-            $other_item['sign_type'] = $other_sign['sign_type'];
-            $other_item['order_money'] = $other_sign['order_money'];
-            $other_item['order_time'] = date('Y-m-d',$other_sign['order_time']);
-            $other_item['weikuan_old_time'] = date('Y-m-d',$sign['sign_using_time']);
-            $other_item['weikuan_new_time'] = date('Y-m-d',$other_sign['order_time']);
-            $other_item['order_sign_pic'] = json_decode($other_sign['order_sign_pic']);
-            $other_item['sign_status'] = $other_sign['sign_status'];//财务审核 0未知 1未处理 2通过 3驳回 4 总经理驳回 5待修改
-            $item['other_item'] = $other_item;
+            $item['other_item_id'] = $other_sign['id'];
+            $item['other_item_sign_type'] = $other_sign['sign_type'];
+            $item['other_item_order_money'] = $other_sign['order_money'];
+            $item['other_item_order_time'] = date('Y-m-d',$other_sign['order_time']);
+            $item['other_item_weikuan_old_time'] = date('Y-m-d',$sign['sign_using_time']);
+            $item['other_item_weikuan_new_time'] = date('Y-m-d',$other_sign['order_time']);
+            $item['other_item_order_sign_pic'] = json_decode($other_sign['order_sign_pic']);
+            $item['other_item_sign_status'] = $other_sign['sign_status'];//财务审核 0未知 1未处理 2通过 3驳回 4 总经理驳回 5待修改
+//            $item['other_item'] = $other_item;
         }
         $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $item);
     }
