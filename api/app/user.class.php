@@ -175,10 +175,10 @@ class user extends base{
         $list_type = $this->postInt('list_type');
         if($list_type == 1){
             $hotel = $this->db->getRows("select * from hqsen_hotel_rec as hhr 
-                      left join hqsen_hotel as hh on hhr.hotel_id = hh.id left join hqsen_hotel_data as hhd on hh.id = hhd.id where hh.is_data = 1");
+                      left join hqsen_hotel as hh on hhr.hotel_id = hh.id left join hqsen_hotel_data as hhd on hh.id = hhd.id where hh.is_data = 1 order by hhr.hotel_weight asc ");
         } else {
             $area_sh_id = $this->postInt('area_sh_id');
-            $hotel = $this->db->getRows("select * from hqsen_hotel as hh left join hqsen_hotel_data as hhd on hh.id = hhd.id where hh.area_sh_id = $area_sh_id and hh.is_data = 1");
+            $hotel = $this->db->getRows("select * from hqsen_hotel as hh left join hqsen_hotel_data as hhd on hh.id = hhd.id where hh.area_sh_id = $area_sh_id and hh.is_data = 1  order by hh.weight asc ");
         }
         $data = [];
         if($hotel){
