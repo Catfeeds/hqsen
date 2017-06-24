@@ -182,7 +182,25 @@ const initialState = {
   },
   dataSource: {
     area_list: [],
-    area_id: []
+    area_id: [],
+    hotel_type: [
+      {
+        label: '星级酒店',
+        value: '星级酒店'
+      },
+      {
+        label: '特色餐厅',
+        value: '特色餐厅'
+      },
+      {
+        label: '婚礼会所',
+        value: '婚礼会所'
+      },
+      {
+        label: '游轮婚礼',
+        value: '游轮婚礼'
+      }
+    ]
   }
 }
 

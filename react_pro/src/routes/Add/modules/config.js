@@ -46,18 +46,24 @@ export default {
     formList: [
       {
         label: '酒店最低价位',
-        type: 'text',
+        type: 'number',
         name: 'hotel_low'
       },
       {
         label: '酒店最高价位',
-        type: 'text',
+        type: 'number',
         name: 'hotel_high'
       },
       {
         label: '酒店最大容纳桌数',
-        type: 'text',
+        type: 'number',
         name: 'hotel_max_desk',
+        rules: { required: true }
+      },
+      {
+        label: '酒店类型',
+        type: 'select',
+        name: 'hotel_type',
         rules: { required: true }
       },
       {
@@ -93,19 +99,19 @@ export default {
       },
       {
         label: '最大容纳桌数',
-        type: 'text',
+        type: 'number',
         name: 'room_max_desk',
         rules: { required: true }
       },
       {
         label: '最少容纳桌数',
-        type: 'text',
+        type: 'number',
         name: 'room_min_desk',
         rules: { required: true }
       },
       {
         label: '最佳容纳桌数',
-        type: 'text',
+        type: 'number',
         name: 'room_best_desk',
         rules: { required: true }
       },
@@ -116,8 +122,14 @@ export default {
         rules: { required: true }
       },
       {
-        label: '宴会厅立柱数',
+        label: '宴会厅层高',
         type: 'text',
+        name: 'room_high',
+        rules: { required: true }
+      },
+      {
+        label: '宴会厅立柱数',
+        type: 'number',
         name: 'room_lz',
         rules: { required: true }
       },

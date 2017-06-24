@@ -12,12 +12,6 @@ export default {
         disabled: true
       },
       {
-        label: '附加款金额',
-        type: 'text',
-        name: 'order_other_money',
-        disabled: true
-      },
-      {
         label: '举办时间',
         type: 'date',
         name: 'sign_using_time',
@@ -40,12 +34,6 @@ export default {
         label: '合同金额',
         type: 'text',
         name: 'order_money',
-        disabled: true
-      },
-      {
-        label: '附加款金额',
-        type: 'text',
-        name: 'order_other_money',
         disabled: true
       },
       {

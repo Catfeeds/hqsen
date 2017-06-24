@@ -31,6 +31,7 @@ class List extends Component {
   constructor (props) {
     super(props)
     this.state = {
+      searchBtnType: ['account_info_register_list', 'account_info_hotel_list', 'hotel_info_hotel_list'],
       addBtnType: [
         'account_info_hotel_list',
         'account_info_inner_list',
@@ -190,6 +191,11 @@ class List extends Component {
           title: '酒店/区域名称'
         },
         {
+          key: 'create_time',
+          dataIndex: 'create_time',
+          title: '创建时间'
+        },
+        {
           key: 'detail',
           dataIndex: 'detail',
           title: '操作',
@@ -232,6 +238,11 @@ class List extends Component {
           title: '酒店/区域名称'
         },
         {
+          key: 'create_time',
+          dataIndex: 'create_time',
+          title: '创建时间'
+        },
+        {
           key: 'detail',
           dataIndex: 'detail',
           title: '操作',
@@ -244,14 +255,10 @@ class List extends Component {
       // 酒店信息
       hotel_info_hotel_list: [
         {
-          key: 'hotel_id',
-          dataIndex: 'hotel_id',
-          title: '序号'
-        },
-        {
           key: 'hotel_name',
           dataIndex: 'hotel_name',
-          title: '酒店名称'
+          title: '酒店名称',
+          width: '20%'
         },
         {
           key: 'area_list',
@@ -262,6 +269,16 @@ class List extends Component {
           key: 'hotel_address',
           dataIndex: 'hotel_address',
           title: '酒店地址'
+        },
+        {
+          key: 'hotel_level',
+          dataIndex: 'hotel_level',
+          title: '酒店等级'
+        },
+        {
+          key: 'weight',
+          dataIndex: 'weight',
+          title: '酒店权重'
         },
         {
           key: 'hotel_config',
@@ -317,11 +334,6 @@ class List extends Component {
       // 注册账号
       account_info_register_list: [
         {
-          key: 'user_id',
-          dataIndex: 'user_id',
-          title: '序号'
-        },
-        {
           key: 'user_name',
           dataIndex: 'user_name',
           title: '账号名称'
@@ -329,7 +341,12 @@ class List extends Component {
         {
           key: 'alipay_account',
           dataIndex: 'alipay_account',
-          title: '支付宝账号'
+          title: '收款账号'
+        },
+        {
+          key: 'create_time',
+          dataIndex: 'create_time',
+          title: '注册时间'
         }
       ],
       // 意见反馈
@@ -357,11 +374,6 @@ class List extends Component {
       ],
       // 酒店账户列表
       account_info_hotel_list: [
-        {
-          key: 'user_id',
-          dataIndex: 'user_id',
-          title: '序号'
-        },
         {
           key: 'user_name',
           dataIndex: 'user_name',
@@ -431,11 +443,6 @@ class List extends Component {
           key: 'order_money',
           dataIndex: 'order_money',
           title: '合同金额'
-        },
-        {
-          key: 'order_other_money',
-          dataIndex: 'order_other_money',
-          title: '附加款金额'
         },
         {
           key: 'sign_pic_count',
@@ -513,11 +520,6 @@ class List extends Component {
           key: 'order_money',
           dataIndex: 'order_money',
           title: '合同金额'
-        },
-        {
-          key: 'order_other_money',
-          dataIndex: 'order_other_money',
-          title: '附加款金额'
         },
         {
           key: 'sign_pic_count',
@@ -835,8 +837,8 @@ class List extends Component {
         <MyBreadcrumb breadcrumb={basicInfo.breadcrumb} />
         <div className="control-box clearfix">
           <Search
-            placeholder="账号/酒店"
-            style={{ width: 200, display: basicInfo.type === 'account_info_hotel_list' ? 'block' : 'none' }}
+            placeholder="请输入..."
+            style={{ width: 200, display: this.state.searchBtnType.indexOf(basicInfo.type) > -1 ? 'block' : 'none' }}
             value={searchInput}
             onChange={e => changeSearchInput(e.target.value)}
             onSearch={() => handleCurrentChange(1)}
