@@ -71,6 +71,8 @@ export const urlKey = {
   dajianOrderList: 'c=finance&f=dajianOrderSignList',
   dajianOrderDetail: 'c=finance&f=dajianSignDetail',
   dajianOrderSubmit: 'c=finance&f=dajianSignFollowCreate',
+  dajianSignFollowCreate: 'c=finance&f=dajianSignFollowCreate',
+  dajianErXiaoFollowCreate: 'c=finance&f=dajianErXiaoFollowCreate',
   // 总经理审批
   bossKeziOrderList: 'c=boss&f=keziOrderSignList',
   bossKeziOrderDetail: 'c=boss&f=keziSignDetail',
@@ -117,7 +119,8 @@ export default function Fetch (url, data = {}, method = 'post', showLoading = fa
     }
   })
   const defer = new Promise((resolve, reject) => {
-    instance[method](`${domain}${urlKey[url]}`, data)
+    instance
+      [method](`${domain}${urlKey[url]}`, data)
       .then(response => response.data)
       .then(response => {
         if (response.status === 200) {

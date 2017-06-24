@@ -12,12 +12,12 @@ export const clearData = createAction('清除添加页面数据')
 export const toggleLoading = createAction('切换addLoading')
 export const saveChoose = createAction('保存单选框')
 
-export const getInit = (type, id) => {
+export const getInit = (type, id, signId) => {
   return (dispatch, getState) => {
     const basicInfo = config[type]
     dispatch(saveChoose(type))
     dispatch(setBasicInfo({ ...basicInfo, type, id }))
-    Fetch(basicInfo.detailUrlKey, { id }).then(response => {
+    Fetch(basicInfo.detailUrlKey, { id, sign_other_sign_id: signId }).then(response => {
       let data = response.data
       dispatch(saveForm(data))
     })
@@ -37,7 +37,7 @@ export const submitForm = (data, router) => {
       response => {
         dispatch(toggleLoading(false))
         message.success('提交成功')
-        router.push(`/list/${type}`)
+        router.goBack()
       },
       () => {
         dispatch(toggleLoading(false))
@@ -67,7 +67,7 @@ const ACTION_HANDLERS = {
         value: '3'
       }
     ]
-    if (action.payload === 'finance_info_kezi_contract' || action.payload === 'finance_info_dajian_contract') {
+    if (action.payload === 'finance_info_kezi_contract' || action.payload === 'payments') {
       data.push({
         label: '待修改',
         value: '5'
@@ -93,11 +93,7 @@ const ACTION_HANDLERS = {
   [saveForm]: (state, action) => {
     return {
       ...state,
-      formData: action.payload,
-      dataSource: {
-        ...state.dataSource,
-        sign_pic: action.payload.sign_pic
-      }
+      formData: action.payload
     }
   },
   [toggleLoading]: (state, action) => {

@@ -57,9 +57,32 @@ class List extends Component {
     }
   }
 
-  goApproveDetail (id, isSubmit) {
+  goApproveDetail (record, isSubmit) {
+    const { sign_other_sign_id: signId, sign_type: signType, id } = record
     const { type } = this.props.params
-    this.context.router.push(`/approve/${type}?id=${id}&isSubmit=${isSubmit}`)
+    if (type === 'finance_info_dajian_contract') {
+      let buildType = ''
+      switch (signType) {
+        case '0':
+          buildType = 'payments'
+          break
+        case '1':
+          buildType = 'middle'
+          break
+        case '2':
+          buildType = 'final'
+          break
+        case '3':
+          buildType = 'additional'
+          break
+        case '4':
+          buildType = 'time'
+          break
+      }
+      this.context.router.push(`/approve/${buildType}?id=${id}&signId=${signId}&isSubmit=${isSubmit}`)
+    } else {
+      this.context.router.push(`/approve/${type}?id=${id}&isSubmit=${isSubmit}`)
+    }
   }
 
   gotoDetail (id) {
@@ -110,16 +133,16 @@ class List extends Component {
   }
   getSignType (text) {
     switch (text) {
-      case '1':
+      case '0':
         return '首款'
-      case '2':
+      case '1':
         return '中款'
-      case '3':
+      case '2':
         return '尾款'
-      case '4':
+      case '3':
         return '附加款'
-      case '5':
-        return '尾款时间变更'
+      case '4':
+        return '尾款时间'
     }
   }
 
@@ -455,7 +478,7 @@ class List extends Component {
           key: 'user_type',
           dataIndex: 'user_type',
           title: '提交审批者',
-          render: (text, record) => <span>{record.sign_type === '1' ? '首销' : '二销'}</span>
+          render: (text, record) => <span>{record.sign_type === '0' ? '首销' : '二销'}</span>
         },
         {
           key: 'sign_pic_count',
@@ -772,12 +795,12 @@ class List extends Component {
     const renderApproveControl = record => {
       return (
         <div>
-          <Button size="small" onClick={() => this.goApproveDetail(record.id, false)}>查看信息</Button>
+          <Button size="small" onClick={() => this.goApproveDetail(record, false)}>查看信息</Button>
           <Button
             type="primary"
             size="small"
             style={{ marginLeft: 5 }}
-            onClick={() => this.goApproveDetail(record.id, true)}
+            onClick={() => this.goApproveDetail(record, true)}
           >
             {record.sign_status === '3' ? '重开' : '审批'}
           </Button>

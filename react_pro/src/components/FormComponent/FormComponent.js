@@ -46,7 +46,7 @@ class FormComponent extends Component {
       case 'checkbox':
         return <CheckboxGroup options={dataSource} disabled={item.disabled} onChange={e => this.handleChange(e)} />
       case 'image':
-        return <ImageView data={dataSource} />
+        return <ImageView data={defaultValue} />
       case 'upload':
         return <UploadImage config={item} setFieldsValue={setFieldsValue} defaultValue={defaultValue} />
       case 'wedding':
