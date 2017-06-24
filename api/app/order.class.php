@@ -201,6 +201,8 @@ class order extends base {
                     $follow_item['user_order_status'] = $one_item['user_order_status'];
                     $order_list['order_follow'] = $follow_item;
                 }
+                $order_list['handle_note'] = $order['order_status'];
+                $order_list['handle_time'] = $order['create_time'];
             }
             $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $order_list);
         }
@@ -569,6 +571,12 @@ class order extends base {
                 $area = $this->db->getRow("select * from hqsen_area  where id =  " . $order['order_area_hotel_id']);
                 $order_item['order_area_hotel_name'] = (string)$area['area_name'];
                 $order_list['order_item'] = $order_item;
+                if($this->user['user_type'] != 4){
+                    $order_list['handle_note'] = $user_order['order_status'];// 不是酒店账号  返回跟踪者
+                } else {
+                    $order_list['handle_note'] = $user_order['user_order_status'];// 默认提供者状态
+                }
+                $order_list['handle_time'] = $order['create_time'];
             }
             $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $order_list);
         }
@@ -705,7 +713,7 @@ class order extends base {
                 $sign_item['sign_using_time'] = $user_dajian_order_sign['sign_using_time'];
                 $sign_item['first_order_money'] = $user_dajian_order_sign['first_order_money'];
                 $sign_item['first_order_using_time'] = $user_dajian_order_sign['first_order_using_time'];
-                $sign_item['sign_pic'] = $user_dajian_order_sign['sign_pic'];
+                $sign_item['sign_pic'] = $user_dajian_order_sign['sign_pic'] ? json_decode($user_dajian_order_sign['sign_pic'], true) : [];
                 $sign_item['next_pay_time'] = $user_dajian_order_sign['next_pay_time'] ;
                 $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $sign_item);
             }
@@ -822,7 +830,7 @@ class order extends base {
                         $item['second_input_note'] = '支付时间';
                         $item['second_input_content'] = $user_dajian_order_other_sign['order_time'];
                         $item['third_input_note'] = '中款凭证';
-                        $item['third_input_content'] = $user_dajian_order_other_sign['order_sign_pic'];
+                        $item['third_input_content'] = $user_dajian_order_other_sign['order_sign_pic'] ? json_decode($user_dajian_order_other_sign['order_sign_pic'], true) : [];
 
                     }
                     if($user_dajian_order_other_sign['sign_type'] == 2){
@@ -832,7 +840,7 @@ class order extends base {
                         $item['second_input_note'] = '支付时间';
                         $item['second_input_content'] = $user_dajian_order_other_sign['order_time'];
                         $item['third_input_note'] = '尾款凭证';
-                        $item['third_input_content'] = $user_dajian_order_other_sign['order_sign_pic'];
+                        $item['third_input_content'] = $user_dajian_order_other_sign['order_sign_pic'] ? json_decode($user_dajian_order_other_sign['order_sign_pic'], true) : [];
 
                     }
                     if($user_dajian_order_other_sign['sign_type'] == 3){
@@ -842,7 +850,7 @@ class order extends base {
                         $item['second_input_note'] = '支付时间';
                         $item['second_input_content'] = $user_dajian_order_other_sign['order_time'];
                         $item['third_input_note'] = '附加款凭证';
-                        $item['third_input_content'] = $user_dajian_order_other_sign['order_sign_pic'];
+                        $item['third_input_content'] = $user_dajian_order_other_sign['order_sign_pic'] ? json_decode($user_dajian_order_other_sign['order_sign_pic'], true) : [];
 
                     }
                     if($user_dajian_order_other_sign['sign_type'] == 4){
@@ -852,7 +860,7 @@ class order extends base {
                         $item['second_input_note'] = '申请时间';
                         $item['second_input_content'] = $user_dajian_order_other_sign['order_time'];
                         $item['third_input_note'] = (string)'';
-                        $item['third_input_content'] = (string)'';
+                        $item['third_input_content'] = (array)[];
                     }
                     if($item){
                         $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $item);

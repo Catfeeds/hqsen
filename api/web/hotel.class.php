@@ -34,9 +34,12 @@ class hotel extends base {
         $data = [];
         foreach ($hotel as $one_hotel){
             if($one_hotel){
+                $hotel_name = $one_hotel['hotel_name'];
                 $hotel_item = array(
                     'hotel_id' => $one_hotel['id'],
-                    'hotel_name' => $one_hotel['hotel_name'],
+                    'hotel_name' => $hotel_name,
+                    'is_data' => $one_hotel['is_data'],
+                    'is_room' => $one_hotel['is_room'],
                     'hotel_level' => $one_hotel['hotel_level'],
                     'weight' => $one_hotel['weight'],
                     'area_list' => $this-> get_sh_area($one_hotel['area_sh_id']),
@@ -321,7 +324,11 @@ class hotel extends base {
             $sql_order['room_lz'] = $room_lz;
             $sql_order['room_image'] = $room_image ? $room_image : '';
             $sql_order['room_high'] = $room_high;
-            $this->db->insert('hqsen_hotel_room', $sql_order);
+            $sql_order['id'] = $this->db->insert('hqsen_hotel_room', $sql_order);
+            if($sql_order['id']){
+                $sql_room['is_room'] = 1;
+                $this->db->update('hqsen_hotel', $sql_room, ' id = ' . $sql_order['id']);
+            }
             $this->appDie();
         } else {
             $this->appDie($this->back_code['sys']['value_empty'], $this->back_msg['sys']['value_empty']);

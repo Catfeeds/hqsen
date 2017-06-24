@@ -25,6 +25,7 @@ class user extends base{
                     $user['nike_name'] = $phone;
                     $user['phone'] = $phone;
                     $user['alipay_account'] = '';
+                    $user['bank_account'] = '';
                     $user['create_time'] = time();
                     $user['user_type'] = 3;
                     $user['del_flag'] = 1;
