@@ -733,6 +733,8 @@ class order extends base {
         $order_other_money = $this->postString('order_money');
         $order_other_time = $this->postInt('order_time');
         $order_other_sign_pic = $this->postString('order_sign_pic'); //签单凭证  json
+        $sign_pic_arr = explode(',', $order_other_sign_pic);
+        $sign_pic_json = json_encode($sign_pic_arr);
         if($sign_type != 3){
             $user_dajian_order_sign = $this->db->getRow('select * from hqsen_user_dajian_order_other_sign where user_dajian_order_id = ' . $user_dajian_order_id . ' and  sign_type = ' . $sign_type );
         }
@@ -740,7 +742,7 @@ class order extends base {
         $user_dajian_order_sign['user_dajian_order_id'] = $user_dajian_order_id;
         $user_dajian_order_sign['order_money'] = $order_other_money;
         $user_dajian_order_sign['order_time'] = $order_other_time;
-        $user_dajian_order_sign['order_sign_pic'] = $order_other_sign_pic;
+        $user_dajian_order_sign['order_sign_pic'] = $sign_pic_json;
         if($user_dajian_order_id){
             if(isset($user_dajian_order_sign['id']) and $user_dajian_order_sign['id']){
                 $this->db->update('hqsen_user_dajian_order_other_sign', $user_dajian_order_sign, ' sign_type = ' . $sign_type . ' and id = ' . $user_dajian_order_sign['id']);
