@@ -113,7 +113,7 @@ class boss extends base {
         $offset = ($page - 1) * $limit;
         $sql_limit = " limit $offset , $limit";
         // 总经理要在财务审批通过基础上
-        $sign = $this->db->getRows("select *  from hqsen_user_dajian_order_sign  where sign_status = 2 and sign_type = 1 order by id desc " . $sql_limit);
+        $sign = $this->db->getRows("select *  from hqsen_user_dajian_order_sign  where sign_status in (2,4) and sign_type = 0 order by id desc " . $sql_limit);
         foreach ($sign as $one_sign){
             $item['id'] = $one_sign['id'];
             $item['order_money'] = $one_sign['order_money'];

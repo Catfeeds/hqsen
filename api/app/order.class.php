@@ -474,7 +474,7 @@ class order extends base {
         $order_page = $order_page ? $order_page : $this->postInt('order_page', 1);
         $limit = 10;
         $offset = ($order_page - 1) * $limit;
-        $sql_limit = "  order by update_time asc  limit $offset , $limit";
+        $sql_limit = "  order by create_time desc  limit $offset , $limit";
         $sql_status = '  order_status != 0 ';
         // 11 首销 12 二销 其他 type 默认提供者
         if($this->user['user_type'] == 11){
@@ -678,11 +678,13 @@ class order extends base {
         $first_order_using_time = $this->postString('first_order_using_time');
         $next_pay_time = $this->postString('next_pay_time');
         $sign_pic = $this->postString('sign_pic'); //签单凭证  json
+        $sign_pic_arr = explode(',', $sign_pic);
+        $sign_pic_json = json_encode($sign_pic_arr);
         $user_dajian_order_sign = $this->db->getRow('select * from hqsen_user_dajian_order_sign where user_dajian_order_id = ' . $user_dajian_order_id );
         $user_dajian_order_sign['user_dajian_order_id'] = $user_dajian_order_id;
         $user_dajian_order_sign['order_money'] = $order_money;
         $user_dajian_order_sign['sign_using_time'] = $sign_using_time;
-        $user_dajian_order_sign['sign_pic'] = $sign_pic;
+        $user_dajian_order_sign['sign_pic'] = $sign_pic_json;
         $user_dajian_order_sign['first_order_money'] = $first_order_money;
         $user_dajian_order_sign['first_order_using_time'] = $first_order_using_time;
         $user_dajian_order_sign['next_pay_time'] = $next_pay_time;

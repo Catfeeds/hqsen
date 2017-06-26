@@ -204,7 +204,7 @@ class finance extends base {
             if(isset($sign_follow['id']) and $sign_follow['id']){
                 $order_sign['sign_status'] = $sign_status;
                 $this->db->update('hqsen_user_dajian_order_sign', $order_sign, ' id = ' . $sign_follow['user_sign_id']);
-                // 处理跟踪者和提供者订单状态
+                // 不通过
                 if($sign_status == 3){
                     $sign = $this->db->getRow("select *  from hqsen_user_dajian_order_sign where id=" . $user_sign_id);
                     if($sign){
@@ -213,7 +213,7 @@ class finance extends base {
                         $this->db->update('hqsen_user_dajian_order', $user_order, ' id = ' . $sign['user_dajian_order_id']);
                     }
                 }
-                // 处理跟踪者和提供者订单状态
+                // 通过
                 if($sign_status == 2){
                     $sign = $this->db->getRow("select *  from hqsen_user_dajian_order_sign where id=" . $user_sign_id);
                     if($sign){
@@ -222,6 +222,7 @@ class finance extends base {
                         $this->db->update('hqsen_user_dajian_order', $user_order, ' id = ' . $sign['user_dajian_order_id']);
                     }
                 }
+                // 待处理
                 if($sign_status == 5){
                     $sign = $this->db->getRow("select *  from hqsen_user_dajian_order_sign where id=" . $user_sign_id);
                     if($sign){
