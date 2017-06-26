@@ -161,11 +161,6 @@ class List extends Component {
       // 客资信息
       order_info_kezi_list: [
         {
-          key: 'order_id',
-          dataIndex: 'order_id',
-          title: '序号'
-        },
-        {
           key: 'customer_name',
           dataIndex: 'customer_name',
           title: '姓名'
@@ -208,11 +203,6 @@ class List extends Component {
       // 搭建信息
       order_info_dajian_list: [
         {
-          key: 'order_id',
-          dataIndex: 'order_id',
-          title: '序号'
-        },
-        {
           key: 'customer_name',
           dataIndex: 'customer_name',
           title: '姓名'
@@ -235,7 +225,8 @@ class List extends Component {
         {
           key: 'area_hotel_name',
           dataIndex: 'area_hotel_name',
-          title: '酒店/区域名称'
+          title: '酒店/区域名称',
+          width: '20%'
         },
         {
           key: 'create_time',
@@ -258,7 +249,22 @@ class List extends Component {
           key: 'hotel_name',
           dataIndex: 'hotel_name',
           title: '酒店名称',
-          width: '20%'
+          width: '20%',
+          render: (text, record) => {
+            const data = []
+            if (record.is_room === '2') {
+              data.push('宴会厅未设定')
+            }
+            if (record.is_data === '2') {
+              data.push('详细设定未设定')
+            }
+            return (
+              <div>
+                <p>{text}</p>
+                <p className="red-tip">{data.join(',')}</p>
+              </div>
+            )
+          }
         },
         {
           key: 'area_list',
@@ -268,7 +274,8 @@ class List extends Component {
         {
           key: 'hotel_address',
           dataIndex: 'hotel_address',
-          title: '酒店地址'
+          title: '酒店地址',
+          width: '20%'
         },
         {
           key: 'hotel_level',
@@ -310,11 +317,6 @@ class List extends Component {
       // 区域信息
       hotel_info_area_list: [
         {
-          key: 'area_id',
-          dataIndex: 'area_id',
-          title: '序号'
-        },
-        {
           key: 'area_name',
           dataIndex: 'area_name',
           title: '区域名称'
@@ -352,11 +354,6 @@ class List extends Component {
       // 意见反馈
       feedback_info: [
         {
-          key: 'id',
-          dataIndex: 'id',
-          title: '序号'
-        },
-        {
           key: 'user_name',
           dataIndex: 'user_name',
           title: '反馈账号'
@@ -382,7 +379,8 @@ class List extends Component {
         {
           key: 'hotel_name',
           dataIndex: 'hotel_name',
-          title: '所属酒店'
+          title: '所属酒店',
+          width: '20%'
         },
         {
           key: 'hotel_area',
@@ -404,11 +402,6 @@ class List extends Component {
       ],
       // 内部账号
       account_info_inner_list: [
-        {
-          key: 'user_id',
-          dataIndex: 'user_id',
-          title: '序号'
-        },
         {
           key: 'user_name',
           dataIndex: 'user_name',
@@ -435,11 +428,6 @@ class List extends Component {
       // 财务审批——客资
       finance_info_kezi_contract: [
         {
-          key: 'id',
-          dataIndex: 'id',
-          title: '序号'
-        },
-        {
           key: 'order_money',
           dataIndex: 'order_money',
           title: '合同金额'
@@ -465,11 +453,6 @@ class List extends Component {
       ],
       // 财务审批——搭建
       finance_info_dajian_contract: [
-        {
-          key: 'id',
-          dataIndex: 'id',
-          title: '序号'
-        },
         {
           key: 'order_money',
           dataIndex: 'order_money',
@@ -512,11 +495,6 @@ class List extends Component {
       // 总经理审批——客资
       manager_info_kezi_contract: [
         {
-          key: 'id',
-          dataIndex: 'id',
-          title: '序号'
-        },
-        {
           key: 'order_money',
           dataIndex: 'order_money',
           title: '合同金额'
@@ -545,11 +523,6 @@ class List extends Component {
       ],
       // 总经理审批——搭建
       manager_info_dajian_contract: [
-        {
-          key: 'id',
-          dataIndex: 'id',
-          title: '序号'
-        },
         {
           key: 'order_money',
           dataIndex: 'order_money',
@@ -592,19 +565,9 @@ class List extends Component {
       // 打款--客资
       remittance_info_kezi_contract: [
         {
-          key: 'id',
-          dataIndex: 'id',
-          title: '序号'
-        },
-        {
           key: 'order_money',
           dataIndex: 'order_money',
           title: '合同金额'
-        },
-        {
-          key: 'order_other_money',
-          dataIndex: 'order_other_money',
-          title: '附加款金额'
         },
         {
           key: 'create_user_name',
@@ -642,11 +605,6 @@ class List extends Component {
       // 打款--搭建
       remittance_info_dajian_contract: [
         {
-          key: 'id',
-          dataIndex: 'id',
-          title: '序号'
-        },
-        {
           key: 'order_money',
           dataIndex: 'order_money',
           title: '合同金额'
@@ -681,11 +639,6 @@ class List extends Component {
       ],
       // 宴会厅设置
       wedding_list: [
-        {
-          key: 'id',
-          dataIndex: 'id',
-          title: '序号'
-        },
         {
           key: 'room_name',
           dataIndex: 'room_name',
@@ -731,11 +684,6 @@ class List extends Component {
       ],
       // 首页推荐酒店设置
       hotel_rec_list: [
-        {
-          key: 'id',
-          dataIndex: 'id',
-          title: '序号'
-        },
         {
           key: 'hotel_name',
           dataIndex: 'hotel_name',

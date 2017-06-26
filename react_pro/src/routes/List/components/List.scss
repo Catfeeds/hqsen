@@ -4,10 +4,14 @@
     float: right;
   }
 }
-.disabled-row,
-.disabled-row:hover {
+.disabled-row, .disabled-row:hover {
   background: #ededed;
 }
 .completed-pay {
   color: #ccc;
+}
+.red-tip {
+  color: red;
+  font-size: 12px;
+  transform: scale(0.8);
 }

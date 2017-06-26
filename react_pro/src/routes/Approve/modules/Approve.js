@@ -73,6 +73,18 @@ const ACTION_HANDLERS = {
         value: '5'
       })
     }
+    if (['middle', 'additional', 'final', 'time'].indexOf(action.payload) > -1) {
+      data = [
+        {
+          label: '通过',
+          value: '2'
+        },
+        {
+          label: '待修改',
+          value: '5'
+        }
+      ]
+    }
     return {
       ...state,
       dataSource: {
