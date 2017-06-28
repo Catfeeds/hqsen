@@ -36,7 +36,7 @@ class account extends base {
                 $user_item = array(
                     'user_id' => $one_user['id'],
                     'user_name' => $one_user['user_name'],
-                    'create_time' => date('Y-m-d' , $one_user['create_time']),
+                    'create_time' => date('Y-m-d H:i:s' , $one_user['create_time']),
                     'alipay_account' => $one_user['alipay_account'],
                 );
                 $data['list'][] = $user_item;

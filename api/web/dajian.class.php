@@ -32,7 +32,7 @@ class dajian extends base {
                     'order_id' => $one_order['id'],
                     'customer_name' => $one_order['customer_name'],
                     'order_phone' => $one_order['order_phone'],
-                    'create_time' => date('Y-m-d', $one_order['create_time']),
+                    'create_time' => date('Y-m-d H:i:s', $one_order['create_time']),
                     'order_type' => $one_order['order_type'],
                     'order_area_hotel_type' => '指定区域',
                     'order_from' => '同步',

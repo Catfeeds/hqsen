@@ -34,7 +34,7 @@ class kezi extends base {
                     'customer_name' => $one_order['customer_name'],
                     'order_phone' => $one_order['order_phone'],
                     'order_type' => $one_order['order_type'],
-                    'create_time' => date('Y-m-d', $one_order['create_time']),
+                    'create_time' => date('Y-m-d H:i:s', $one_order['create_time']),
                 );
                 // 如果是1 表示是区域  如果是2 表示是酒店
                 if($one_order['order_area_hotel_type'] == 1){

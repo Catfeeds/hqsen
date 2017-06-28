@@ -327,7 +327,7 @@ class hotel extends base {
             $sql_order['id'] = $this->db->insert('hqsen_hotel_room', $sql_order);
             if($sql_order['id']){
                 $sql_room['is_room'] = 1;
-                $this->db->update('hqsen_hotel', $sql_room, ' id = ' . $sql_order['id']);
+                $this->db->update('hqsen_hotel', $sql_room, ' id = ' . $sql_order['hotel_id']);
             }
             $this->appDie();
         } else {

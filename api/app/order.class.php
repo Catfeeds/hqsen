@@ -165,6 +165,7 @@ class order extends base {
     public function orderKeZiDetail(){
         $order_id = $this->getInt('order_id');
         $order_id = $order_id ? $order_id : $this->postInt('order_id');
+        $detail_type = $this->postInt('detail_type'); // 1客资提供者 2客资跟踪者
         if($order_id){
             $user_order = $this->db->getRow('select * from hqsen_user_kezi_order where id = ' . $order_id );
             $order = $this->db->getRow('select * from hqsen_kezi_order where id = ' . $user_order['kezi_order_id'] );
@@ -201,7 +202,55 @@ class order extends base {
                     $follow_item['user_order_status'] = $one_item['user_order_status'];
                     $order_list['order_follow'] = $follow_item;
                 }
-                $order_list['handle_note'] = $order['order_status'];
+                // 提供者 1
+                if($detail_type == 1){
+                    switch ($order['order_status']){
+                        case 1:
+                            $order_list['handle_note'] = '跟进中(跟踪者处理中)';
+                            break;
+                        case 2:
+                            $order_list['handle_note'] = '待结算(等待财务打款)';
+                            break;
+                        case 3:
+                            $order_list['handle_note'] = '已结算(财务已打款)';
+                            break;
+                        case 4:
+                            if('$财务 通过的审批 案$'){
+                                $order_list['handle_note'] = '已取消($财务 通过的审批 案$)';
+                            } else {
+                                $order_list['handle_note'] = '该客资信息已被取消,后续无法继续跟进';
+                            }
+                            break;
+                    }
+                    // 跟踪者 2
+                } else if($detail_type == 2){
+                    switch ($order['order_status']){
+                        case 1:
+                            $order_list['handle_note'] = '无';
+                            break;
+                        case 2:
+                            $order_list['handle_note'] = '该搭建合同正在被审核,请耐 等待^_^';
+                            break;
+                        case 3:
+                            $order_list['handle_note'] = '相关的奖励即将发放给提供搭建信息者';
+                            break;
+                        case 4:
+                            $order_list['handle_note'] = '关奖励已经发放';
+                            break;
+                        case 5:
+                            $order_list['handle_note'] = '客资合同待重新提交:$财务待修改的审批 案$';
+                            break;
+                        case 6:
+                            if('$财务 通过的审批 案$'){
+                                $order_list['handle_note'] = '已取消($财务 通过的审批 案$)';
+                            } else {
+                                $order_list['handle_note'] = '该客资信息已被取消,后续无法继续跟进';
+                            }
+                            break;
+                    }
+                } else {
+                    $order_list['handle_note'] = $order['order_status'];
+                }
                 $order_list['handle_time'] = $order['create_time'];
             }
             $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $order_list);
@@ -589,11 +638,13 @@ class order extends base {
                             $order_list['handle_note'] = '搭建合同待重新提交:$财务待修改的审批 案$';
                             break;
                         case 6:
-                            $order_list['handle_note'] = '该搭建信息已被你取消,后续 法继续跟进';
-                            $order_list['handle_note'] = '搭建合同已取消:($财务 通过的审批 案$)';
+                            if('$财务 通过的审批 案$'){
+                                $order_list['handle_note'] = '已取消($财务 通过的审批 案$)';
+                            } else {
+                                $order_list['handle_note'] = '该搭建信息已被你取消,后续无法继续跟进';
+                            }
                             break;
                     }
-//                    $order_list['handle_note'] = $user_order['order_status'];// 不是酒店账号  返回跟踪者
                 } else if($this->user['user_type'] == 12){
                     switch ($user_order['order_status']){
                         case 1:
@@ -606,12 +657,30 @@ class order extends base {
                             $order_list['handle_note'] = '搭建订单已完结';
                             break;
                         case 4:
-                            $order_list['handle_note'] = '关奖励已经发放给提供搭建信息者';
+                            $order_list['handle_note'] = '待重新提交:$财务待修改的审批 案$';
                             break;
                     }
-                    $order_list['handle_note'] = $user_order['user_order_status'];// 默认提供者状态
+                } else if($this->user['user_type'] == 4){
+                    switch ($user_order['order_status']){
+                        case 1:
+                            $order_list['handle_note'] = '跟进中(专员处中)';
+                            break;
+                        case 2:
+                            $order_list['handle_note'] = '待结算(等待财务打款)';
+                            break;
+                        case 3:
+                            $order_list['handle_note'] = '已结算(财务已打款)';
+                            break;
+                        case 4:
+                            if('$财务 通过的审批 案$'){
+                                $order_list['handle_note'] = '已取消($财务 通过的审批 案$)';
+                            } else {
+                                $order_list['handle_note'] = '已取消(专员已终 搭建跟进)';
+                            }
+                            break;
+                    }
                 } else {
-
+                    $order_list['handle_note'] = $user_order['user_order_status'];// 默认提供者状态
                 }
                 $order_list['handle_time'] = $order['create_time'];
             }
@@ -916,7 +985,6 @@ class order extends base {
             $this->appDie($this->back_code['sys']['value_empty'], $this->back_msg['sys']['value_empty']);
         }
     }
-
 
 
 }
