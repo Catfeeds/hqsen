@@ -65,7 +65,7 @@ class user extends base{
         $page = $this->postInt('page', 1);
         $limit = 10;
         $offset = ($page - 1) * $limit;
-        $sql_limit = " limit $offset , $limit";
+        $sql_limit = " order by id desc limit $offset , $limit";
         $feedback = $this->db->getRows("select *   from hqsen_feedback  where del_flag = 1 " . $sql_limit);
         $data = [];
         foreach ($feedback as $one_feedback){
@@ -79,7 +79,7 @@ class user extends base{
                 $data['list'][] = $one_feedback_item;
             }
         }
-        $data['count'] = $this->db->getCount('hqsen_area', 'del_flag = 1');
+        $data['count'] = $this->db->getCount('hqsen_feedback', 'del_flag = 1');
         $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $data);
     }
 
