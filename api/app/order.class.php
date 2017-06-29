@@ -549,7 +549,7 @@ class order extends base {
             }
         } elseif($this->user['user_type'] == 12){
             if($order_status){
-                $sql_status = ' erxiao_order_status = ' . $order_status;
+                $sql_status = ' erxiao_order_status = ' . $order_status;//搭建二销状态 0首销还未通过 1待处理 2待审核 3已完结 5已驳回
             }
             $sql_status .= ' and erxiao_user_id = '. $this->user['id'];
 
@@ -859,12 +859,13 @@ class order extends base {
             }
             // 更新首销订单 关于二销信息
             $order_type_sql['erxiao_sign_type'] = $sign_type;
-            $order_type_sql['erxiao_order_status'] = 2;
+            $order_type_sql['erxiao_order_status'] = 2; //搭建二销状态 0首销还未通过 1待处理 2待审核 3已完结 5已驳回
             $this->db->update('hqsen_user_dajian_order', $order_type_sql, ' id = ' . $user_dajian_order_id);
             // 更新首销签单  关于二销信息
             $erxiao_sign_sql['sign_type'] = $sign_type;
             $erxiao_sign_sql['sign_other_sign_id'] = $user_dajian_order_sign['id'];
             $erxiao_sign_sql['sign_user_id'] = $this->user['id'];
+            $erxiao_sign_sql['sign_other_sign_status'] = 1; // 二销财务审核 0未知 1未处理 2通过 3驳回 4 总经理驳回 5待修改
             $this->db->update('hqsen_user_dajian_order_sign', $erxiao_sign_sql, ' user_dajian_order_id = ' . $user_dajian_order_id);
 
             $this->appDie();

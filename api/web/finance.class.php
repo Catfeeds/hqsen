@@ -119,7 +119,7 @@ class finance extends base {
     }
 
 
-    // 首销搭建 订单列表
+    // 搭建 订单列表
     public function dajianOrderSignList(){
         $page = $this->postInt('page', 1);
         $limit = 10;
@@ -135,6 +135,9 @@ class finance extends base {
             $item['del_flag'] = $one_sign['del_flag'];//0未知 1初次录入 2再次录入
             $item['sign_status'] = $one_sign['sign_status'];//财务审核 0未知 1未处理 2通过 3驳回 4 总经理驳回 5待修改
             $item['sign_other_sign_status'] = $one_sign['sign_other_sign_status'];//财务审核 0未知 1未处理 2通过 3驳回 4 总经理驳回 5待修改
+            if($item['sign_type'] > 0){
+                $item['sign_status'] = $item['sign_other_sign_status'];
+            }
             $list['list'][] = $item;
         }
         $list['count'] = $this->db->getCount('hqsen_user_dajian_order_sign', 'del_flag != 0');
@@ -258,9 +261,17 @@ class finance extends base {
             // 审批成功  更新签单数据  不更新跟踪者订单数据 还是待审核状态
             if(isset($sign_follow['id']) and $sign_follow['id']){
                 $sign = $this->db->getRow("select *  from hqsen_user_dajian_order_sign where id=" . $user_sign_id);
+                $user_order_sign['sign_other_sign_status'] = $sign_status;// 二销财务审核 0未知 1未处理 2通过 3驳回 4 总经理驳回 5待修改
+                $this->db->update('hqsen_user_dajian_order_sign', $user_order_sign, ' id = ' . $user_sign_id);// 签单搭建 财务状态
+
                 // 通过
                 if($sign_status == 2 and $sign){
-                    $user_order['erxiao_order_status'] = 3;// 搭建二销修改成 已完成
+                    // 如果尾款  进入已完成 非尾款 进入待处理
+                    if($sign['sign_type'] == 2){
+                        $user_order['erxiao_order_status'] = 3;// 搭建二销修改成 已完成
+                    } else {
+                        $user_order['erxiao_order_status'] = 1;// 搭建二销修改成 待处理
+                    }
                     $this->db->update('hqsen_user_dajian_order', $user_order, ' id = ' . $sign['user_dajian_order_id']);
                 }
                 // 待修改
