@@ -498,8 +498,9 @@ class order extends base {
                         $error_count++;
                     }
                 }
-                // 如果创建失败   那么删除订单
-                if($error_count >= count($area_hotel_id_array)) {
+                // 如果有一条创建失败   那么删除订单
+//                if($error_count >= count($area_hotel_id_array)) {
+                if($error_count > 0) {
                     $del_order['del_flag'] = 2;
                     $this->db->update('hqsen_dajian_order', $del_order, ' id = ' . $sql_order['id']);
                 }
@@ -705,6 +706,7 @@ class order extends base {
     public function insertUserDaJianOrder($order_id, $area_hotel_type, $area_hotel_id, $order_phone)
     {
         if ($area_hotel_id) {
+            // 1 表示 根据区域创建搭建信息  搭建信息默认根据区域来
             if ($area_hotel_type == 1) {
                 // 区域信息  自动分配首销账号 user_type=11
                 $user_data = $this->db->getRow("
@@ -795,7 +797,6 @@ class order extends base {
         $user_dajian_order_sign['first_order_using_time'] = $first_order_using_time;
         $user_dajian_order_sign['next_pay_time'] = $next_pay_time;
         $user_dajian_order_sign['order_time'] = time();// 订单创建时间
-        $user_dajian_order_sign['sign_user_id'] = $this->user['id'];// 订单创建时间
         if($user_dajian_order_id){
             if(isset($user_dajian_order_sign['id']) and $user_dajian_order_sign['id']){
                 $this->db->update('hqsen_user_dajian_order_sign', $user_dajian_order_sign, ' id = ' . $user_dajian_order_sign['id']);

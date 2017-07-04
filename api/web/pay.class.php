@@ -129,7 +129,7 @@ class pay extends base {
             $pay_item['user_dajian_order_id'] = $one_sign['user_dajian_order_id'];
             $pay_item['order_money'] = $one_sign['order_money'];
             $pay_item['first_order_money'] = $one_sign['first_order_money'];
-            $pay_item['sign_user_id'] = $one_sign['sign_user_id'];
+            $pay_item['sign_user_id'] = $user_order['watch_user_id']; //  首销ID
             $pay_item['create_user_name'] = $user_info['user_name'];
             $pay_item['create_user_money'] = '100';
             $pay_item['pay_status'] = $user_order['order_status'];// 1未打款 2 已打款
