@@ -296,7 +296,7 @@ class order extends base {
                     select * from (
                             select hud.* from hqsen_user as hu 
                             left join hqsen_user_data as hud on hu.id=hud.user_id 
-                            where hu.user_type=4 and hu.del_flag = 1 and hud.area_id = $area_hotel_id
+                            where hu.user_type=4 and hu.del_flag = 1 and hu.user_status=1  and hud.area_id = $area_hotel_id
                             order by last_order_time asc
                         ) as c group by c.hotel_id
                 ");
@@ -327,7 +327,7 @@ class order extends base {
                 $one_user_data = $this->db->getRow("
                     select hud.* from hqsen_user as hu 
                     left join hqsen_user_data as hud on hu.id=hud.user_id 
-                    where hu.user_type=4 and hu.del_flag = 1 and hud.hotel_id = $area_hotel_id
+                    where hu.user_type=4 and hu.del_flag = 1 and hu.user_status=1  and hud.hotel_id = $area_hotel_id
                     order by last_order_time asc
                     limit 1
                 ");
@@ -713,7 +713,7 @@ class order extends base {
                     select hud.* from hqsen_user as hu 
                     left join hqsen_user_data as hud on hu.id=hud.user_id 
                     where hu.user_type=11
-                    and hu.del_flag = 1 
+                    and hu.del_flag = 1  and hu.user_status=1 
                     and hud.area_id = $area_hotel_id 
                     order by last_order_time asc
                 ");
