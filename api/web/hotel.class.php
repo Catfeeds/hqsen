@@ -455,9 +455,16 @@ class hotel extends base {
         $hotel_weight = $this->postString('hotel_weight');
         $hotel_id = $this->postString('hotel_id');
         if($hotel_id and $hotel_weight){
-            $sql_order['hotel_id'] = $hotel_id;
-            $sql_order['hotel_weight'] = $hotel_weight;
-            $this->db->insert('hqsen_hotel_rec', $sql_order);
+            $hotel = $this->db->getRow("select *  from hqsen_hotel_rec where hotel_id=" . $hotel_id);
+            if($hotel){
+                $sql_order['del_flag'] = 1;
+                $sql_order['hotel_weight'] = $hotel_weight;
+                $this->db->update('hqsen_hotel_rec', $sql_order, ' hotel_id = ' . $hotel_id);
+            } else {
+                $sql_order['hotel_id'] = $hotel_id;
+                $sql_order['hotel_weight'] = $hotel_weight;
+                $this->db->insert('hqsen_hotel_rec', $sql_order);
+            }
             $this->appDie();
         } else {
             $this->appDie($this->back_code['sys']['value_empty'], $this->back_msg['sys']['value_empty']);
