@@ -43,8 +43,6 @@ class user extends base{
                 // todo 注释使用最后登陆时间
                 $user['session_id'] = md5($user['id'] . $user['create_time']);
                 $this->db->update('hqsen_user', $user, ' id = ' . $user['id']);
-//                session_id($user['session_id']);
-//                session_start();
                 $login_user = array(
                     'access_token' => $user['session_id'],
                     'alipay_account' => $user['alipay_account'],
@@ -52,7 +50,6 @@ class user extends base{
                     'nike_name' => $user['nike_name'],
                     'user_type' => $user['user_type']
                 );
-//                $_SESSION['user_info'] = $user;
                 $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $login_user);
             } else {
                 $this->appDie($this->back_code['user']['phone_code_err'], $this->back_msg['user']['phone_code_err']);
@@ -67,7 +64,7 @@ class user extends base{
         $user_name = $this->postString('user_name');
         $password = $this->postString('password');
         if($user_name and $password){
-            $user = $this->db->getRow("select * from hqsen_user where user_name = '$user_name'");
+            $user = $this->db->getRow("select * from hqsen_user where user_status = 1 and user_name = '$user_name'");
             if(!$user or md5($password) != $user['password']){
                     $this->appDie($this->back_code['user']['login_err'], $this->back_msg['user']['login_err']);
             }
@@ -172,6 +169,7 @@ class user extends base{
         }
     }
 
+    // 首页酒店列表
     public function mainList(){
         $list_type = $this->postInt('list_type');
         if($list_type == 1){
@@ -199,6 +197,7 @@ class user extends base{
         $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $data);
     }
 
+    // 首页酒店详情
     public function mainHotelDetail(){
         $hotel_id = $this->postInt('hotel_id');
         $one_hotel = $this->db->getRow("select * from hqsen_hotel as hh 
@@ -242,6 +241,7 @@ class user extends base{
         $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $item);
     }
 
+    // 获取上海18个区
     public function getShArea()
     {
         $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $this->get_sh_area());
