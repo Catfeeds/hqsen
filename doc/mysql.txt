@@ -4,6 +4,3 @@ CREATE DATABASE IF NOT EXISTS hqsen default charset utf8 COLLATE utf8_general_ci
 http://www.pmdaniu.com/rp/view?id=V3RSMAtrVWZQYwU3AipRNA
 
 
-// 同步 客资完成
-
-// 同步 酒店三天 客资

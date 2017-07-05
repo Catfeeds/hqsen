@@ -25,7 +25,7 @@ class boss extends base {
         $offset = ($page - 1) * $limit;
         $sql_limit = " limit $offset , $limit";
         // 总经理要在财务审批通过基础上
-        $sign = $this->db->getRows("select *  from hqsen_user_kezi_order_sign  where sign_status = 2 order by id desc " . $sql_limit);
+        $sign = $this->db->getRows("select *  from hqsen_user_kezi_order_sign  where boss_sign_status > 0 order by id desc " . $sql_limit);
         foreach ($sign as $one_sign){
             $item['id'] = $one_sign['id'];
             $item['order_money'] = $one_sign['order_money'];
@@ -113,7 +113,7 @@ class boss extends base {
         $offset = ($page - 1) * $limit;
         $sql_limit = " limit $offset , $limit";
         // 总经理要在财务审批通过基础上
-        $sign = $this->db->getRows("select *  from hqsen_user_dajian_order_sign  where sign_status in (2,4) and sign_type = 0 order by id desc " . $sql_limit);
+        $sign = $this->db->getRows("select *  from hqsen_user_dajian_order_sign  where boss_sign_status > 0 and sign_type = 0 order by id desc " . $sql_limit);
         foreach ($sign as $one_sign){
             $item['id'] = $one_sign['id'];
             $item['order_money'] = $one_sign['order_money'];
@@ -162,6 +162,9 @@ class boss extends base {
         $user_sign_id = $this->postInt('user_sign_id');
         $status_desc = $this->postString('status_desc');
         $sign_status = $this->postString('boss_sign_status', 1);
+        if($status_desc == 'undefined'){
+            $status_desc = '';
+        }
         // 审批流程数据
         if ($user_sign_id and $sign_status) {
             $sign_follow['boss_sign_status'] = $sign_status;
@@ -202,7 +205,7 @@ class boss extends base {
     // 通过首销ID 获取二销ID 后台编辑同区域下不存在二销 使用默认ID
     public function getErXiaoId($shouxiao_id){
         $shouxiao_user = $this->db->getRow("select * from hqsen_user_data where  user_id =  " . $shouxiao_id);
-        $erxiao_user = $this->db->getRow("select * from hqsen_user_data where  area_id =  " . $shouxiao_user['area_id'] . ' order by last_order_time asc limit 1');
+        $erxiao_user = $this->db->getRow("select * from hqsen_user_data as hud left join hqsen_user as hu on hud.user_id=hu.id where hu.user_type=12 and hu.user_status=1 and  hud.area_id =  " . $shouxiao_user['area_id'] . ' order by hud.last_order_time asc limit 1');
         if(isset($erxiao_user['user_id']) and $erxiao_user['user_id']){
             $erxiao_sql['last_order_time'] = time();
             $this->db->update('hqsen_user_data', $erxiao_sql, ' id = ' . $erxiao_user['id']);

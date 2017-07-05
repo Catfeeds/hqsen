@@ -55,8 +55,7 @@ class finance extends base {
             $sign_follow['id'] = $this->db->insert('hqsen_user_kezi_sign_follow', $sign_follow);
             // 审批成功  更新签单数据  不更新跟踪者订单数据 还是待审核状态
             if(isset($sign_follow['id']) and $sign_follow['id']){
-                $order_sign['sign_status'] = $sign_status;
-                $this->db->update('hqsen_user_kezi_order_sign', $order_sign, ' id = ' . $sign_follow['user_sign_id']);
+                $order_sign['sign_status'] = $sign_status; // 用户签单  财务审核状态
                 // 处理跟踪者和提供者订单状态
                 if($sign_status == 3){
                     $sign = $this->db->getRow("select *  from hqsen_user_kezi_order_sign where id=" . $user_sign_id);
@@ -68,6 +67,7 @@ class finance extends base {
                 }
                 // 处理跟踪者和提供者订单状态
                 if($sign_status == 2){
+                    $order_sign['boss_sign_status'] = 1; // 用户签单  总经理审核状态
                     $sign = $this->db->getRow("select *  from hqsen_user_kezi_order_sign where id=" . $user_sign_id);
                     if($sign){
                         $user_order['order_status'] = 2;
@@ -83,6 +83,7 @@ class finance extends base {
                         $this->db->update('hqsen_user_kezi_order', $user_order, ' id = ' . $sign['user_kezi_order_id']);
                     }
                 }
+                $this->db->update('hqsen_user_kezi_order_sign', $order_sign, ' id = ' . $sign_follow['user_sign_id']);
             }
             $this->appDie();
         } else {
@@ -205,8 +206,7 @@ class finance extends base {
             $sign_follow['id'] = $this->db->insert('hqsen_user_dajian_sign_follow', $sign_follow);
             // 审批成功  更新签单数据  不更新跟踪者订单数据 还是待审核状态
             if(isset($sign_follow['id']) and $sign_follow['id']){
-                $order_sign['sign_status'] = $sign_status;
-                $this->db->update('hqsen_user_dajian_order_sign', $order_sign, ' id = ' . $sign_follow['user_sign_id']);
+                $order_sign['sign_status'] = $sign_status;// 用户签单  财务审核状态
                 // 不通过
                 if($sign_status == 3){
                     $sign = $this->db->getRow("select *  from hqsen_user_dajian_order_sign where id=" . $user_sign_id);
@@ -218,6 +218,7 @@ class finance extends base {
                 }
                 // 通过
                 if($sign_status == 2){
+                    $order_sign['boss_sign_status'] = 1; // 用户签单  总经理审核状态
                     $sign = $this->db->getRow("select *  from hqsen_user_dajian_order_sign where id=" . $user_sign_id);
                     if($sign){
                         $user_order['order_status'] = 2;
@@ -234,6 +235,8 @@ class finance extends base {
                         $this->db->update('hqsen_user_dajian_order', $user_order, ' id = ' . $sign['user_dajian_order_id']);
                     }
                 }
+                $this->db->update('hqsen_user_dajian_order_sign', $order_sign, ' id = ' . $sign_follow['user_sign_id']);
+
             }
             $this->appDie();
         } else {
