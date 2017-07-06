@@ -153,6 +153,9 @@ class order extends base {
                     'order_phone' => (string)$one_order['order_phone'],
                     'watch_user' => (string)$one_order['watch_user_name'],
                 );
+                if($order_status == 1){
+                    $order_item['create_time'] = (string)$one_order['update_time'];
+                }
                 $order_list['order_list'][] = $order_item;
             }
 
@@ -371,6 +374,7 @@ class order extends base {
             $order_follow['order_follow_desc'] = $order_follow_desc;
             $order_follow['order_follow_create_time'] = time();
             $order_follow['user_order_status'] = $user_order_status;
+            $order_follow['update_time'] = intval($order_follow_time);
             $order_follow['id'] = $this->db->insert('hqsen_user_kezi_order_follow', $order_follow);
             if($user_order_status == 2){ // 无效驳回
                 // 更新用户订单  已取消
@@ -498,9 +502,9 @@ class order extends base {
                         $error_count++;
                     }
                 }
-                // 如果有一条创建失败   那么删除订单
-//                if($error_count >= count($area_hotel_id_array)) {
-                if($error_count > 0) {
+                // 如果有一条创建成功  就算成功
+                if($error_count >= count($area_hotel_id_array)) {
+//                if($error_count > 0) {
                     $del_order['del_flag'] = 2;
                     $this->db->update('hqsen_dajian_order', $del_order, ' id = ' . $sql_order['id']);
                 }
@@ -544,6 +548,9 @@ class order extends base {
                         'order_phone' => (string)$one_order['order_phone'],
                         'watch_user' => (string)$one_order['watch_user_name'],
                     );
+                    if($order_status == 1){
+                        $order_item['create_time'] = (string)$one_order['update_time'];
+                    }
                     $order_list['order_list'][] = $order_item;
                 }
 

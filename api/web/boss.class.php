@@ -9,6 +9,7 @@
 
 
 namespace api\web;
+use api\app\order;
 
 class boss extends base {
 
@@ -61,11 +62,14 @@ class boss extends base {
                 // 总经理通过  处理跟踪者和提供者订单状态
                 if($sign_status == 2){
                     $sign = $this->db->getRow("select *  from hqsen_user_kezi_order_sign where id=" . $user_sign_id);
+                    $user_order = $this->db->getRow("select *  from hqsen_user_kezi_order where id=" . $sign['user_kezi_order_id']);
+                    $order = $this->db->getRow("select *  from hqsen_kezi_order where id=" . $sign['kezi_order_id']);
                     if($sign){
                         $user_order['order_status'] = 3;
                         $user_order['user_order_status'] = 2;
                         $this->db->update('hqsen_user_kezi_order', $user_order, ' id = ' . $sign['user_kezi_order_id']);
                     }
+                    $this->createDaJian($order['customer_name'],$order['order_type'],$order['order_phone'],$order['order_area_hotel_type'],$order['order_area_hotel_id'],$order['use_date'],$order['order_money'],$order['order_desc']);
                 }
                 if($sign_status == 3){
                     $order_sign['sign_status'] = 4; // 签单信息更改为总经理驳回
@@ -214,6 +218,45 @@ class boss extends base {
             return 62;// 默认二销账号
         }
 
+    }
+
+    public function createDaJian($customer_name, $order_type, $order_phone, $order_area_hotel_type, $order_area_hotel_id, $use_date, $order_money, $order_desc){
+        $sql_order['customer_name'] = $customer_name;
+        $sql_order['order_type'] = $order_type;
+        $sql_order['order_phone'] = $order_phone;
+        $sql_order['order_area_hotel_type'] = $order_area_hotel_type;
+        $sql_order['order_area_hotel_id'] = $order_area_hotel_id;
+        $sql_order['use_date'] = $use_date;
+        $sql_order['order_money'] = $order_money;
+        $sql_order['order_desc'] = $order_desc;
+        $sql_order['order_status'] = 1;
+        $sql_order['create_time'] = time();
+        $sql_order['user_id'] = $this->user['id'];
+        $sql_order['id'] = $this->db->insert('hqsen_dajian_order', $sql_order);
+        $area_hotel_id_array = explode(',', $order_area_hotel_id);
+        $area_hotel_id_array = array_filter($area_hotel_id_array);
+        $error_msg = '';
+        $error_count = 0;
+        // 目前区域单选  兼容多选
+        foreach ($area_hotel_id_array as $one_area_hotel_id){
+            $order_msg = order::insertUserDaJianOrder($sql_order['id'], $order_area_hotel_type, $one_area_hotel_id, $order_phone);
+            if($order_msg){
+                $error_msg .= $order_msg;
+                $error_count++;
+            }
+        }
+        // 如果有一条创建成功  就算成功
+        if($error_count >= count($area_hotel_id_array)) {
+//                if($error_count > 0) {
+            $del_order['del_flag'] = 2;
+            $this->db->update('hqsen_dajian_order', $del_order, ' id = ' . $sql_order['id']);
+        }
+
+        if($error_msg){
+            $this->appDie($this->back_code['order']['dajian_order_fail'], $error_msg);
+        } else {
+            $this->appDie();
+        }
     }
 
 }
