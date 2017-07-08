@@ -28,6 +28,7 @@ class finance extends base {
         foreach ($sign as $one_sign){
             $item['id'] = $one_sign['id'];
             $item['order_money'] = $one_sign['order_money'];
+            $item['keizi_order_id'] = $one_sign['kezi_order_id'];
             $item['create_time'] = date('Y-m-d H:i:s' , $one_sign['create_time']);
             $item['update_time'] = date('Y-m-d H:i:s' , $one_sign['update_time']);
             $item['order_other_money'] = $one_sign['order_other_money'];// 客资附加款  去掉不用 0607
@@ -133,6 +134,9 @@ class finance extends base {
         foreach ($sign as $one_sign){
             $item['id'] = $one_sign['id'];
             $item['sign_other_sign_id'] = $one_sign['sign_other_sign_id'];
+            $item['dajian_order_id'] = $one_sign['dajian_order_id'];
+            $item['create_time'] = date('Y-m-d H:i:s' , $one_sign['create_time']);
+            $item['update_time'] = date('Y-m-d H:i:s' , $one_sign['update_time']);
             $item['order_money'] = $one_sign['order_money'];
             $item['sign_type'] = $one_sign['sign_type'];// 搭建二销签单状态 0首款   1 中款  2尾款  3附加款 4尾款时间
             $item['sign_pic_count'] = count(json_decode($one_sign['sign_pic']));
