@@ -73,6 +73,7 @@ class user extends base{
                 $one_feedback_item = array(
                     'user_name' => $one_feedback['user_name'],
                     'content' => $one_feedback['content'],
+                    'update_time' => date('Y-m-d H:i:s' , $one_feedback['update_time']),
                     'phone' => $one_feedback['phone'],
                     'id' => $one_feedback['id'],
                 );
