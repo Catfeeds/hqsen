@@ -290,23 +290,23 @@ left join hqsen_user_data as hud on hu.id=hud.user_id where hu.id = " . $user_id
         $limit = 10;
         $offset = ($page - 1) * $limit;
 
-        $search_hotel_sql = "select *,hu.id as hu_id from hqsen_user as hu left join hqsen_user_data as hud on hu.id=hud.user_id where hud.hotel_name like '%$search_input%' and hu.del_flag = 1 and hu.user_type = 4 order by hu.id desc" ;
-        $user = $this->db->getRows($search_hotel_sql);
-        $data = [];
-        $data['list'] = [];
-
-        foreach ($user as $one_user){
-            if($one_user){
-                $user_item = array(
-                    'user_id' => $one_user['hu_id'],
-                    'user_name' => $one_user['user_name'],
-                    'hotel_name' => (string)$one_user['hotel_name'],
-                    'hotel_area' => (string)$one_user['hotel_area'],
-                    'user_status' => $one_user['user_status'],
-                );
-                $data['list'][] = $user_item;
-            }
-        }
+//        $search_hotel_sql = "select *,hu.id as hu_id from hqsen_user as hu left join hqsen_user_data as hud on hu.id=hud.user_id where hud.hotel_name like '%$search_input%' and hu.del_flag = 1 and hu.user_type = 4 order by hu.id desc" ;
+//        $user = $this->db->getRows($search_hotel_sql);
+//        $data = [];
+//        $data['list'] = [];
+//
+//        foreach ($user as $one_user){
+//            if($one_user){
+//                $user_item = array(
+//                    'user_id' => $one_user['hu_id'],
+//                    'user_name' => $one_user['user_name'],
+//                    'hotel_name' => (string)$one_user['hotel_name'],
+//                    'hotel_area' => (string)$one_user['hotel_area'],
+//                    'user_status' => $one_user['user_status'],
+//                );
+//                $data['list'][] = $user_item;
+//            }
+//        }
         $search_name_sql = "select *,hu.id as hu_id from hqsen_user as hu left join hqsen_user_data as hud on hu.id=hud.user_id where hud.user_name like '%$search_input%' and hu.del_flag = 1 and hu.user_type = 4 order by hu.id desc" ;
         $user = $this->db->getRows($search_name_sql);
         foreach ($user as $one_user){
