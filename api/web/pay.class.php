@@ -68,14 +68,16 @@ class pay extends base {
         foreach ($sign as $one_sign){
             $user_order = $this->db->getRow("select *  from hqsen_user_kezi_order where id=" . $one_sign['user_kezi_order_id']);
             $create_user = $this->db->getRow("select *  from hqsen_user where id=" . $user_order['user_id']);
-            $watch_user = $this->db->getRow("select *  from hqsen_user where id=" . $user_order['user_id']);
+            $watch_user = $this->db->getRow("select *  from hqsen_user where id=" . $user_order['watch_user_id']);
             $pay_item['id'] = $one_sign['id'];
             $pay_item['user_kezi_order_id'] = $one_sign['user_kezi_order_id'];
             $pay_item['order_money'] = $one_sign['order_money'];
             $pay_item['order_other_money'] = $one_sign['order_other_money'];
-            $pay_item['create_user_name'] = $user_order['user_id'];
+            $pay_item['create_user_name'] = $create_user['user_name'];
+            $pay_item['create_account'] = $create_user['alipay_account'];
             $pay_item['create_user_money'] = '100';
-            $pay_item['watch_user_name'] = $user_order['watch_user_name'];
+            $pay_item['watch_user_name'] = $watch_user['user_name'];
+            $pay_item['watch_account'] = $watch_user['alipay_account'];
             $pay_item['watch_user_money'] = '100';
             $pay_item['pay_status'] = $user_order['order_status'];// 1未打款 2 已打款
             $data['list'][] = $pay_item;
