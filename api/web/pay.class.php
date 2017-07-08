@@ -79,6 +79,7 @@ class pay extends base {
             $pay_item['watch_user_name'] = $watch_user['user_name'];
             $pay_item['watch_account'] = $watch_user['alipay_account'];
             $pay_item['watch_user_money'] = '100';
+            $pay_item['create_time'] = date('Y-m-d H:i:s' , $one_sign['create_time']);
             $pay_item['pay_status'] = $user_order['order_status'];// 1未打款 2 已打款
             $data['list'][] = $pay_item;
         }
@@ -137,6 +138,7 @@ class pay extends base {
             $pay_item['create_user_name'] = $user_info['user_name'];
             $pay_item['create_user_money'] = '100';
             $pay_item['pay_status'] = $user_order['order_status'];// 1未打款 2 已打款
+            $pay_item['create_time'] = date('Y-m-d H:i:s' , $one_sign['create_time']);
             $data['list'][] = $pay_item;
         }
         $data['count'] = $this->db->getCount('hqsen_user_dajian_order_sign', ' boss_sign_status = 2 ');
