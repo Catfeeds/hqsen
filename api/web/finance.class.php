@@ -283,6 +283,14 @@ class finance extends base {
                     } else {
                         $user_order['erxiao_order_status'] = 1;// 搭建二销修改成 待处理
                     }
+                    // 通过修改尾款时间  订单修改尾款时间
+                    if($sign['sign_type'] == 4){
+                        $other_sign = $this->db->getRow("select *  from hqsen_user_dajian_order_other_sign where sign_type = 4 and id=" . $sign['sign_other_sign_id']);
+                        if($other_sign){
+                            $dajian_order['use_date'] = $other_sign['order_time'];
+                            $this->db->update('hqsen_dajian_order', $dajian_order, ' id = ' . $sign['dajian_order_id']);// 签单搭建 财务状态
+                        }
+                    }
                     $this->db->update('hqsen_user_dajian_order', $user_order, ' id = ' . $sign['user_dajian_order_id']);
                 }
                 // 待修改
