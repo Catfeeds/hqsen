@@ -118,7 +118,7 @@ class order extends base {
                     'create_time' => (string)$one_order['create_time'],
                     'order_status' => (int)$one_order['user_order_status'],// 需要返回提供者状态   不搞给错了
                     'order_phone' => (string)$one_order['order_phone'],
-                    'watch_user' => (string)$one_order['watch_user_name'],
+                    'watch_user' => (string)$one_order['watch_user_name'] . '  (' . $one_order['watch_user_hotel_name'] . ')' ,
                 );
                 $order_list['order_list'][] = $order_item;
             }

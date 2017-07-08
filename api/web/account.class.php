@@ -24,7 +24,7 @@ class account extends base {
         $search_input = $this->postString('search_input');
         $limit = 10;
         $offset = ($page - 1) * $limit;
-        $sql_limit = " limit $offset , $limit";
+        $sql_limit = " order by id desc limit $offset , $limit";
         $search_sql = '';
         if($search_input){
             $search_sql = " and user_name like '%$search_input%'" ;
