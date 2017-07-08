@@ -105,7 +105,7 @@ class boss extends base {
             } else {
                 $one_item['status_type'] = (string)2;
             }
-            $one_item['create_time'] = date('Y-m-d',$one_follow['create_time']);
+            $one_item['create_time'] = date('Y-m-d H:i:s',$one_follow['create_time']);
             $one_item['status'] = $one_follow['boss_sign_status'] > 1 ? $one_follow['boss_sign_status'] : $one_follow['sign_status'];
             $one_item['status_desc'] = $one_follow['status_desc'];
             $follow_list[] = $one_item;
@@ -158,7 +158,7 @@ class boss extends base {
             } else {
                 $one_item['status_type'] = (string)2;
             }
-            $one_item['create_time'] = date('Y-m-d',$one_follow['create_time']);
+            $one_item['create_time'] = date('Y-m-d H:i:s',$one_follow['create_time']);
             $one_item['status'] = $one_follow['boss_sign_status'] > 1 ? $one_follow['boss_sign_status'] : $one_follow['sign_status'];
             $one_item['status_desc'] = $one_follow['status_desc'];
             $follow_list[] = $one_item;
