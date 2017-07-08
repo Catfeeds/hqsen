@@ -37,7 +37,9 @@ class account extends base {
                     'user_id' => $one_user['id'],
                     'user_name' => $one_user['user_name'],
                     'create_time' => date('Y-m-d H:i:s' , $one_user['create_time']),
-                    'alipay_account' => $one_user['alipay_account'],
+                    'alipay_account' => $one_user['alipay_account'] ? $one_user['alipay_account'] : '未设置账号',
+                    'payed' => intval(10000),
+                    'unpay' => intval(10000),
                 );
                 $data['list'][] = $user_item;
             }
@@ -68,6 +70,10 @@ class account extends base {
                     'hotel_name' => (string)$one_user['hotel_name'],
                     'hotel_area' => (string)$one_user['hotel_area'],
                     'user_status' => $one_user['user_status'],
+                    'create_time' => date('Y-m-d H:i:s' , $one_user['create_time']),
+                    'alipay_account' => $one_user['alipay_account'] ? $one_user['alipay_account'] : '未设置账号',
+                    'payed' => intval(10000),
+                    'unpay' => intval(10000),
                 );
                 $data['list'][] = $user_item;
             }
@@ -196,6 +202,7 @@ class account extends base {
                     'user_name' => $one_user['hu_user_name'],
                     'user_type' => $user_type,
                     'user_status' => $one_user['user_status'],
+                    'create_time' => date('Y-m-d H:i:s' , $one_user['create_time']),
                 );
                 $data['list'][] = $user_item;
             }
