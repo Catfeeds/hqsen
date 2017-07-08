@@ -407,6 +407,8 @@ class order extends base {
         $user_kezi_order_sign['order_other_money'] = $order_other_money;
         $user_kezi_order_sign['sign_using_time'] = $sign_using_time;
         $user_kezi_order_sign['sign_pic'] = $sign_pic_json;
+        $user_kezi_order_sign['create_time'] = time();
+        $user_kezi_order_sign['update_time'] = time();
         $user_kezi_order_sign['user_kezi_order_id'] = $user_kezi_order_id;
         if($user_kezi_order_id){
             if(isset($user_kezi_order_sign['id']) and $user_kezi_order_sign['id']){
@@ -804,6 +806,8 @@ class order extends base {
         $user_dajian_order_sign['first_order_using_time'] = $first_order_using_time;
         $user_dajian_order_sign['next_pay_time'] = $next_pay_time;
         $user_dajian_order_sign['order_time'] = time();// 订单创建时间
+        $user_dajian_order_sign['create_time'] = time();
+        $user_dajian_order_sign['update_time'] = time();
         if($user_dajian_order_id){
             if(isset($user_dajian_order_sign['id']) and $user_dajian_order_sign['id']){
                 $this->db->update('hqsen_user_dajian_order_sign', $user_dajian_order_sign, ' id = ' . $user_dajian_order_sign['id']);

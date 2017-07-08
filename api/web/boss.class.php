@@ -58,6 +58,7 @@ class boss extends base {
             // 审批成功  更新签单数据  不更新跟踪者订单数据 还是待审核状态
             if (isset($sign_follow['id']) and $sign_follow['id']) {
                 $order_sign['boss_sign_status'] = $sign_status;
+                $order_sign['update_time'] = time();
                 $this->db->update('hqsen_user_kezi_order_sign', $order_sign, ' id = ' . $sign_follow['user_sign_id']);
                 // 总经理通过  处理跟踪者和提供者订单状态
                 if($sign_status == 2){
@@ -176,6 +177,7 @@ class boss extends base {
             $sign_follow['user_sign_id'] = $user_sign_id;
             $sign_follow['create_time'] = time();
             $sign_follow['id'] = $this->db->insert('hqsen_user_dajian_sign_follow', $sign_follow);
+            $order_sign['update_time'] = time();
             // 审批成功  更新签单数据  不更新跟踪者订单数据 还是待审核状态
             if (isset($sign_follow['id']) and $sign_follow['id']) {
                 $order_sign['boss_sign_status'] = $sign_status;

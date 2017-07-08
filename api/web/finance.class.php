@@ -28,6 +28,8 @@ class finance extends base {
         foreach ($sign as $one_sign){
             $item['id'] = $one_sign['id'];
             $item['order_money'] = $one_sign['order_money'];
+            $item['create_time'] = date('Y-m-d H:i:s' , $one_sign['create_time']);
+            $item['update_time'] = date('Y-m-d H:i:s' , $one_sign['update_time']);
             $item['order_other_money'] = $one_sign['order_other_money'];// 客资附加款  去掉不用 0607
             $item['sign_pic_count'] = count(json_decode($one_sign['sign_pic']));
             $item['sign_status'] = $one_sign['sign_status'];//1未处理 2通过 3驳回 4总经理驳回 5待修改
@@ -56,6 +58,7 @@ class finance extends base {
             // 审批成功  更新签单数据  不更新跟踪者订单数据 还是待审核状态
             if(isset($sign_follow['id']) and $sign_follow['id']){
                 $order_sign['sign_status'] = $sign_status; // 用户签单  财务审核状态
+                $order_sign['update_time'] = time(); // 用户签单  财务审核状态
                 // 处理跟踪者和提供者订单状态
                 if($sign_status == 3){
                     $sign = $this->db->getRow("select *  from hqsen_user_kezi_order_sign where id=" . $user_sign_id);
@@ -207,6 +210,7 @@ class finance extends base {
             // 审批成功  更新签单数据  不更新跟踪者订单数据 还是待审核状态
             if(isset($sign_follow['id']) and $sign_follow['id']){
                 $order_sign['sign_status'] = $sign_status;// 用户签单  财务审核状态
+                $order_sign['update_time'] = time();// 用户签单  财务审核状态
                 // 不通过
                 if($sign_status == 3){
                     $sign = $this->db->getRow("select *  from hqsen_user_dajian_order_sign where id=" . $user_sign_id);
