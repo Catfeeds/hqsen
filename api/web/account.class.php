@@ -53,14 +53,18 @@ class account extends base {
     public function hotelAccountList(){
         $page = $this->postInt('page', 1);
         $search_input = $this->postString('search_input');
-        if($search_input){
-            $this->accountSearch();
-        }
+//        if($search_input){
+//            $this->accountSearch();
+//        }
         $limit = 10;
         $offset = ($page - 1) * $limit;
         $sql_limit = " limit $offset , $limit";
 
-        $user = $this->db->getRows("select *,hu.id as hu_id from hqsen_user as hu left join hqsen_user_data as hud on hu.id=hud.user_id where  hu.del_flag = 1 and hu.user_type = 4 order by hu.id desc" . $sql_limit);
+        $search_sql = '';
+        if($search_input){
+            $search_sql = " and hu.user_name like '%$search_input%'" ;
+        }
+        $user = $this->db->getRows("select *,hu.id as hu_id from hqsen_user as hu left join hqsen_user_data as hud on hu.id=hud.user_id where  hu.del_flag = 1 and hu.user_type = 4 $search_sql order by hu.id desc" . $sql_limit);
         $data = [];
         foreach ($user as $one_user){
             if($one_user){
