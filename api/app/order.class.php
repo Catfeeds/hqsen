@@ -245,7 +245,7 @@ class order extends base {
                             $order_list['handle_note'] = '该搭建合同正在被审核,请耐心等待^_^';
                             break;
                         case 3:
-                            $order_list['handle_note'] = '相关的奖励即将发放给提供搭建信息者';
+                            $order_list['handle_note'] = '相关的奖励即将发放,请确保收款账号有效';
                             break;
                         case 4:
                             $order_list['handle_note'] = '相关奖励已经发放';
