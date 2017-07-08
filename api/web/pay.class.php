@@ -69,15 +69,32 @@ class pay extends base {
             $user_order = $this->db->getRow("select *  from hqsen_user_kezi_order where id=" . $one_sign['user_kezi_order_id']);
             $create_user = $this->db->getRow("select *  from hqsen_user where id=" . $user_order['user_id']);
             $watch_user = $this->db->getRow("select *  from hqsen_user where id=" . $user_order['watch_user_id']);
+
+            if($create_user['alipay_account']){
+                $c_accout = '支付宝:' . $create_user['alipay_account'];
+            } else if($create_user['bank_account']){
+                $c_accout = $create_user['bank_name'] . ':' . $create_user['bank_account'] . '(' . $create_user['bank_user'] . ')' ;
+            } else {
+                $c_accout = '未设置账号';
+            }
+
+            if($watch_user['alipay_account']){
+                $w_accout = '支付宝:' . $watch_user['alipay_account'];
+            } else if($watch_user['bank_account']){
+                $w_accout = $watch_user['bank_name'] . ':' . $watch_user['bank_account'] . '(' . $watch_user['bank_user'] . ')' ;
+            } else {
+                $w_accout = '未设置账号';
+            }
+
             $pay_item['id'] = $one_sign['id'];
             $pay_item['user_kezi_order_id'] = $one_sign['user_kezi_order_id'];
             $pay_item['order_money'] = $one_sign['order_money'];
             $pay_item['order_other_money'] = $one_sign['order_other_money'];
             $pay_item['create_user_name'] = $create_user['user_name'];
-            $pay_item['create_account'] = $create_user['alipay_account'];
+            $pay_item['create_account'] = $c_accout;
             $pay_item['create_user_money'] = '100';
             $pay_item['watch_user_name'] = $watch_user['user_name'];
-            $pay_item['watch_account'] = $watch_user['alipay_account'];
+            $pay_item['watch_account'] = $w_accout;
             $pay_item['watch_user_money'] = '100';
             $pay_item['create_time'] = date('Y-m-d H:i:s' , $one_sign['create_time']);
             $pay_item['pay_status'] = $user_order['order_status'];// 1未打款 2 已打款
@@ -130,12 +147,22 @@ class pay extends base {
         foreach ($sign as $one_sign){
             $user_order = $this->db->getRow("select *  from hqsen_user_dajian_order where id=" . $one_sign['user_dajian_order_id']);
             $user_info = $this->db->getRow("select *  from hqsen_user where id=" . $user_order['user_id']);
+
+            if($user_info['alipay_account']){
+                $c_accout = '支付宝:' . $user_info['alipay_account'];
+            } else if($user_info['bank_account']){
+                $c_accout = $user_info['bank_name'] . ':' . $user_info['bank_account'] . '(' . $user_info['bank_user'] . ')' ;
+            } else {
+                $c_accout = '未设置账号';
+            }
+
             $pay_item['id'] = $one_sign['id'];
             $pay_item['user_dajian_order_id'] = $one_sign['user_dajian_order_id'];
             $pay_item['order_money'] = $one_sign['order_money'];
             $pay_item['first_order_money'] = $one_sign['first_order_money'];
             $pay_item['sign_user_id'] = $user_order['watch_user_id']; //  首销ID
             $pay_item['create_user_name'] = $user_info['user_name'];
+            $pay_item['create_account'] = $c_accout;
             $pay_item['create_user_money'] = '100';
             $pay_item['pay_status'] = $user_order['order_status'];// 1未打款 2 已打款
             $pay_item['create_time'] = date('Y-m-d H:i:s' , $one_sign['create_time']);

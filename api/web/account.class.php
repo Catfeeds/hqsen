@@ -33,11 +33,18 @@ class account extends base {
         $data['list'] = [];
         foreach ($user as $one_user){
             if($one_user){
+                if($one_user['alipay_account']){
+                    $accout = '支付宝:' . $one_user['alipay_account'];
+                } else if($one_user['bank_account']){
+                    $accout = $one_user['bank_name'] . ':' . $one_user['bank_account'] . '(' . $one_user['bank_user'] . ')' ;
+                } else {
+                    $accout = '未设置账号';
+                }
                 $user_item = array(
                     'user_id' => $one_user['id'],
                     'user_name' => $one_user['user_name'],
                     'create_time' => date('Y-m-d H:i:s' , $one_user['create_time']),
-                    'alipay_account' => $one_user['alipay_account'] ? $one_user['alipay_account'] : '未设置账号',
+                    'alipay_account' => $accout,
                     'payed' => intval(10000),
                     'unpay' => intval(10000),
                 );
