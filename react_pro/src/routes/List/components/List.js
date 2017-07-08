@@ -90,6 +90,13 @@ class List extends Component {
     const { type } = this.props.params
     this.context.router.push(`/detail/${type}?id=${id}`)
   }
+  gotoOrderDetail (record, isKezi) {
+    if (isKezi) {
+      this.context.router.push(`/detail/order_info_kezi_list?id=${record.kezi_order_id}`)
+    } else {
+      this.context.router.push(`/detail/order_info_dajian_list?id=${record.dajian_order_id}`)
+    }
+  }
 
   addRow (id) {
     const { type } = this.props.params
@@ -177,7 +184,11 @@ class List extends Component {
           render: text => {
             const orderType = configData.order_type
             const name = orderType.length ? orderType.filter(item => item.value === text)[0].label : ''
-            return <span>{name}</span>
+            return (
+              <span>
+                {name}
+              </span>
+            )
           }
         },
         {
@@ -196,7 +207,11 @@ class List extends Component {
           title: '操作',
           render: (text, record) => {
             const id = record[basicInfo.uniqueKey]
-            return <Button type="default" size="small" onClick={() => this.gotoDetail(id)}>查看详情</Button>
+            return (
+              <Button type="default" size="small" onClick={() => this.gotoDetail(id)}>
+                查看详情
+              </Button>
+            )
           }
         }
       ],
@@ -239,7 +254,11 @@ class List extends Component {
           title: '操作',
           render: (text, record) => {
             const id = record[basicInfo.uniqueKey]
-            return <Button type="default" onClick={() => this.gotoDetail(id)}>查看详情</Button>
+            return (
+              <Button type="default" onClick={() => this.gotoDetail(id)}>
+                查看详情
+              </Button>
+            )
           }
         }
       ],
@@ -260,8 +279,12 @@ class List extends Component {
             }
             return (
               <div>
-                <p>{text}</p>
-                <p className="red-tip">{data.join(',')}</p>
+                <p>
+                  {text}
+                </p>
+                <p className="red-tip">
+                  {data.join(',')}
+                </p>
               </div>
             )
           }
@@ -302,7 +325,9 @@ class List extends Component {
                 >
                   详细设定
                 </Button>
-                <Button type="default" size="small" onClick={() => this.setWedding(record)}>宴会厅设置</Button>
+                <Button type="default" size="small" onClick={() => this.setWedding(record)}>
+                  宴会厅设置
+                </Button>
               </div>
             )
           }
@@ -346,6 +371,12 @@ class List extends Component {
           title: '收款账号'
         },
         {
+          key: 'payed',
+          dataIndex: 'payed',
+          title: '佣金',
+          render: (text, record) => `${text + record.unpay}(${text}+${record.unpay})`
+        },
+        {
           key: 'create_time',
           dataIndex: 'create_time',
           title: '注册时间'
@@ -367,6 +398,11 @@ class List extends Component {
           key: 'phone',
           dataIndex: 'phone',
           title: '联系方式'
+        },
+        {
+          key: 'create_time',
+          dataIndex: 'create_time',
+          title: '创建时间'
         }
       ],
       // 酒店账户列表
@@ -385,13 +421,32 @@ class List extends Component {
         {
           key: 'hotel_area',
           dataIndex: 'hotel_area',
-          title: '酒店所在区'
+          title: '所属区域'
+        },
+        {
+          key: 'alipay_account',
+          dataIndex: 'alipay_account',
+          title: '收款账号'
+        },
+        {
+          key: 'payed',
+          dataIndex: 'payed',
+          title: '佣金',
+          render: (text, record) => `${text + record.unpay}(${text}+${record.unpay})`
         },
         {
           key: 'user_status',
           dataIndex: 'user_status',
           title: '状态',
-          render: text => <span>{text === '1' ? '已启用' : '已禁用'}</span>
+          render: text =>
+            <span>
+              {text === '1' ? '已启用' : '已禁用'}
+            </span>
+        },
+        {
+          key: 'create_time',
+          dataIndex: 'create_time',
+          title: '创建时间'
         },
         {
           key: 'control',
@@ -413,10 +468,18 @@ class List extends Component {
           title: '账号类型'
         },
         {
+          key: 'create_time',
+          dataIndex: 'create_time',
+          title: '创建时间'
+        },
+        {
           key: 'user_status',
           dataIndex: 'user_status',
           title: '状态',
-          render: text => <span>{text === '1' ? '已启用' : '已禁用'}</span>
+          render: text =>
+            <span>
+              {text === '1' ? '已启用' : '已禁用'}
+            </span>
         },
         {
           key: 'control',
@@ -436,13 +499,29 @@ class List extends Component {
           key: 'sign_pic_count',
           dataIndex: 'sign_pic_count',
           title: '合同附件',
-          render: text => <span>{text}图片</span>
+          render: text =>
+            <span>
+              {text}图片
+            </span>
         },
         {
           key: 'sign_status',
           dataIndex: 'sign_status',
-          title: '状态',
-          render: text => <span>{this.getStatus(text)}</span>
+          title: '处理阶段',
+          render: text =>
+            <span>
+              {this.getStatus(text)}
+            </span>
+        },
+        {
+          key: 'create_time',
+          dataIndex: 'create_time',
+          title: '创建时间'
+        },
+        {
+          key: 'update_time',
+          dataIndex: 'update_time',
+          title: '更新时间'
         },
         {
           key: 'control',
@@ -462,28 +541,51 @@ class List extends Component {
           key: 'sign_type',
           dataIndex: 'sign_type',
           title: '审批类型',
-          render: text => <span>{this.getSignType(text)}</span>
+          render: text =>
+            <span>
+              {this.getSignType(text)}
+            </span>
         },
         {
           key: 'user_type',
           dataIndex: 'user_type',
           title: '提交审批者',
-          render: (text, record) => <span>{record.sign_type === '0' ? '首销' : '二销'}</span>
+          render: (text, record) =>
+            <span>
+              {record.sign_type === '0' ? '首销' : '二销'}
+            </span>
         },
         {
           key: 'sign_pic_count',
           dataIndex: 'sign_pic_count',
           title: '合同附件',
-          render: text => <span>{text}图片</span>
+          render: text =>
+            <span>
+              {text}图片
+            </span>
         },
         {
           key: 'sign_status',
           dataIndex: 'sign_status',
-          title: '状态',
+          title: '处理阶段',
           render: text => {
             let data = this.getStatus(text)
-            return <span>{data}</span>
+            return (
+              <span>
+                {data}
+              </span>
+            )
           }
+        },
+        {
+          key: 'create_time',
+          dataIndex: 'create_time',
+          title: '创建时间'
+        },
+        {
+          key: 'update_time',
+          dataIndex: 'update_time',
+          title: '更新时间'
         },
         {
           key: 'control',
@@ -503,16 +605,33 @@ class List extends Component {
           key: 'sign_pic_count',
           dataIndex: 'sign_pic_count',
           title: '合同附件',
-          render: text => <span>{text}图片</span>
+          render: text =>
+            <span>
+              {text}图片
+            </span>
         },
         {
           key: 'boss_sign_status',
           dataIndex: 'boss_sign_status',
-          title: '状态',
+          title: '处理阶段',
           render: text => {
             let data = this.getStatus(text)
-            return <span>{data}</span>
+            return (
+              <span>
+                {data}
+              </span>
+            )
           }
+        },
+        {
+          key: 'create_time',
+          dataIndex: 'create_time',
+          title: '创建时间'
+        },
+        {
+          key: 'update_time',
+          dataIndex: 'update_time',
+          title: '更新时间'
         },
         {
           key: 'control',
@@ -529,31 +648,36 @@ class List extends Component {
           title: '合同金额'
         },
         {
-          key: 'sign_type',
-          dataIndex: 'sign_type',
-          title: '审批类型',
-          render: text => <span>{this.getSignType(text)}</span>
-        },
-        {
-          key: 'user_type',
-          dataIndex: 'user_type',
-          title: '提交审批者',
-          render: (text, record) => <span>{record.sign_type === '1' ? '首销' : '二销'}</span>
-        },
-        {
           key: 'sign_pic_count',
           dataIndex: 'sign_pic_count',
           title: '合同附件',
-          render: text => <span>{text}图片</span>
+          render: text =>
+            <span>
+              {text}图片
+            </span>
         },
         {
           key: 'boss_sign_status',
           dataIndex: 'boss_sign_status',
-          title: '状态',
+          title: '处理阶段',
           render: text => {
             let data = this.getStatus(text)
-            return <span>{data}</span>
+            return (
+              <span>
+                {data}
+              </span>
+            )
           }
+        },
+        {
+          key: 'create_time',
+          dataIndex: 'create_time',
+          title: '创建时间'
+        },
+        {
+          key: 'update_time',
+          dataIndex: 'update_time',
+          title: '更新时间'
         },
         {
           key: 'control',
@@ -575,6 +699,11 @@ class List extends Component {
           title: '提供者账号'
         },
         {
+          key: 'create_account',
+          dataIndex: 'create_account',
+          title: '提供者收款账号'
+        },
+        {
           key: 'create_user_money',
           dataIndex: 'create_user_money',
           title: '提供者分成'
@@ -585,6 +714,11 @@ class List extends Component {
           title: '跟踪者账号'
         },
         {
+          key: 'watch_account',
+          dataIndex: 'watch_account',
+          title: '跟踪者收款账号'
+        },
+        {
           key: 'watch_user_money',
           dataIndex: 'watch_user_money',
           title: '跟踪者分成'
@@ -592,8 +726,16 @@ class List extends Component {
         {
           key: 'pay_status',
           dataIndex: 'pay_status',
-          title: '状态',
-          render: text => <span>{text === '4' ? '已打款' : '待打款'}</span>
+          title: '打款状态',
+          render: text =>
+            <span>
+              {text === '4' ? '已打款' : '待打款'}
+            </span>
+        },
+        {
+          key: 'create_time',
+          dataIndex: 'create_time',
+          title: '创建时间'
         },
         {
           key: 'control',
@@ -627,8 +769,16 @@ class List extends Component {
         {
           key: 'pay_status',
           dataIndex: 'pay_status',
-          title: '状态',
-          render: text => <span>{text === '4' ? '已打款' : '待打款'}</span>
+          title: '打款状态',
+          render: text =>
+            <span>
+              {text === '4' ? '已打款' : '待打款'}
+            </span>
+        },
+        {
+          key: 'create_time',
+          dataIndex: 'create_time',
+          title: '创建时间'
         },
         {
           key: 'control',
@@ -743,16 +893,22 @@ class List extends Component {
       )
     }
     const renderApproveControl = record => {
+      const isKezi = basicInfo.breadcrumb[1].indexOf('客资') > -1
       return (
         <div>
-          <Button size="small" onClick={() => this.goApproveDetail(record, false)}>查看信息</Button>
+          <Button size="small" onClick={() => this.gotoOrderDetail(record, isKezi)}>
+            {isKezi ? '客资信息' : '搭建信息'}
+          </Button>
+          <Button style={{ margin: '0 5px' }} size="small" onClick={() => this.goApproveDetail(record, false)}>
+            签单信息
+          </Button>
           <Button
             type="primary"
             size="small"
-            style={{ marginLeft: 5 }}
+            disabled={record.sign_status === '2'}
             onClick={() => this.goApproveDetail(record, true)}
           >
-            {record.sign_status === '3' ? '重开' : '审批'}
+            审批
           </Button>
         </div>
       )
@@ -760,11 +916,15 @@ class List extends Component {
     const renderPayControl = record => {
       return (
         <div>
-          <Button size="small" style={{ marginRight: 5 }} onClick={() => this.gotoDetail(record.id)}>查看信息</Button>
+          <Button size="small" style={{ marginRight: 5 }} onClick={() => this.gotoDetail(record.id)}>
+            查看信息
+          </Button>
           {record.pay_status === '4'
             ? <span className="completed-pay">已完成</span>
             : <Popconfirm title="是否完成打款?" onConfirm={() => payCompleted(record)}>
-              <Button type="primary" size="small">完成打款</Button>
+              <Button type="primary" size="small">
+                  完成打款
+                </Button>
             </Popconfirm>}
         </div>
       )
