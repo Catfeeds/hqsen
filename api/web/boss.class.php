@@ -29,7 +29,7 @@ class boss extends base {
         $sign = $this->db->getRows("select *  from hqsen_user_kezi_order_sign  where boss_sign_status > 0 order by id desc " . $sql_limit);
         foreach ($sign as $one_sign){
             $item['id'] = $one_sign['id'];
-            $item['keizi_order_id'] = $one_sign['kezi_order_id'];
+            $item['kezi_order_id'] = $one_sign['kezi_order_id'];
             $item['create_time'] = date('Y-m-d H:i:s' , $one_sign['create_time']);
             $item['update_time'] = date('Y-m-d H:i:s' , $one_sign['update_time']);
             $item['order_money'] = $one_sign['order_money'];

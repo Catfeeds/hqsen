@@ -67,6 +67,8 @@ class pay extends base {
         $sign = $this->db->getRows("select *  from hqsen_user_kezi_order_sign  where boss_sign_status = 2 order by id desc " . $sql_limit);
         foreach ($sign as $one_sign){
             $user_order = $this->db->getRow("select *  from hqsen_user_kezi_order where id=" . $one_sign['user_kezi_order_id']);
+            $create_user = $this->db->getRow("select *  from hqsen_user where id=" . $user_order['user_id']);
+            $watch_user = $this->db->getRow("select *  from hqsen_user where id=" . $user_order['user_id']);
             $pay_item['id'] = $one_sign['id'];
             $pay_item['user_kezi_order_id'] = $one_sign['user_kezi_order_id'];
             $pay_item['order_money'] = $one_sign['order_money'];

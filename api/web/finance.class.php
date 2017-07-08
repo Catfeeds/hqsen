@@ -28,7 +28,7 @@ class finance extends base {
         foreach ($sign as $one_sign){
             $item['id'] = $one_sign['id'];
             $item['order_money'] = $one_sign['order_money'];
-            $item['keizi_order_id'] = $one_sign['kezi_order_id'];
+            $item['kezi_order_id'] = $one_sign['kezi_order_id'];
             $item['create_time'] = date('Y-m-d H:i:s' , $one_sign['create_time']);
             $item['update_time'] = date('Y-m-d H:i:s' , $one_sign['update_time']);
             $item['order_other_money'] = $one_sign['order_other_money'];// 客资附加款  去掉不用 0607
