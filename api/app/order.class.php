@@ -491,7 +491,7 @@ class order extends base {
         $order_phone = $this->postInt('order_phone');
         $order_area_hotel_type = $this->postString('order_area_hotel_type');
         $order_area_hotel_id = $this->postString('order_area_hotel_id');
-        $order_money = $this->postInt('order_money');
+        $order_money = $this->postString('order_money');
         $use_date = $this->postString('use_date');
         $order_desc = $this->postString('order_desc');
         if($order_type and $order_phone and $order_area_hotel_type and $order_area_hotel_id){
@@ -549,14 +549,14 @@ class order extends base {
         $order_page = $order_page ? $order_page : $this->postInt('order_page', 1);
         $limit = 10;
         $offset = ($order_page - 1) * $limit;
-        if($order_status == 1 and $this->user['user_type'] == 11){
-            $sql_limit = "  order by update_time asc  limit $offset , $limit";
-        } else {
-            $sql_limit = "  order by update_time desc  limit $offset , $limit";
-        }
         $sql_status = '  order_status != 0 ';
         // 11 首销 12 二销 其他 type 默认提供者
         if($this->user['user_type'] == 11){
+            if($order_status == 1){
+                $sql_limit = "  order by update_time asc limit $offset , $limit";
+            } else {
+                $sql_limit = "  order by update_time desc limit $offset , $limit";
+            }
             if($order_status){
                 $sql_status = '  order_status = ' . $order_status;
             }
@@ -581,6 +581,11 @@ class order extends base {
 
             }
         } elseif($this->user['user_type'] == 12){
+            if($order_status == 1){
+                $sql_limit = "  order by update_time asc limit $offset , $limit";
+            } else {
+                $sql_limit = "  order by update_time desc limit $offset , $limit";
+            }
             if($order_status){
                 $sql_status = ' erxiao_order_status = ' . $order_status;//搭建二销状态 0首销还未通过 1待处理 2待审核 3已完结 5已驳回
             }
@@ -592,17 +597,19 @@ class order extends base {
                 foreach ($order as $one_order){
                     $order_item = array(
                         'id' => (int)$one_order['id'],
-                        'create_time' => (string)$one_order['create_time'],
+                        'create_time' => (string)$one_order['update_time'],
                         'order_status' => (int)$one_order['erxiao_order_status'],
                         'erxiao_sign_type' => (int)$one_order['erxiao_sign_type'],
                         'order_phone' => (string)$one_order['order_phone'],
-                        'watch_user' => (string)$one_order['watch_user_name'],
+                        'watch_user' => (string)$one_order['watch_user_name'] . '  (' . $one_order['watch_user_hotel_name'] . ')' ,
                     );
                     $order_list['order_list'][] = $order_item;
                 }
 
             }
         } else {
+            // 搭建提供者
+            $sql_limit = "  order by create_time desc  limit $offset , $limit";
             if($order_status){
                 $sql_status = '  user_order_status = ' . $order_status;
             }
@@ -617,7 +624,7 @@ class order extends base {
                         'create_time' => (string)$one_order['create_time'],
                         'order_status' => (int)$one_order['user_order_status'],
                         'order_phone' => (string)$one_order['order_phone'],
-                        'watch_user' => (string)$one_order['watch_user_name'],
+                        'watch_user' => (string)$one_order['watch_user_name'] . '  (' . $one_order['watch_user_hotel_name'] . ')' ,
                     );
                     $order_list['order_list'][] = $order_item;
                 }
@@ -659,20 +666,30 @@ class order extends base {
                             $order_list['handle_note'] = '无';
                             break;
                         case 2:
-                            $order_list['handle_note'] = '该搭建合同正在被审核,请耐等待^_^';
+                            $order_list['handle_note'] = '该搭建合同正在被审核,请耐心等待^_^';
                             break;
                         case 3:
                             $order_list['handle_note'] = '相关的奖励即将发放给提供搭建信息者';
                             break;
                         case 4:
-                            $order_list['handle_note'] = '关奖励已经发放给提供搭建信息者';
+                            $order_list['handle_note'] = '相关奖励已经发放给提供搭建信息者';
                             break;
                         case 5:
-                            $order_list['handle_note'] = '搭建合同待重新提交:$财务待修改的审批 案$';
+                            $sign = $this->db->getRow("select * from hqsen_user_dajian_order_sign where user_dajian_order_id = $order_id");
+                            $finance_last_follow = $this->db->getRow("select * from hqsen_user_dajian_sign_follow where sign_status = 5 and user_sign_id = " . $sign['id'] . ' order by id desc limit 1');
+                            $order_list['handle_note'] = '搭建合同待重新提交:';
+                            if($finance_last_follow){
+                                $order_list['handle_note'] = $order_list['handle_note'] . '  (' . $finance_last_follow['status_desc'] . ')';
+                            }
                             break;
                         case 6:
-                            if('$财务 通过的审批 案$'){
-                                $order_list['handle_note'] = '已取消($财务 通过的审批 案$)';
+                            $sign = $this->db->getRow("select * from hqsen_user_dajian_order_sign where user_dajian_order_id = $order_id");
+                            if($sign){
+                                $finance_last_follow = $this->db->getRow("select * from hqsen_user_dajian_sign_follow where sign_status = 3 and user_sign_id = " . $sign['id'] . ' order by id desc limit 1');
+                                $order_list['handle_note'] = '已取消';
+                                if($finance_last_follow){
+                                    $order_list['handle_note'] = $order_list['handle_note'] . '  (' . $finance_last_follow['status_desc'] . ')';
+                                }
                             } else {
                                 $order_list['handle_note'] = '该搭建信息已被你取消,后续无法继续跟进';
                             }
@@ -690,7 +707,12 @@ class order extends base {
                             $order_list['handle_note'] = '搭建订单已完结';
                             break;
                         case 4:
-                            $order_list['handle_note'] = '待重新提交:$财务待修改的审批 案$';
+                            $sign = $this->db->getRow("select * from hqsen_user_dajian_order_sign where user_dajian_order_id = $order_id");
+                            $finance_last_follow = $this->db->getRow("select * from hqsen_user_dajian_sign_follow where user_sign_id = " . $sign['id'] . ' order by id desc limit 1');
+                            $order_list['handle_note'] = '待重新提交:';
+                            if($finance_last_follow and $finance_last_follow['status_desc'] == 5){
+                                $order_list['handle_note'] = $order_list['handle_note'] . '  (' . $finance_last_follow['status_desc'] . ')';
+                            }
                             break;
                     }
                 } else if($this->user['user_type'] == 4){
@@ -705,10 +727,16 @@ class order extends base {
                             $order_list['handle_note'] = '已结算(财务已打款)';
                             break;
                         case 4:
-                            if('$财务 通过的审批 案$'){
-                                $order_list['handle_note'] = '已取消($财务 通过的审批 案$)';
+                            $sign = $this->db->getRow("select * from hqsen_user_dajian_order_sign where user_dajian_order_id = $order_id");
+                            if($sign){
+                                $finance_last_follow = $this->db->getRow("select * from hqsen_user_dajian_sign_follow where sign_status = 3 and user_sign_id = " . $sign['id'] . ' order by id desc limit 1');
+                                $order_list['handle_note'] = '已取消';
+                                if($finance_last_follow){
+                                    $order_list['handle_note'] = $order_list['handle_note'] . '  (' . $finance_last_follow['status_desc'] . ')';
+                                }
+
                             } else {
-                                $order_list['handle_note'] = '已取消(专员已终 搭建跟进)';
+                                $order_list['handle_note'] = '已取消(专员已终止搭建跟进)';
                             }
                             break;
                     }
@@ -798,12 +826,11 @@ class order extends base {
                 // 更新用户订单  已取消
                 $sql_order['order_status'] = 6;
                 $sql_order['user_order_status'] = 4;
-                $this->db->update('hqsen_user_dajian_order', $sql_order, ' id = ' . $user_kezi_order_id);
             } else if($user_order_status == 3){
                 // 更新用户订单  待审核
                 $sql_order['order_status'] = 3;
-                $this->db->update('hqsen_user_dajian_order', $sql_order, ' id = ' . $user_kezi_order_id);
             }
+            $this->db->update('hqsen_user_dajian_order', $sql_order, ' id = ' . $user_kezi_order_id);
             $this->appDie();
         } else {
             $this->appDie($this->back_code['sys']['value_empty'], $this->back_msg['sys']['value_empty']);
