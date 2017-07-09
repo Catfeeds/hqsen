@@ -103,7 +103,7 @@ class order extends base {
         $order_page = $order_page ? $order_page : $this->postInt('order_page', 1);
         $limit = 10;
         $offset = ($order_page - 1) * $limit;
-        $sql_limit = " order by update_time desc limit $offset , $limit";
+        $sql_limit = " order by create_time desc limit $offset , $limit";
         $sql_status = '  user_order_status != 0 ';
         if($order_status){
             $sql_status = '  user_order_status = ' . $order_status;
@@ -549,7 +549,11 @@ class order extends base {
         $order_page = $order_page ? $order_page : $this->postInt('order_page', 1);
         $limit = 10;
         $offset = ($order_page - 1) * $limit;
-        $sql_limit = "  order by create_time desc  limit $offset , $limit";
+        if($order_status == 1 and $this->user['user_type'] == 11){
+            $sql_limit = "  order by update_time asc  limit $offset , $limit";
+        } else {
+            $sql_limit = "  order by update_time desc  limit $offset , $limit";
+        }
         $sql_status = '  order_status != 0 ';
         // 11 首销 12 二销 其他 type 默认提供者
         if($this->user['user_type'] == 11){
@@ -564,10 +568,10 @@ class order extends base {
                 foreach ($order as $one_order){
                     $order_item = array(
                         'id' => (int)$one_order['id'],
-                        'create_time' => (string)$one_order['create_time'],
+                        'create_time' => (string)$one_order['update_time'],
                         'order_status' => (int)$one_order['order_status'],
                         'order_phone' => (string)$one_order['order_phone'],
-                        'watch_user' => (string)$one_order['watch_user_name'],
+                        'watch_user' => (string)$one_order['watch_user_name'] . '  (' . $one_order['watch_user_hotel_name'] . ')' ,
                     );
                     if($order_status == 1){
                         $order_item['create_time'] = (string)$one_order['update_time'];
@@ -655,7 +659,7 @@ class order extends base {
                             $order_list['handle_note'] = '无';
                             break;
                         case 2:
-                            $order_list['handle_note'] = '该搭建合同正在被审核,请耐 等待^_^';
+                            $order_list['handle_note'] = '该搭建合同正在被审核,请耐等待^_^';
                             break;
                         case 3:
                             $order_list['handle_note'] = '相关的奖励即将发放给提供搭建信息者';
@@ -712,6 +716,8 @@ class order extends base {
                     $order_list['handle_note'] = $user_order['user_order_status'];// 默认提供者状态
                 }
                 $order_list['handle_time'] = $order['create_time'];
+                $finish_middle = $this->db->getRow('select * from hqsen_user_dajian_order_other_sign where user_dajian_order_id = ' . $order_id . ' and  sign_type = 1 and sign_status = 2' );
+                $order_list['finish_middle'] = $finish_middle ? 2 : 1; // 中款已支付 2 未支付1
             }
             $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $order_list);
         }
