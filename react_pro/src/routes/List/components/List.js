@@ -31,7 +31,20 @@ class List extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      searchBtnType: ['account_info_register_list', 'account_info_hotel_list', 'hotel_info_hotel_list'],
+      searchBtnType: [
+        {
+          type: 'account_info_register_list',
+          message: '账号名称'
+        },
+        {
+          type: 'account_info_hotel_list',
+          message: '用户名'
+        },
+        {
+          type: 'hotel_info_hotel_list',
+          message: '所在区'
+        }
+      ],
       addBtnType: [
         'account_info_hotel_list',
         'account_info_inner_list',
@@ -56,6 +69,11 @@ class List extends Component {
     if (type !== basicInfo.type) {
       initData(type, query.id)
     }
+  }
+  getSearchType () {
+    const { type } = this.props.List.basicInfo
+    const filterType = this.state.searchBtnType.filter(item => item.type === type)
+    return filterType.length ? filterType[0] : {}
   }
 
   goApproveDetail (record, isSubmit) {
@@ -426,7 +444,13 @@ class List extends Component {
         {
           key: 'alipay_account',
           dataIndex: 'alipay_account',
-          title: '收款账号'
+          title: '收款账号',
+          render: text =>
+            text === '未设置账号'
+              ? <span className="red-tip">
+                {text}
+              </span>
+              : text
         },
         {
           key: 'payed',
@@ -767,6 +791,11 @@ class List extends Component {
           title: '提供者分成'
         },
         {
+          key: 'create_account',
+          dataIndex: 'create_account',
+          title: '提供者收款账户'
+        },
+        {
           key: 'pay_status',
           dataIndex: 'pay_status',
           title: '打款状态',
@@ -894,6 +923,7 @@ class List extends Component {
     }
     const renderApproveControl = record => {
       const isKezi = basicInfo.breadcrumb[1].indexOf('客资') > -1
+      const disabledBtn = record.sign_status === '2' || record.boss_sign_status === '2' || record.sign_status === '3' || record.boss_sign_status === '3'
       return (
         <div>
           <Button size="small" onClick={() => this.gotoOrderDetail(record, isKezi)}>
@@ -905,7 +935,7 @@ class List extends Component {
           <Button
             type="primary"
             size="small"
-            disabled={record.sign_status === '2'}
+            disabled={disabledBtn}
             onClick={() => this.goApproveDetail(record, true)}
           >
             审批
@@ -944,13 +974,14 @@ class List extends Component {
       <div className="list-page">
         <MyBreadcrumb breadcrumb={basicInfo.breadcrumb} />
         <div className="control-box clearfix">
-          <Search
-            placeholder="请输入..."
-            style={{ width: 200, display: this.state.searchBtnType.indexOf(basicInfo.type) > -1 ? 'block' : 'none' }}
-            value={searchInput}
-            onChange={e => changeSearchInput(e.target.value)}
-            onSearch={() => handleCurrentChange(1)}
-          />
+          {this.getSearchType().type &&
+            <Search
+              placeholder={this.getSearchType().message}
+              style={{ width: 200 }}
+              value={searchInput}
+              onChange={e => changeSearchInput(e.target.value)}
+              onSearch={() => handleCurrentChange(1)}
+            />}
           <Button
             type="primary"
             icon="plus-circle-o"

@@ -57,23 +57,23 @@ export const actions = {
 // ------------------------------------
 const ACTION_HANDLERS = {
   [saveChoose]: (state, action) => {
-    let data = [
-      {
-        label: '通过',
-        value: '2'
-      },
-      {
-        label: '不通过',
-        value: '3'
-      }
-    ]
+    let data = []
     if (action.payload === 'finance_info_kezi_contract' || action.payload === 'payments') {
-      data.push({
-        label: '待修改',
-        value: '5'
-      })
-    }
-    if (['middle', 'additional', 'final', 'time'].indexOf(action.payload) > -1) {
+      data = [
+        {
+          label: '通过',
+          value: '2'
+        },
+        {
+          label: '不通过',
+          value: '3'
+        },
+        {
+          label: '待修改',
+          value: '5'
+        }
+      ]
+    } else if (['middle', 'additional', 'final', 'time'].indexOf(action.payload) > -1) {
       data = [
         {
           label: '通过',
@@ -82,6 +82,18 @@ const ACTION_HANDLERS = {
         {
           label: '待修改',
           value: '5'
+        }
+      ]
+    } else {
+      // 总经理类型
+      data = [
+        {
+          label: '通过',
+          value: '2'
+        },
+        {
+          label: '退回财务审批',
+          value: '3'
         }
       ]
     }
@@ -140,7 +152,8 @@ const initialState = {
       {
         label: '',
         type: 'textarea',
-        name: 'status_desc'
+        name: 'status_desc',
+        rules: { required: true }
       }
     ],
     breadcrumb: []

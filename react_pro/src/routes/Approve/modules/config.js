@@ -95,27 +95,32 @@ export default {
       {
         label: '合同金额',
         type: 'text',
-        name: 'order_money'
+        name: 'order_money',
+        disabled: true
       },
       {
         label: '举办时间',
         type: 'date',
-        name: 'sign_using_time'
+        name: 'sign_using_time',
+        disabled: true
       },
       {
         label: '首付金额',
         type: 'text',
-        name: 'first_order_money'
+        name: 'first_order_money',
+        disabled: true
       },
       {
         label: '首付时间',
         type: 'date',
-        name: 'first_order_using_time'
+        name: 'first_order_using_time',
+        disabled: true
       },
       {
         label: '首付附件',
         type: 'image',
-        name: 'sign_pic'
+        name: 'sign_pic',
+        disabled: true
       }
     ]
   },
@@ -128,42 +133,50 @@ export default {
       {
         label: '合同金额',
         type: 'text',
-        name: 'order_money'
+        name: 'order_money',
+        disabled: true
       },
       {
         label: '举办时间',
         type: 'date',
-        name: 'sign_using_time'
+        name: 'sign_using_time',
+        disabled: true
       },
       {
         label: '首付金额',
         type: 'text',
-        name: 'first_order_money'
+        name: 'first_order_money',
+        disabled: true
       },
       {
         label: '首付时间',
         type: 'date',
-        name: 'first_order_using_time'
+        name: 'first_order_using_time',
+        disabled: true
       },
       {
         label: '首付附件',
         type: 'image',
-        name: 'sign_pic'
+        name: 'sign_pic',
+        disabled: true
       },
       {
         label: '中款金额',
         type: 'text',
-        name: 'other_item_order_money'
+        name: 'other_item_order_money',
+        disabled: true
       },
       {
         label: '中款时间',
         type: 'date',
-        name: 'other_item_order_time'
+        name: 'other_item_order_time',
+        disabled: true
       },
       {
         label: '中款附件',
         type: 'image',
-        name: 'other_item_order_sign_pic'
+        name: 'other_item_order_sign_pic',
+        disabled: true
       }
     ]
   },
@@ -176,42 +189,50 @@ export default {
       {
         label: '合同金额',
         type: 'text',
-        name: 'order_money'
+        name: 'order_money',
+        disabled: true
       },
       {
         label: '举办时间',
         type: 'date',
-        name: 'sign_using_time'
+        name: 'sign_using_time',
+        disabled: true
       },
       {
         label: '首付金额',
         type: 'text',
-        name: 'first_order_money'
+        name: 'first_order_money',
+        disabled: true
       },
       {
         label: '首付时间',
         type: 'date',
-        name: 'first_order_using_time'
+        name: 'first_order_using_time',
+        disabled: true
       },
       {
         label: '首付附件',
         type: 'image',
-        name: 'sign_pic'
+        name: 'sign_pic',
+        disabled: true
       },
       {
         label: '附加款金额',
         type: 'text',
-        name: 'other_item_order_money'
+        name: 'other_item_order_money',
+        disabled: true
       },
       {
         label: '附加款时间',
         type: 'date',
-        name: 'other_item_order_time'
+        name: 'other_item_order_time',
+        disabled: true
       },
       {
         label: '附加款附件',
         type: 'image',
-        name: 'other_item_order_sign_pic'
+        name: 'other_item_order_sign_pic',
+        disabled: true
       }
     ]
   },
@@ -224,42 +245,50 @@ export default {
       {
         label: '合同金额',
         type: 'text',
-        name: 'order_money'
+        name: 'order_money',
+        disabled: true
       },
       {
         label: '举办时间',
         type: 'date',
-        name: 'sign_using_time'
+        name: 'sign_using_time',
+        disabled: true
       },
       {
         label: '首付金额',
         type: 'text',
-        name: 'first_order_money'
+        name: 'first_order_money',
+        disabled: true
       },
       {
         label: '首付时间',
         type: 'date',
-        name: 'first_order_using_time'
+        name: 'first_order_using_time',
+        disabled: true
       },
       {
         label: '首付附件',
         type: 'image',
-        name: 'sign_pic'
+        name: 'sign_pic',
+        disabled: true
       },
       {
         label: '尾款金额',
         type: 'text',
-        name: 'other_item_order_money'
+        name: 'other_item_order_money',
+        disabled: true
       },
       {
         label: '尾款时间',
         type: 'date',
-        name: 'other_item_order_time'
+        name: 'other_item_order_time',
+        disabled: true
       },
       {
         label: '尾款附件',
         type: 'image',
-        name: 'other_item_order_sign_pic'
+        name: 'other_item_order_sign_pic',
+        disabled: true
       }
     ]
   },
@@ -272,17 +301,20 @@ export default {
       {
         label: '合同金额',
         type: 'text',
-        name: 'other_item_order_money'
+        name: 'other_item_order_money',
+        disabled: true
       },
       {
         label: '原举办时间',
         type: 'date',
-        name: 'other_item_weikuan_old_time'
+        name: 'other_item_weikuan_old_time',
+        disabled: true
       },
       {
         label: '欲修改时间',
         type: 'date',
-        name: 'other_item_weikuan_new_time'
+        name: 'other_item_weikuan_new_time',
+        disabled: true
       }
     ]
   }

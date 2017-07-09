@@ -6,11 +6,15 @@
 }
 .disabled-row, .disabled-row:hover {
   color: #ededed;
+  .red-tip {
+    color: #ededed;
+  }
 }
 .completed-pay {
   color: #ccc;
 }
 .red-tip {
+  display: inline-block;
   color: red;
   font-size: 12px;
   transform: scale(0.8);
