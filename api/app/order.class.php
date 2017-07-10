@@ -422,6 +422,7 @@ class order extends base {
         $sign_pic_arr = explode(',', $sign_pic);
         $sign_pic_json = json_encode($sign_pic_arr);
         $user_kezi_order_sign = $this->db->getRow('select * from hqsen_user_kezi_order_sign where user_kezi_order_id = ' . $user_kezi_order_id );
+        $user_order = $this->db->getRow("select *  from hqsen_user_kezi_order where id=" . $user_kezi_order_id);
         $user_kezi_order_sign['order_money'] = $order_money;
         $user_kezi_order_sign['order_other_money'] = $order_other_money;
         $user_kezi_order_sign['sign_using_time'] = $sign_using_time;
@@ -429,6 +430,7 @@ class order extends base {
         $user_kezi_order_sign['create_time'] = time();
         $user_kezi_order_sign['update_time'] = time();
         $user_kezi_order_sign['user_kezi_order_id'] = $user_kezi_order_id;
+        $user_kezi_order_sign['kezi_order_id'] = $user_order['kezi_order_id'];
         if($user_kezi_order_id){
             if(isset($user_kezi_order_sign['id']) and $user_kezi_order_sign['id']){
                 $this->db->update('hqsen_user_kezi_order_sign', $user_kezi_order_sign, ' id = ' . $user_kezi_order_sign['id']);
@@ -566,12 +568,13 @@ class order extends base {
             $order_list['order_list'] = [];
             if($order){
                 foreach ($order as $one_order){
+                    $user_data = $this->db->getRow('select * from hqsen_user_data where user_id=' . $one_order['watch_user_id'] );
                     $order_item = array(
                         'id' => (int)$one_order['id'],
                         'create_time' => (string)$one_order['update_time'],
                         'order_status' => (int)$one_order['order_status'],
                         'order_phone' => (string)$one_order['order_phone'],
-                        'watch_user' => (string)$one_order['watch_user_name'] . '  (' . $one_order['watch_user_hotel_name'] . ')' ,
+                        'watch_user' => (string)$one_order['watch_user_name'] . '  (' . $user_data['hotel_area'] . ')' ,
                     );
                     if($order_status == 1){
                         $order_item['create_time'] = (string)$one_order['update_time'];
@@ -595,13 +598,14 @@ class order extends base {
             $order_list['order_list'] = [];
             if($order){
                 foreach ($order as $one_order){
+                    $user_data = $this->db->getRow('select * from hqsen_user_data where user_id=' . $one_order['watch_user_id'] );
                     $order_item = array(
                         'id' => (int)$one_order['id'],
                         'create_time' => (string)$one_order['update_time'],
                         'order_status' => (int)$one_order['erxiao_order_status'],
                         'erxiao_sign_type' => (int)$one_order['erxiao_sign_type'],
                         'order_phone' => (string)$one_order['order_phone'],
-                        'watch_user' => (string)$one_order['watch_user_name'] . '  (' . $one_order['watch_user_hotel_name'] . ')' ,
+                        'watch_user' => (string)$one_order['watch_user_name'] . '  (' . $user_data['hotel_area'] . ')' ,
                     );
                     $order_list['order_list'][] = $order_item;
                 }
@@ -619,12 +623,13 @@ class order extends base {
             $order_list['order_list'] = [];
             if($order){
                 foreach ($order as $one_order){
+                    $user_data = $this->db->getRow('select * from hqsen_user_data where user_id=' . $one_order['watch_user_id'] );
                     $order_item = array(
                         'id' => (int)$one_order['id'],
                         'create_time' => (string)$one_order['create_time'],
                         'order_status' => (int)$one_order['user_order_status'],
                         'order_phone' => (string)$one_order['order_phone'],
-                        'watch_user' => (string)$one_order['watch_user_name'] . '  (' . $one_order['watch_user_hotel_name'] . ')' ,
+                        'watch_user' => (string)$one_order['watch_user_name'] . '  (' . $user_data['hotel_area'] . ')' ,
                     );
                     $order_list['order_list'][] = $order_item;
                 }
@@ -850,6 +855,7 @@ class order extends base {
         $sign_pic_arr = explode(',', $sign_pic);
         $sign_pic_json = json_encode($sign_pic_arr);
         $user_dajian_order_sign = $this->db->getRow('select * from hqsen_user_dajian_order_sign where user_dajian_order_id = ' . $user_dajian_order_id );
+        $user_order = $this->db->getRow("select *  from hqsen_user_dajian_order where id=" . $user_dajian_order_id);
         $user_dajian_order_sign['user_dajian_order_id'] = $user_dajian_order_id;
         $user_dajian_order_sign['order_money'] = $order_money;
         $user_dajian_order_sign['sign_using_time'] = $sign_using_time;
@@ -860,6 +866,7 @@ class order extends base {
         $user_dajian_order_sign['order_time'] = time();// 订单创建时间
         $user_dajian_order_sign['create_time'] = time();
         $user_dajian_order_sign['update_time'] = time();
+        $user_dajian_order_sign['dajian_order_id'] = $user_order['dajian_order_id'];
         if($user_dajian_order_id){
             if(isset($user_dajian_order_sign['id']) and $user_dajian_order_sign['id']){
                 $this->db->update('hqsen_user_dajian_order_sign', $user_dajian_order_sign, ' id = ' . $user_dajian_order_sign['id']);
