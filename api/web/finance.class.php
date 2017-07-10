@@ -298,7 +298,7 @@ class finance extends base {
                     $this->db->update('hqsen_user_dajian_order', $user_order, ' id = ' . $sign['user_dajian_order_id']);
                 }
                 // 待修改
-                if($sign_status == 5 and $sign){
+                if($sign_status == 5){
                     $user_order['erxiao_order_status'] = 5;// 搭建二销修改成 待处理
                     $this->db->update('hqsen_user_dajian_order', $user_order, ' id = ' . $sign['user_dajian_order_id']);
                 }

@@ -750,7 +750,7 @@ class order extends base {
                 }
                 $order_list['handle_time'] = $order['create_time'];
                 $finish_middle = $this->db->getRow('select * from hqsen_user_dajian_order_other_sign where user_dajian_order_id = ' . $order_id . ' and  sign_type = 1 and sign_status = 2' );
-                $order_list['finish_middle'] = $finish_middle ? 2 : 1; // 中款已支付 2 未支付1
+                $order_list['finish_middle'] = $finish_middle ? 1 : 2; // 1是已支付  2是未支付
             }
             $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $order_list);
         }
