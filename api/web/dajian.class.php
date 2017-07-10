@@ -24,7 +24,7 @@ class dajian extends base {
         $limit = 10;
         $offset = ($page - 1) * $limit;
         $sql_limit = " limit $offset , $limit";
-        $order = $this->db->getRows("select * from hqsen_dajian_order  where del_flag = 1 " . $sql_limit);
+        $order = $this->db->getRows("select * from hqsen_dajian_order  where del_flag = 1  order by id desc " . $sql_limit);
         $data = [];
         foreach ($order as $one_order){
             if($one_order){

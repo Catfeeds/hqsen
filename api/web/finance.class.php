@@ -271,10 +271,14 @@ class finance extends base {
             $sign_follow['id'] = $this->db->insert('hqsen_user_dajian_sign_follow', $sign_follow);
             // 审批成功  更新签单数据  不更新跟踪者订单数据 还是待审核状态
             if(isset($sign_follow['id']) and $sign_follow['id']){
+                // 首销签单处理
                 $sign = $this->db->getRow("select *  from hqsen_user_dajian_order_sign where id=" . $user_sign_id);
                 $user_order_sign['sign_other_sign_status'] = $sign_status;// 二销财务审核 0未知 1未处理 2通过 3驳回 4 总经理驳回 5待修改
-                $this->db->update('hqsen_user_dajian_order_sign', $user_order_sign, ' id = ' . $user_sign_id);// 签单搭建 财务状态
-
+                $this->db->update('hqsen_user_dajian_order_sign', $user_order_sign, ' id = ' . $user_sign_id);// 首销签单搭建 财务状态
+                // 二销签单处理
+                $other_sign = $this->db->getRow("select *  from hqsen_user_dajian_order_other_sign where id=" . $sign['sign_other_sign_id']);
+                $other_sign['sign_status'] = $sign_status; // 二销签单 财务状态 0未知 1未处理 2通过 3驳回 4 总经理驳回 5待修改
+                $this->db->update('hqsen_user_dajian_order_sign', $other_sign, ' id = ' . $sign['sign_other_sign_id']);// 二销签单 财务状态 更新
                 // 通过
                 if($sign_status == 2 and $sign){
                     // 如果尾款  进入已完成 非尾款 进入待处理
@@ -282,14 +286,14 @@ class finance extends base {
                         $user_order['erxiao_order_status'] = 3;// 搭建二销修改成 已完成
                     } else {
                         $user_order['erxiao_order_status'] = 1;// 搭建二销修改成 待处理
+                        // 判断中款是否完成
+                        $finish_middle = $this->db->getRow('select * from hqsen_user_dajian_order_other_sign where user_dajian_order_id = ' . $sign['user_dajian_order_id'] . ' and  sign_type = 1 and sign_status = 2' );
+                        $user_order['erxiao_sign_type'] = $finish_middle ? 2 : 1;// 如果已支付  待处理显示尾款  未支付 待处理显示中款
                     }
                     // 通过修改尾款时间  订单修改尾款时间
                     if($sign['sign_type'] == 4){
-                        $other_sign = $this->db->getRow("select *  from hqsen_user_dajian_order_other_sign where sign_type = 4 and id=" . $sign['sign_other_sign_id']);
-                        if($other_sign){
-                            $dajian_order['use_date'] = $other_sign['order_time'];
-                            $this->db->update('hqsen_dajian_order', $dajian_order, ' id = ' . $sign['dajian_order_id']);// 签单搭建 财务状态
-                        }
+                        $user_dajian_order['sign_using_time'] = $other_sign['order_time'];
+                        $this->db->update('hqsen_user_dajian_order_sign', $user_dajian_order, ' id = ' . $user_sign_id);// 签单搭建 财务状态
                     }
                     $this->db->update('hqsen_user_dajian_order', $user_order, ' id = ' . $sign['user_dajian_order_id']);
                 }
