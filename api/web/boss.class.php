@@ -73,7 +73,8 @@ class boss extends base {
                         $user_order['user_order_status'] = 2;
                         $this->db->update('hqsen_user_kezi_order', $user_order, ' id = ' . $sign['user_kezi_order_id']);
                     }
-                    $this->createDaJian($order['customer_name'],$order['order_type'],$order['order_phone'],$order['order_area_hotel_type'],$order['order_area_hotel_id'],$order['use_date'],$order['order_money'],$order['order_desc']);
+                    // 默认布展
+                    $this->createDaJian($order['customer_name'],1,$order['order_phone'],$order['order_area_hotel_type'],$order['order_area_hotel_id'],$order['use_date'],$order['order_money'],$order['order_desc'], $user_order['watch_user_id']);
                 }
                 if($sign_status == 3){
                     $order_sign['sign_status'] = 4; // 签单信息更改为总经理驳回
@@ -228,7 +229,7 @@ class boss extends base {
 
     }
 
-    public function createDaJian($customer_name, $order_type, $order_phone, $order_area_hotel_type, $order_area_hotel_id, $use_date, $order_money, $order_desc){
+    public function createDaJian($customer_name, $order_type, $order_phone, $order_area_hotel_type, $order_area_hotel_id, $use_date, $order_money, $order_desc, $user_id){
         $sql_order['customer_name'] = $customer_name;
         $sql_order['order_type'] = $order_type;
         $sql_order['order_phone'] = $order_phone;
@@ -238,8 +239,9 @@ class boss extends base {
         $sql_order['order_money'] = $order_money;
         $sql_order['order_desc'] = $order_desc;
         $sql_order['order_status'] = 1;
+        $sql_order['order_from'] = 2;
         $sql_order['create_time'] = time();
-        $sql_order['user_id'] = $this->user['id'];
+        $sql_order['user_id'] = $user_id;
         $sql_order['id'] = $this->db->insert('hqsen_dajian_order', $sql_order);
         $area_hotel_id_array = explode(',', $order_area_hotel_id);
         $area_hotel_id_array = array_filter($area_hotel_id_array);
@@ -247,7 +249,7 @@ class boss extends base {
         $error_count = 0;
         // 目前区域单选  兼容多选
         foreach ($area_hotel_id_array as $one_area_hotel_id){
-            $order_msg = order::insertUserDaJianOrder($sql_order['id'], $order_area_hotel_type, $one_area_hotel_id, $order_phone);
+            $order_msg = $this->insertUserDaJianOrder($sql_order['id'], $order_area_hotel_type, $one_area_hotel_id, $order_phone, $user_id);
             if($order_msg){
                 $error_msg .= $order_msg;
                 $error_count++;
@@ -264,6 +266,46 @@ class boss extends base {
             $this->appDie($this->back_code['order']['dajian_order_fail'], $error_msg);
         } else {
             $this->appDie();
+        }
+    }
+
+    public function insertUserDaJianOrder($order_id, $area_hotel_type, $area_hotel_id, $order_phone, $user_id)
+    {
+        if ($area_hotel_id) {
+            // 1 表示 根据区域创建搭建信息  搭建信息默认根据区域来
+            if ($area_hotel_type == 1) {
+                // 区域信息  自动分配首销账号 user_type=11
+                $user_data = $this->db->getRow("
+                    select hud.* from hqsen_user as hu 
+                    left join hqsen_user_data as hud on hu.id=hud.user_id 
+                    where hu.user_type=11
+                    and hu.del_flag = 1  and hu.user_status=1 
+                    and hud.area_id = $area_hotel_id 
+                    order by last_order_time asc
+                ");
+                if(!$user_data){
+                    $area = $this->db->getRow('select * from hqsen_area where id =' . $area_hotel_id);
+                    $error_message = '区域:' . $area['area_name'] . '搭建信息创建失败';
+                    return $error_message;
+                }
+                $one_user_order_sql = [];
+                if ($user_data) {
+                    $one_user_order_sql['user_id'] = $user_id;
+                    $one_user_order_sql['watch_user_name'] = $user_data['user_name'];
+                    $one_user_order_sql['watch_user_hotel_name'] = $user_data['hotel_name'];
+                    $one_user_order_sql['watch_user_id'] = $user_data['user_id'];
+                    $one_user_order_sql['dajian_order_id'] = $order_id;
+                    $one_user_order_sql['create_time'] = time();
+                    $one_user_order_sql['update_time'] = time();
+                    $one_user_order_sql['order_phone'] = $order_phone;
+                    $rs = $this->db->insert('hqsen_user_dajian_order', $one_user_order_sql);
+                    if($rs){
+                        $update_sql['last_order_time'] = time();
+                        $this->db->update('hqsen_user_data', $update_sql, ' user_id = ' . $user_data['user_id']);
+                    }
+                }
+            }
+            return false;
         }
     }
 

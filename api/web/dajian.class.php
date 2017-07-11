@@ -28,6 +28,10 @@ class dajian extends base {
         $data = [];
         foreach ($order as $one_order){
             if($one_order){
+                $item_come_from = array(
+                    '1' => '用户创建',
+                    '2' => '同步',
+                );
                 $dajian_item = array(
                     'order_id' => $one_order['id'],
                     'customer_name' => $one_order['customer_name'],
@@ -35,7 +39,7 @@ class dajian extends base {
                     'create_time' => date('Y-m-d H:i:s', $one_order['create_time']),
                     'order_type' => $one_order['order_type'],
                     'order_area_hotel_type' => '指定区域',
-                    'order_from' => '同步',
+                    'order_from' => $item_come_from[$one_order['order_from']],
                 );
                 // 如果是1 表示是区域  如果是2 表示是酒店
                 if($one_order['order_area_hotel_type'] == 1){
