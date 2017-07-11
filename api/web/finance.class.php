@@ -278,7 +278,7 @@ class finance extends base {
                 // 二销签单处理
                 $other_sign = $this->db->getRow("select *  from hqsen_user_dajian_order_other_sign where id=" . $sign['sign_other_sign_id']);
                 $other_sign['sign_status'] = $sign_status; // 二销签单 财务状态 0未知 1未处理 2通过 3驳回 4 总经理驳回 5待修改
-                $this->db->update('hqsen_user_dajian_order_sign', $other_sign, ' id = ' . $sign['sign_other_sign_id']);// 二销签单 财务状态 更新
+                $this->db->update('hqsen_user_dajian_order_other_sign', $other_sign, ' id = ' . $sign['sign_other_sign_id']);// 二销签单 财务状态 更新
                 // 通过
                 if($sign_status == 2 and $sign){
                     // 如果尾款  进入已完成 非尾款 进入待处理
