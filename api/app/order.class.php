@@ -314,12 +314,17 @@ class order extends base {
     {
         if ($area_hotel_id) {
             if ($area_hotel_type == 1) {
+                $for_self_sql = ' ';
+                // 如果自己是酒店账号    那么分配给自己
+                if($this->user['user_type'] == 4){
+                    $for_self_sql = ' and hu.id = ' . $this->user['id'] . ' ';
+                }
                 // 分配订单 需要分配酒店账号 user_type=4
                 $user_data = $this->db->getRows("
                     select * from (
                             select hud.* from hqsen_user as hu 
                             left join hqsen_user_data as hud on hu.id=hud.user_id 
-                            where hu.user_type=4 and hu.del_flag = 1 and hu.user_status=1  and hud.area_id = $area_hotel_id
+                            where hu.user_type=4 and hu.del_flag = 1 and hu.user_status=1  $for_self_sql and hud.area_id = $area_hotel_id
                             order by last_order_time asc
                         ) as c group by c.hotel_id
                 ");
@@ -347,10 +352,15 @@ class order extends base {
                     }
                 }
             } else {
+                $for_self_sql = ' ';
+                // 如果自己是酒店账号    那么分配给自己
+                if($this->user['user_type'] == 4){
+                    $for_self_sql = ' and hu.id = ' . $this->user['id'] . ' ';
+                }
                 $one_user_data = $this->db->getRow("
                     select hud.* from hqsen_user as hu 
                     left join hqsen_user_data as hud on hu.id=hud.user_id 
-                    where hu.user_type=4 and hu.del_flag = 1 and hu.user_status=1  and hud.hotel_id = $area_hotel_id
+                    where hu.user_type=4 and hu.del_flag = 1 and hu.user_status=1  $for_self_sql and hud.hotel_id = $area_hotel_id
                     order by last_order_time asc
                     limit 1
                 ");

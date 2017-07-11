@@ -74,7 +74,10 @@ class boss extends base {
                         $this->db->update('hqsen_user_kezi_order', $user_order, ' id = ' . $sign['user_kezi_order_id']);
                     }
                     // 默认布展
-                    $this->createDaJian($order['customer_name'],1,$order['order_phone'],$order['order_area_hotel_type'],$order['order_area_hotel_id'],$order['use_date'],$order['order_money'],$order['order_desc'], $user_order['watch_user_id']);
+                    $watch_user_info = $this->db->getRow("select *  from hqsen_user_data where user_id=" . $user_order['watch_user_id']);
+                    $order_area_hotel_type = 1;//指定区域
+                    $order_area_hotel_id = $watch_user_info['area_id'];//区域ID
+                    $this->createDaJian($order['customer_name'],1,$order['order_phone'],$order_area_hotel_type,$order_area_hotel_id,$order['use_date'],$order['order_money'],$order['order_desc'], $user_order['watch_user_id']);
                 }
                 if($sign_status == 3){
                     $order_sign['sign_status'] = 4; // 签单信息更改为总经理驳回
