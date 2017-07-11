@@ -66,7 +66,11 @@ class user extends base{
         if($user_name and $password){
             $user = $this->db->getRow("select * from hqsen_user where user_status = 1 and user_name = '$user_name'");
             if(!$user or md5($password) != $user['password']){
-                    $this->appDie($this->back_code['user']['login_err'], $this->back_msg['user']['login_err']);
+                $this->appDie($this->back_code['user']['login_err'], $this->back_msg['user']['login_err']);
+            }
+            $company_account = [4, 11, 12];
+            if(!in_array($user['user_type'], $company_account)){
+                $this->appDie($this->back_code['user']['login_err'], $this->back_msg['user']['login_err']);
             }
             $user_data = $this->db->getRow("select * from hqsen_user_data where user_id = " . $user['id']);
             $user['last_login_time'] = time();

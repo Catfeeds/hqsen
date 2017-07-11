@@ -24,7 +24,7 @@ class finance extends base {
         $limit = 10;
         $offset = ($page - 1) * $limit;
         $sql_limit = " limit $offset , $limit";
-        $sign = $this->db->getRows("select *  from hqsen_user_kezi_order_sign order by id desc " . $sql_limit);
+        $sign = $this->db->getRows("select *  from hqsen_user_kezi_order_sign order by update_time desc " . $sql_limit);
         foreach ($sign as $one_sign){
             $item['id'] = $one_sign['id'];
             $item['order_money'] = $one_sign['order_money'];
@@ -130,7 +130,7 @@ class finance extends base {
         $limit = 10;
         $offset = ($page - 1) * $limit;
         $sql_limit = " limit $offset , $limit";
-        $sign = $this->db->getRows("select *  from hqsen_user_dajian_order_sign order by id desc " . $sql_limit);
+        $sign = $this->db->getRows("select *  from hqsen_user_dajian_order_sign order by update_time desc " . $sql_limit);
         foreach ($sign as $one_sign){
             $item['id'] = $one_sign['id'];
             $item['sign_other_sign_id'] = $one_sign['sign_other_sign_id'];

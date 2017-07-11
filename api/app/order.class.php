@@ -594,11 +594,7 @@ class order extends base {
 
             }
         } elseif($this->user['user_type'] == 12){
-            if($order_status == 1){
-                $sql_limit = "  order by update_time asc limit $offset , $limit";
-            } else {
-                $sql_limit = "  order by update_time desc limit $offset , $limit";
-            }
+            $sql_limit = "  order by update_time desc limit $offset , $limit";
             if($order_status){
                 $sql_status = ' erxiao_order_status = ' . $order_status;//搭建二销状态 0首销还未通过 1待处理 2待审核 3已完结 5已驳回
             }
@@ -615,7 +611,7 @@ class order extends base {
                         'order_status' => (int)$one_order['erxiao_order_status'],
                         'erxiao_sign_type' => (int)$one_order['erxiao_sign_type'],
                         'order_phone' => (string)$one_order['order_phone'],
-                        'watch_user' => (string)$one_order['watch_user_name'] . '  (' . $user_data['hotel_area'] . ')' ,
+                        'watch_user' => (string)$this->user['user_name'] . '  (' . $user_data['hotel_area'] . ')' ,
                     );
                     $order_list['order_list'][] = $order_item;
                 }
@@ -758,7 +754,9 @@ class order extends base {
                 } else {
                     $order_list['handle_note'] = $user_order['user_order_status'];// 默认提供者状态
                 }
+                $sign = $this->db->getRow("select * from hqsen_user_dajian_order_sign where user_dajian_order_id = $order_id");
                 $order_list['handle_time'] = $order['create_time'];
+                $order_list['sign_using_time'] = $sign['sign_using_time'];// 尾款使用时间
                 $finish_middle = $this->db->getRow('select * from hqsen_user_dajian_order_other_sign where user_dajian_order_id = ' . $order_id . ' and  sign_type = 1 and sign_status = 2' );
                 $order_list['finish_middle'] = $finish_middle ? 1 : 2; // 1是已支付  2是未支付
             }
@@ -944,6 +942,7 @@ class order extends base {
             $this->db->update('hqsen_user_dajian_order', $order_type_sql, ' id = ' . $user_dajian_order_id);
             // 更新首销签单  关于二销信息
             $erxiao_sign_sql['sign_type'] = $sign_type;
+            $erxiao_sign_sql['update_time'] = time();
             $erxiao_sign_sql['sign_other_sign_id'] = $user_dajian_order_sign['id'];
             $erxiao_sign_sql['sign_user_id'] = $this->user['id'];
             $erxiao_sign_sql['sign_other_sign_status'] = 1; // 二销财务审核 0未知 1未处理 2通过 3驳回 4 总经理驳回 5待修改
