@@ -594,20 +594,28 @@ class order extends base {
 
             }
         } elseif($this->user['user_type'] == 12){
-            $sql_limit = "  order by update_time desc limit $offset , $limit";
-            if($order_status){
-                $sql_status = ' erxiao_order_status = ' . $order_status;//搭建二销状态 0首销还未通过 1待处理 2待审核 3已完结 5已驳回
+            if($order_status == 1){
+                $sql_limit = "  order by hudos.erxiao_unhandle_time asc limit $offset , $limit";
+            } else {
+                $sql_limit = "  order by hudos.update_time desc limit $offset , $limit";
             }
-            $sql_status .= ' and erxiao_user_id = '. $this->user['id'];
+            if($order_status){
+                $sql_status = ' hudo.erxiao_order_status = ' . $order_status;//搭建二销状态 0首销还未通过 1待处理 2待审核 3已完结 5已驳回
+            }
+            $sql_status .= ' and hudo.erxiao_user_id = '. $this->user['id'];
 
-            $order = $this->db->getRows('select * from hqsen_user_dajian_order where ' . $sql_status . $sql_limit);
+            $order = $this->db->getRows('select hudo.id as id, hudo.erxiao_order_status as erxiao_order_status, 
+              hudo.erxiao_sign_type as erxiao_sign_type, hudos.erxiao_unhandle_time as erxiao_unhandle_time,
+              hudo.order_phone as order_phone,hudo.watch_user_id as watch_user_id
+            from hqsen_user_dajian_order as hudo left join hqsen_user_dajian_order_sign as hudos
+            on hudo.id = hudos.user_dajian_order_id  where ' . $sql_status . $sql_limit);
             $order_list['order_list'] = [];
             if($order){
                 foreach ($order as $one_order){
                     $user_data = $this->db->getRow('select * from hqsen_user_data where user_id=' . $one_order['watch_user_id'] );
                     $order_item = array(
                         'id' => (int)$one_order['id'],
-                        'create_time' => (string)$one_order['update_time'],
+                        'create_time' => (string)$one_order['erxiao_unhandle_time'],
                         'order_status' => (int)$one_order['erxiao_order_status'],
                         'erxiao_sign_type' => (int)$one_order['erxiao_sign_type'],
                         'order_phone' => (string)$one_order['order_phone'],
@@ -642,8 +650,15 @@ class order extends base {
 
             }
         }
-
-        $order_list['count'] = $this->db->getCount('hqsen_user_dajian_order', $sql_status);
+        if($this->user['user_type'] == 12){
+            if($order_status){
+                $sql_status = ' erxiao_order_status = ' . $order_status;//搭建二销状态 0首销还未通过 1待处理 2待审核 3已完结 5已驳回
+            }
+            $sql_status .= ' and erxiao_user_id = '. $this->user['id'];
+            $order_list['count'] = $this->db->getCount('hqsen_user_dajian_order', $sql_status);
+        } else {
+            $order_list['count'] = $this->db->getCount('hqsen_user_dajian_order', $sql_status);
+        }
         $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $order_list);
     }
 
@@ -757,6 +772,7 @@ class order extends base {
                 $sign = $this->db->getRow("select * from hqsen_user_dajian_order_sign where user_dajian_order_id = $order_id");
                 $order_list['handle_time'] = $order['create_time'];
                 $order_list['sign_using_time'] = $sign['sign_using_time'];// 尾款使用时间
+                $order_list['next_pay_time'] = $sign['next_pay_time'];// 中款使用时间
                 $finish_middle = $this->db->getRow('select * from hqsen_user_dajian_order_other_sign where user_dajian_order_id = ' . $order_id . ' and  sign_type = 1 and sign_status = 2' );
                 $order_list['finish_middle'] = $finish_middle ? 1 : 2; // 1是已支付  2是未支付
             }
@@ -874,6 +890,7 @@ class order extends base {
         $user_dajian_order_sign['order_time'] = time();// 订单创建时间
         $user_dajian_order_sign['create_time'] = time();
         $user_dajian_order_sign['update_time'] = time();
+        $user_dajian_order_sign['erxiao_unhandle_time'] = $next_pay_time; // 生成签单 默认二销未处理时间为中款时间
         $user_dajian_order_sign['dajian_order_id'] = $user_order['dajian_order_id'];
         if($user_dajian_order_id){
             if(isset($user_dajian_order_sign['id']) and $user_dajian_order_sign['id']){
@@ -1013,7 +1030,7 @@ class order extends base {
         if($user_dajian_order_id){
             $user_dajian_order_sign = $this->db->getRow('select * from hqsen_user_dajian_order_sign where user_dajian_order_id = ' . $user_dajian_order_id );
             if($user_dajian_order_sign){
-                $user_dajian_order_other_sign = $this->db->getRow('select * from hqsen_user_dajian_order_other_sign where id = ' . $user_dajian_order_sign['sign_other_sign_id'] );
+                $user_dajian_order_other_sign = $this->db->getRow('select * from hqsen_user_dajian_order_other_sign where id = ' . $user_dajian_order_sign['sign_other_sign_id'] . ' order by id desc limit 1');
                 if($user_dajian_order_other_sign){
                     $item = [];
                     if($user_dajian_order_other_sign['sign_type'] == 1){
@@ -1027,7 +1044,7 @@ class order extends base {
 
                     }
                     if($user_dajian_order_other_sign['sign_type'] == 2){
-                        $item['title'] = '中款明细';
+                        $item['title'] = '尾款明细';
                         $item['first_input_note'] = '尾款金额';
                         $item['first_input_content'] = $user_dajian_order_other_sign['order_money'];
                         $item['second_input_note'] = '支付时间';

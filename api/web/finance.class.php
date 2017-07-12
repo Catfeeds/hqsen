@@ -274,6 +274,7 @@ class finance extends base {
                 // 首销签单处理
                 $sign = $this->db->getRow("select *  from hqsen_user_dajian_order_sign where id=" . $user_sign_id);
                 $user_order_sign['sign_other_sign_status'] = $sign_status;// 二销财务审核 0未知 1未处理 2通过 3驳回 4 总经理驳回 5待修改
+                $user_order_sign['update_time'] = time();
                 $this->db->update('hqsen_user_dajian_order_sign', $user_order_sign, ' id = ' . $user_sign_id);// 首销签单搭建 财务状态
                 // 二销签单处理
                 $other_sign = $this->db->getRow("select *  from hqsen_user_dajian_order_other_sign where id=" . $sign['sign_other_sign_id']);
@@ -292,9 +293,13 @@ class finance extends base {
                     }
                     // 通过修改尾款时间  订单修改尾款时间
                     if($sign['sign_type'] == 4){
-                        $user_dajian_order['sign_using_time'] = $other_sign['order_time'];
-                        $this->db->update('hqsen_user_dajian_order_sign', $user_dajian_order, ' id = ' . $user_sign_id);// 签单搭建 财务状态
+                        $user_order_sign['sign_using_time'] = $other_sign['order_time'];
                     }
+                    // 如果通过中款 或者尾款时间修改  更新二销待处理时间戳为尾款时间
+                    if($sign['sign_type'] == 1 or $sign['sign_type'] == 4){
+                        $user_order_sign['erxiao_unhandle_time'] = $user_order_sign['sign_using_time'];
+                    }
+                    $this->db->update('hqsen_user_dajian_order_sign', $user_order_sign, ' id = ' . $user_sign_id);
                     $this->db->update('hqsen_user_dajian_order', $user_order, ' id = ' . $sign['user_dajian_order_id']);
                 }
                 // 待修改
