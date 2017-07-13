@@ -606,7 +606,7 @@ class order extends base {
 
             $order = $this->db->getRows('select hudo.id as id, hudo.erxiao_order_status as erxiao_order_status, 
               hudo.erxiao_sign_type as erxiao_sign_type, hudos.erxiao_unhandle_time as erxiao_unhandle_time,
-              hudo.order_phone as order_phone,hudo.watch_user_id as watch_user_id
+              hudo.order_phone as order_phone,hudo.watch_user_id as watch_user_id,hudos.update_time as update_time
             from hqsen_user_dajian_order as hudo left join hqsen_user_dajian_order_sign as hudos
             on hudo.id = hudos.user_dajian_order_id  where ' . $sql_status . $sql_limit);
             $order_list['order_list'] = [];
@@ -621,6 +621,9 @@ class order extends base {
                         'order_phone' => (string)$one_order['order_phone'],
                         'watch_user' => (string)$this->user['user_name'] . '  (' . $user_data['hotel_area'] . ')' ,
                     );
+                    if($order_status != 1){
+                        $order_item['create_time'] = (string)$one_order['update_time'];
+                    }
                     $order_list['order_list'][] = $order_item;
                 }
 
@@ -938,7 +941,7 @@ class order extends base {
         $order_other_sign_pic = $this->postString('order_sign_pic'); //签单凭证  json
         $sign_pic_arr = explode(',', $order_other_sign_pic);
         $sign_pic_json = json_encode($sign_pic_arr);
-        if($sign_type != 3){
+        if($sign_type != 3 or $sign_type != 4){
             $user_dajian_order_sign = $this->db->getRow('select * from hqsen_user_dajian_order_other_sign where user_dajian_order_id = ' . $user_dajian_order_id . ' and  sign_type = ' . $sign_type );
         }
         $user_dajian_order_sign['sign_type'] = $sign_type;
