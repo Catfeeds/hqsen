@@ -449,6 +449,10 @@ class order extends base {
             }
             // 处理跟踪者和提供者订单状态
             $user_order['order_status'] = 2;
+            // 更新提供者佣金
+            $pay_ratio = $this->db->getRow("select *  from hqsen_pay_ratio limit 1");
+            $user_order['create_user_money'] = $order_money * $pay_ratio['kezi_user'];
+            $user_order['watch_user_money'] = $order_money * $pay_ratio['kezi_hotel'];
             $this->db->update('hqsen_user_kezi_order', $user_order, ' id = ' . $user_kezi_order_sign['user_kezi_order_id']);
             $this->appDie();
         } else {
@@ -903,6 +907,9 @@ class order extends base {
             }
             // 更新首销订单 关于二销信息
             $order_type_sql['order_status'] = 2;
+            // 更新提供者佣金
+            $pay_ratio = $this->db->getRow("select *  from hqsen_pay_ratio limit 1");
+            $order_type_sql['create_user_money'] = $order_money * $pay_ratio['dajian_user'];
             $this->db->update('hqsen_user_dajian_order', $order_type_sql, ' id = ' . $user_dajian_order_id);
             $this->appDie();
         } else {

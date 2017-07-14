@@ -92,12 +92,12 @@ class pay extends base {
             $pay_item['order_other_money'] = $one_sign['order_other_money'];
             $pay_item['create_user_name'] = $create_user['user_name'];
             $pay_item['create_account'] = $c_accout;
-            $pay_item['create_user_money'] = '100';
+            $pay_item['create_user_money'] = $user_order['create_user_money'];
             $pay_item['watch_user_name'] = $watch_user['user_name'];
             $pay_item['watch_account'] = $w_accout;
-            $pay_item['watch_user_money'] = '100';
+            $pay_item['watch_user_money'] = $user_order['watch_user_money'];
             $pay_item['create_time'] = date('Y-m-d H:i:s' , $one_sign['create_time']);
-            $pay_item['pay_status'] = $user_order['order_status'];// 1未打款 2 已打款
+            $pay_item['pay_status'] = $user_order['order_status'];// 客资跟踪者订单状态1待处理 2待审核 3待结算 4已结算 5已驳回 6已取消
             $data['list'][] = $pay_item;
         }
         $data['count'] = $this->db->getCount('hqsen_user_kezi_order_sign', 'boss_sign_status = 2');
@@ -163,8 +163,8 @@ class pay extends base {
             $pay_item['sign_user_id'] = $user_order['watch_user_id']; //  首销ID
             $pay_item['create_user_name'] = $user_info['user_name'];
             $pay_item['create_account'] = $c_accout;
-            $pay_item['create_user_money'] = '100';
-            $pay_item['pay_status'] = $user_order['order_status'];// 1未打款 2 已打款
+            $pay_item['create_user_money'] = $user_order['create_user_money'];
+            $pay_item['pay_status'] = $user_order['order_status'];// 客资跟踪者订单状态1待处理 2待审核 3待结算 4已结算 5已驳回 6已取消
             $pay_item['create_time'] = date('Y-m-d H:i:s' , $one_sign['create_time']);
             $data['list'][] = $pay_item;
         }
