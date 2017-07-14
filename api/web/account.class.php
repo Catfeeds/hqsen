@@ -40,13 +40,17 @@ class account extends base {
                 } else {
                     $accout = '未设置账号';
                 }
+
+                $unpay = $this->db->getRow('select sum(create_user_money) as s from hqsen_user_kezi_order  where user_order_status = 2 and user_id = ' . $one_user['id']);
+                $pay = $this->db->getRow('select sum(create_user_money) as s from hqsen_user_kezi_order where user_order_status = 3 and user_id = ' . $one_user['id']);
+
                 $user_item = array(
                     'user_id' => $one_user['id'],
                     'user_name' => $one_user['user_name'],
                     'create_time' => date('Y-m-d H:i:s' , $one_user['create_time']),
                     'alipay_account' => $accout,
-                    'payed' => intval(10000),
-                    'unpay' => intval(10000),
+                    'payed' => intval($pay['s']),
+                    'unpay' => intval($unpay['s']),
                 );
                 $data['list'][] = $user_item;
             }
@@ -75,6 +79,13 @@ class account extends base {
         $data = [];
         foreach ($user as $one_user){
             if($one_user){
+
+                $unpay = $this->db->getRow('select sum(create_user_money) as s from hqsen_user_kezi_order  where user_order_status = 2 and user_id = ' . $one_user['hu_id']);
+                $pay = $this->db->getRow('select sum(create_user_money) as s from hqsen_user_kezi_order where user_order_status = 3 and user_id = ' . $one_user['hu_id']);
+                $watch_unpay = $this->db->getRow('select sum(watch_user_money) as s from hqsen_user_kezi_order where user_order_status = 2 and watch_user_id = ' . $one_user['hu_id']);
+                $watch_pay = $this->db->getRow('select sum(watch_user_money) as s from hqsen_user_kezi_order where user_order_status = 3 and watch_user_id = ' . $one_user['hu_id']);
+                $dajian_unpay = $this->db->getRow('select sum(create_user_money) as s from hqsen_user_dajian_order where user_order_status = 2 and user_id = ' . $one_user['hu_id']);
+                $dajian_pay = $this->db->getRow('select sum(create_user_money) as s from hqsen_user_dajian_order where user_order_status = 3 and user_id = ' . $one_user['hu_id']);
                 $user_item = array(
                     'user_id' => $one_user['hu_id'],
                     'user_name' => $one_user['user_name'],
@@ -83,8 +94,8 @@ class account extends base {
                     'user_status' => $one_user['user_status'],
                     'create_time' => date('Y-m-d H:i:s' , $one_user['create_time']),
                     'alipay_account' => $one_user['alipay_account'] ? $one_user['alipay_account'] : '未设置账号',
-                    'payed' => intval(10000),
-                    'unpay' => intval(10000),
+                    'payed' => intval($unpay['s']) + intval($watch_unpay['s']) + intval($dajian_unpay['s']),
+                    'unpay' => intval($pay['s']) + intval($watch_pay['s']) + intval($dajian_pay['s']),
                 );
                 $data['list'][] = $user_item;
             }
