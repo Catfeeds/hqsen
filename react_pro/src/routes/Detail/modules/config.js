@@ -7,8 +7,7 @@ export default {
         label: '姓名',
         type: 'text',
         name: 'customer_name',
-        disabled: true,
-        rules: { required: true }
+        disabled: true
       },
       {
         label: '类型',
@@ -26,16 +25,9 @@ export default {
         rules: { required: true }
       },
       {
-        label: '区域',
+        label: '酒店/区域名称',
         type: 'text',
-        name: 'order_area',
-        disabled: true,
-        rules: { required: true }
-      },
-      {
-        label: '酒店',
-        type: 'text',
-        name: 'order_hotel',
+        name: 'area_hotel_name',
         disabled: true,
         rules: { required: true }
       },
@@ -43,29 +35,25 @@ export default {
         label: '桌数',
         type: 'text',
         name: 'desk_count',
-        disabled: true,
-        rules: { required: true }
+        disabled: true
       },
       {
         label: '预算',
         type: 'text',
         name: 'order_money',
-        disabled: true,
-        rules: { required: true }
+        disabled: true
       },
       {
-        label: '时间',
+        label: '预计时间',
         type: 'text',
         name: 'use_date',
-        disabled: true,
-        rules: { required: true }
+        disabled: true
       },
       {
         label: '备注',
         type: 'textarea',
         name: 'order_desc',
-        disabled: true,
-        rules: { required: true }
+        disabled: true
       }
     ],
     breadcrumb: ['客资/搭建信息', '客资信息列表', '客资详情']
@@ -84,19 +72,22 @@ export default {
         label: '类型',
         type: 'select',
         name: 'order_type',
-        disabled: true
+        disabled: true,
+        rules: { required: true }
       },
       {
         label: '手机号',
         type: 'text',
         name: 'order_phone',
-        disabled: true
+        disabled: true,
+        rules: { required: true }
       },
       {
         label: '区域',
         type: 'select',
         name: 'order_area',
-        disabled: true
+        disabled: true,
+        rules: { required: true }
       },
       {
         label: '预算',
@@ -105,7 +96,7 @@ export default {
         disabled: true
       },
       {
-        label: '时间',
+        label: '预计时间',
         type: 'date',
         name: 'use_date',
         disabled: true
@@ -136,7 +127,7 @@ export default {
         disabled: true
       },
       {
-        label: '提供者支付宝',
+        label: '提供者收款账户',
         type: 'text',
         name: 'create_user_alipay',
         disabled: true
@@ -154,7 +145,7 @@ export default {
         disabled: true
       },
       {
-        label: '跟踪者支付宝',
+        label: '跟踪者收款账户',
         type: 'text',
         name: 'watch_user_alipay',
         disabled: true
@@ -185,7 +176,7 @@ export default {
         disabled: true
       },
       {
-        label: '跟踪者支付宝',
+        label: '跟踪者收款账户',
         type: 'text',
         name: 'watch_user_alipay',
         disabled: true

@@ -5,7 +5,9 @@ import Fetch from 'root/Fetch'
 
 class WeddingMenu extends Component {
   static propTypes = {
-    hoteId: PropTypes.string
+    hoteId: PropTypes.string,
+    setFieldsValue: PropTypes.func,
+    config: PropTypes.object
   }
   constructor (props) {
     super(props)
@@ -25,15 +27,21 @@ class WeddingMenu extends Component {
   }
 
   getHotelMenuList () {
+    const { setFieldsValue, config } = this.props
     Fetch('hotelMenuList', { id: this.props.hoteId }).then(res => {
+      const wedingList = res.data.list || []
       this.setState({
-        wedingList: res.data.list || []
+        wedingList
+      })
+      setFieldsValue({
+        [config.name]: wedingList.length ? wedingList.length : ''
       })
     })
   }
 
   addWeddingMenu () {
     const { wedingList, name, price } = this.state
+    const { setFieldsValue, config } = this.props
     if (name && price) {
       if (wedingList.filter(item => item.menu_name === name).length) {
         this.setState({ errorTip: '您输入的套餐名重复！' })
@@ -43,8 +51,12 @@ class WeddingMenu extends Component {
           menu_name: name,
           menu_money: price
         }).then(res => {
+          const wedingList = [...(wedingList || []), res.data]
           this.setState({
-            wedingList: [...wedingList, res.data]
+            wedingList
+          })
+          setFieldsValue({
+            [config.name]: wedingList.length ? wedingList.length : ''
           })
         })
         this.cancleWeddingMenu()
@@ -75,26 +87,35 @@ class WeddingMenu extends Component {
   }
 
   removeWeddingItem (id) {
+    const { setFieldsValue, config } = this.props
     Fetch('hotelMenuDelete', { id }).then(res => {
+      const wedingList = this.state.wedingList.filter(item => item.id !== id)
       this.setState({
-        wedingList: this.state.wedingList.filter(item => item.id !== id)
+        wedingList
+      })
+      setFieldsValue({
+        [config.name]: wedingList.length ? wedingList.length : ''
       })
     })
   }
 
   render () {
     const { name, price, visible, wedingList, errorTip } = this.state
+    console.log(wedingList)
     return (
       <div className="wedding-menu">
-        <Button size="small" icon="plus" onClick={this.showModal}>添加</Button>
+        <Button size="small" icon="plus" onClick={this.showModal}>
+          添加
+        </Button>
         <ul>
-          {wedingList &&
-            wedingList.map((item, index) =>
+          {wedingList.length
+            ? wedingList.map((item, index) =>
               <li key={index} className="wedding-item">
                 {item.menu_name} ： &nbsp;&nbsp;￥{item.menu_money}/桌
-                <Icon className="remove-weding" type="close" onClick={() => this.removeWeddingItem(item.id)} />
+                  <Icon className="remove-weding" type="close" onClick={() => this.removeWeddingItem(item.id)} />
               </li>
-            )}
+              )
+            : null}
         </ul>
         <Modal
           title="添加婚宴"
@@ -117,7 +138,9 @@ class WeddingMenu extends Component {
               <Input type="number" value={price} onChange={e => this.saveModalValue(e, 'price')} />
             </Col>
           </Row>
-          <p className="error-tip">{errorTip}</p>
+          <p className="error-tip">
+            {errorTip}
+          </p>
         </Modal>
       </div>
     )

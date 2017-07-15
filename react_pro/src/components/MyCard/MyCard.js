@@ -11,7 +11,7 @@ class MyCard extends Component {
       <div className="my-card">
         <div className="card-header">
           {data.create_time} （{data.status_type === '1' ? '总经理' : '财务'}审批）
-          <span className="card-status">{data.status === '3' ? '驳回' : '通过'}</span>
+          <span className="card-status">{data.status}</span>
         </div>
         <div className="card-body">
           审批备注：{data.status_desc}

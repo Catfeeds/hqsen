@@ -17,12 +17,17 @@ export const setDisableRow = createAction('禁用数据', (id, updateStatus) => 
 export const handleCurrentChange = current => {
   return (dispatch, getState) => {
     const { searchInput, basicInfo, searchId } = getState().List
+    const data =
+      basicInfo.type === 'wedding_list'
+        ? { page: current, search_input: searchInput, id: searchId }
+        : { page: current, search_input: searchInput }
     dispatch(toggleLoading(true))
-    Fetch(basicInfo.listUrlKey, { page: current, search_input: searchInput, id: searchId }).then(
+    Fetch(basicInfo.listUrlKey, data).then(
       response => {
-        console.log(basicInfo.listUrlKey)
-        console.log({ page: current, search_input: searchInput, id: searchId })
-        dispatch(setResultInfo(current, response.data))
+        if (basicInfo.type === 'wedding_list' && !searchId) {
+        } else {
+          dispatch(setResultInfo(current, response.data))
+        }
       },
       () => {
         dispatch(toggleLoading(false))
