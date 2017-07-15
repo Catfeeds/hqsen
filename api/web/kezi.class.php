@@ -73,15 +73,32 @@ class kezi extends base {
                 'customer_name' => $order['customer_name'],
                 'order_type' => $order['order_type'],
                 'order_phone' => $order['order_phone'],
-//                'order_area' => '',
-//                'order_hotel' => '',
                 'desk_count' => $order['desk_count'],
                 'order_money' => $order['order_money'],
                 'use_date' => $order['use_date'],
                 'watch_user' => $order['watch_user'],
                 'order_desc' => $order['order_desc'],
             );
-
+            // 如果是1 表示是区域  如果是2 表示是酒店
+            if($order['order_area_hotel_type'] == 1){
+                $area = $this->db->getRow("select * from hqsen_area  where id =  " . $order['order_area_hotel_id']);
+                $order_item['area_hotel_name'] = (string)$area['area_name'];
+            } else {
+                // 多个酒店
+                $id_arr = explode(',', $order['order_area_hotel_id']);
+                $in_id = [];
+                foreach ($id_arr as $one_id){
+                    if($one_id){
+                        $in_id[] = intval($one_id);
+                    }
+                }
+                $in_id = implode(',', $in_id);
+                $hotel = $this->db->getRows("select * from hqsen_hotel  where id in( " . $in_id . ')');
+                $order_item['area_hotel_name'] = '';
+                foreach ($hotel as $hotel_name){
+                    $order_item['area_hotel_name'] .= $hotel_name['hotel_name'] . '  ';
+                }
+            }
             $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $order_item);
         } else {
             $this->appDie($this->back_code['sys']['value_empty'], $this->back_msg['sys']['value_empty']);

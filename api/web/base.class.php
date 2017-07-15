@@ -249,6 +249,7 @@ class base{
             array('value'=>'12', 'label'=>'二销'),
             array('value'=>'13', 'label'=>'财务'),
             array('value'=>'14', 'label'=>'客服'),
+            array('value'=>'15', 'label'=>'管理员'),
         );
     }
 

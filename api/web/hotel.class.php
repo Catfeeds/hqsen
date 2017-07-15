@@ -27,8 +27,16 @@ class hotel extends base {
         $sql_limit = " limit $offset , $limit";
         $search_sql = '';
         if($search_input){
-            $area_id = array_search($search_input, $this-> get_sh_area());
-            $search_sql = " and area_sh_id = '$area_id'" ;
+            $area_in = ' in( ';
+            foreach ($this-> get_sh_area() as $one_value){
+                if (strstr( $one_value , $search_input ) !== false ){
+                    $area_id = array_search($one_value, $this-> get_sh_area());
+                    $area_in = $area_in . $area_id . ',';
+                }
+            }
+            $area_in = trim($area_in, ',');
+            $area_in = $area_in . ' )';
+            $search_sql = " and area_sh_id $area_in" ;
         }
         $hotel = $this->db->getRows("select *  from hqsen_hotel  where del_flag = 1 $search_sql order by id desc " . $sql_limit);
         $data = [];
@@ -340,6 +348,12 @@ class hotel extends base {
         if($id){
             $sql_order['del_flag'] = 2;
             $this->db->update('hqsen_hotel_room', $sql_order, ' id = ' . $id);
+            $hotel_room = $this->db->getRow("select *  from hqsen_hotel_room where id = $id");
+            $hotel_have = $this->db->getRow("select *  from hqsen_hotel_room where del_flag=1 and hotel_id = " . $hotel_room['hotel_id']);
+            if(!$hotel_have){
+                $hotel_have_sql['is_room'] = 2;
+                $this->db->update('hqsen_hotel', $hotel_have_sql, ' id = ' . $hotel_room['hotel_id']);
+            }
             $this->appDie();
         } else {
             $this->appDie($this->back_code['sys']['value_empty'], $this->back_msg['sys']['value_empty']);
