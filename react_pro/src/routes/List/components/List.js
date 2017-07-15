@@ -386,7 +386,13 @@ class List extends Component {
         {
           key: 'alipay_account',
           dataIndex: 'alipay_account',
-          title: '收款账号'
+          title: '收款账号',
+          render: text =>
+            text === '未设置账号'
+              ? <span className="red-tip">
+                {text}
+              </span>
+              : text
         },
         {
           key: 'payed',
@@ -725,7 +731,13 @@ class List extends Component {
         {
           key: 'create_account',
           dataIndex: 'create_account',
-          title: '提供者收款账号'
+          title: '提供者收款账号',
+          render: text =>
+            text === '未设置账号'
+              ? <span className="red-tip">
+                {text}
+              </span>
+              : text
         },
         {
           key: 'create_user_money',
@@ -740,7 +752,13 @@ class List extends Component {
         {
           key: 'watch_account',
           dataIndex: 'watch_account',
-          title: '跟踪者收款账号'
+          title: '跟踪者收款账号',
+          render: text =>
+            text === '未设置账号'
+              ? <span className="red-tip">
+                {text}
+              </span>
+              : text
         },
         {
           key: 'watch_user_money',
@@ -793,7 +811,13 @@ class List extends Component {
         {
           key: 'create_account',
           dataIndex: 'create_account',
-          title: '提供者收款账户'
+          title: '提供者收款账户',
+          render: text =>
+            text === '未设置账号'
+              ? <span className="red-tip">
+                {text}
+              </span>
+              : text
         },
         {
           key: 'pay_status',
@@ -923,7 +947,11 @@ class List extends Component {
     }
     const renderApproveControl = record => {
       const isKezi = basicInfo.breadcrumb[1].indexOf('客资') > -1
-      const disabledBtn = record.sign_status === '2' || record.boss_sign_status === '2' || record.sign_status === '3' || record.boss_sign_status === '3'
+      const disabledBtn =
+        record.sign_status === '2' ||
+        record.boss_sign_status === '2' ||
+        record.sign_status === '3' ||
+        record.boss_sign_status === '3'
       return (
         <div>
           <Button size="small" onClick={() => this.gotoOrderDetail(record, isKezi)}>
@@ -932,12 +960,7 @@ class List extends Component {
           <Button style={{ margin: '0 5px' }} size="small" onClick={() => this.goApproveDetail(record, false)}>
             签单信息
           </Button>
-          <Button
-            type="primary"
-            size="small"
-            disabled={disabledBtn}
-            onClick={() => this.goApproveDetail(record, true)}
-          >
+          <Button type="primary" size="small" disabled={disabledBtn} onClick={() => this.goApproveDetail(record, true)}>
             审批
           </Button>
         </div>

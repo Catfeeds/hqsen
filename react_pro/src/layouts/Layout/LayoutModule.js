@@ -1,17 +1,9 @@
 import { createAction } from 'redux-act'
-import Fetch from '../../Fetch'
+// import Fetch from '../../Fetch'
 
 // ------------------------------------
 // Actions
 // ------------------------------------
-
-export const getConfigData = () => {
-  return (dispatch, getState) => {
-    Fetch('configData').then(response => {
-      dispatch(saveConfig(response.data))
-    })
-  }
-}
 
 export const saveConfig = createAction('初始化数据')
 
@@ -19,7 +11,7 @@ export const saveHeadKey = createAction('保存导航key')
 
 export const actions = {
   saveHeadKey,
-  getConfigData
+  saveConfig
 }
 
 // ------------------------------------
