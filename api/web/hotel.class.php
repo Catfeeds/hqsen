@@ -28,15 +28,20 @@ class hotel extends base {
         $search_sql = '';
         if($search_input){
             $area_in = ' in( ';
+            $count = 0;
             foreach ($this-> get_sh_area() as $one_value){
-                if (strstr( $one_value , $search_input ) !== false ){
+                if (strpos( $one_value , $search_input ) !== false ){
                     $area_id = array_search($one_value, $this-> get_sh_area());
                     $area_in = $area_in . $area_id . ',';
+                    $count++;
                 }
+
             }
             $area_in = trim($area_in, ',');
             $area_in = $area_in . ' )';
-            $search_sql = " and area_sh_id $area_in" ;
+            if($count){
+                $search_sql = " and area_sh_id $area_in" ;
+            }
         }
         $hotel = $this->db->getRows("select *  from hqsen_hotel  where del_flag = 1 $search_sql order by id desc " . $sql_limit);
         $data = [];

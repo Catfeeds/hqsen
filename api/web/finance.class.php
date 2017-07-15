@@ -259,9 +259,6 @@ class finance extends base {
         $status_desc = $this->postString('status_desc');
         $sign_status = $this->postString('sign_status', 1);
 
-        if($status_desc == 'undefined'){
-            $status_desc = '';
-        }
         if($user_sign_id and $sign_status){
             // 审批流程数据
             $sign_follow['sign_status'] = $sign_status;
@@ -297,7 +294,7 @@ class finance extends base {
                     }
                     // 如果通过中款 或者尾款时间修改  更新二销待处理时间戳为尾款时间
                     if($sign['sign_type'] == 1 or $sign['sign_type'] == 4){
-                        $user_order_sign['erxiao_unhandle_time'] = $user_order_sign['sign_using_time'];
+                        $user_order_sign['erxiao_unhandle_time'] = $sign['sign_using_time'];
                     }
                     $this->db->update('hqsen_user_dajian_order_sign', $user_order_sign, ' id = ' . $user_sign_id);
                     $this->db->update('hqsen_user_dajian_order', $user_order, ' id = ' . $sign['user_dajian_order_id']);
