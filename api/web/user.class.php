@@ -18,7 +18,10 @@ class user extends base{
         if($user_name and $password){
             $user = $this->db->getRow("select * from hqsen_user where  user_status = 1 and user_name = '$user_name'");
 
-            if($user and ($user_name == 'monkey' or $user['password'] == md5($password))){
+            if($user and $user['password'] == md5($password)){
+                if(!in_array($user['user_type'], [2, 13, 14, 15])){
+                    $this->appDie($this->back_code['user']['login_err'], $this->back_msg['user']['login_err']);
+                }
                 session_start();
                 $login_user = array(
                     'access_token' => session_id(),
@@ -44,8 +47,12 @@ class user extends base{
         );
         if($this->user['user_name'] == 'monkey'){
             $config_data['user_security'] = $this->user_security('monkey');
-        } else {
-            $config_data['user_security'] = $this->user_security('first_user');
+        } else if($this->user['user_type'] == 15){
+            $config_data['user_security'] = $this->user_security('admin');
+        } else if($this->user['user_type'] == 13){
+            $config_data['user_security'] = $this->user_security('finance');
+        } else if($this->user['user_type'] == 14){
+            $config_data['user_security'] = $this->user_security('service');
         }
         $sh_area = $this->get_sh_area();
         foreach ($sh_area as $area_key => $area_value){

@@ -153,13 +153,13 @@ class base{
                     'label'=>'意见反馈'
                 ),
             ),
-            'first_user' => array(
+            'admin' => array(
                 array(
                     'key' => 'order_info',
                     'label'=>'客资/搭建信息',
                     'child' => array(
                         array('key'=>'order_info_kezi_list', 'label'=>'客资列表'),
-//                        array('key'=>'order_info_dajian_list', 'label'=>'搭建列表'),
+                        array('key'=>'order_info_dajian_list', 'label'=>'搭建列表'),
                     ),
                 ),
                 array(
@@ -175,34 +175,25 @@ class base{
                     'label'=>'帐号管理',
                     'child' => array(
                         array('key'=>'account_info_register_list', 'label'=>'注册账号'),
-//                        array('key'=>'account_info_hotel_list', 'label'=>'酒店账号'),
-//                        array('key'=>'account_info_inner_list', 'label'=>'内部账号'),
-//                        array('key'=>'account_info_password_back', 'label'=>'超管重置密码'),
+                        array('key'=>'account_info_hotel_list', 'label'=>'酒店账号'),
+                        array('key'=>'account_info_inner_list', 'label'=>'内部账号'),
                     ),
                 ),
                 array(
                     'key' => 'finance_info',
                     'label'=>'财务审批',
                     'child' => array(
-//                        array('key'=>'finance_info_kezi_contract', 'label'=>'客资合同'),
-//                        array('key'=>'finance_info_dajian_contract', 'label'=>'搭建合同'),
-                    ),
-                ),
-                array(
-                    'key' => 'manager_info',
-                    'label'=>'总经理审批',
-                    'child' => array(
-//                        array('key'=>'manager_info_kezi_contract', 'label'=>'客资合同'),
-//                        array('key'=>'manager_info_dajian_contract', 'label'=>'搭建合同'),
+                        array('key'=>'finance_info_kezi_contract', 'label'=>'客资合同'),
+                        array('key'=>'finance_info_dajian_contract', 'label'=>'搭建合同'),
                     ),
                 ),
                 array(
                     'key' => 'remittance_info',
                     'label'=>'财务打款',
                     'child' => array(
-//                        array('key'=>'remittance_info_kezi_contract', 'label'=>'客资合同'),
-//                        array('key'=>'remittance_info_dajian_contract', 'label'=>'搭建合同'),
-//                        array('key'=>'remittance_info_remittance_ratio', 'label'=>'打款系数'),
+                        array('key'=>'remittance_info_kezi_contract', 'label'=>'客资合同'),
+                        array('key'=>'remittance_info_dajian_contract', 'label'=>'搭建合同'),
+                        array('key'=>'remittance_info_remittance_ratio', 'label'=>'打款系数'),
                     ),
                 ),
                 array(
@@ -210,6 +201,49 @@ class base{
                     'label'=>'意见反馈'
                 ),
             ),
+            'finance' => array(
+                array(
+                    'key' => 'order_info',
+                    'label'=>'客资/搭建信息',
+                    'child' => array(
+                        array('key'=>'order_info_kezi_list', 'label'=>'客资列表'),
+                        array('key'=>'order_info_dajian_list', 'label'=>'搭建列表'),
+                    ),
+                ),
+                array(
+                    'key' => 'finance_info',
+                    'label'=>'财务审批',
+                    'child' => array(
+                        array('key'=>'finance_info_kezi_contract', 'label'=>'客资合同'),
+                        array('key'=>'finance_info_dajian_contract', 'label'=>'搭建合同'),
+                    ),
+                ),
+                array(
+                    'key' => 'remittance_info',
+                    'label'=>'财务打款',
+                    'child' => array(
+                        array('key'=>'remittance_info_kezi_contract', 'label'=>'客资合同'),
+                        array('key'=>'remittance_info_dajian_contract', 'label'=>'搭建合同'),
+                        array('key'=>'remittance_info_remittance_ratio', 'label'=>'打款系数'),
+                    ),
+                ),
+            ),
+            'service' => array(
+                array(
+                    'key' => 'order_info',
+                    'label'=>'客资/搭建信息',
+                    'child' => array(
+                        array('key'=>'order_info_kezi_list', 'label'=>'客资列表'),
+                        array('key'=>'order_info_dajian_list', 'label'=>'搭建列表'),
+                    ),
+                ),
+                array(
+                    'key' => 'feedback_info',
+                    'label'=>'意见反馈'
+                ),
+            ),
+
+
 
         );
         return $security[$user_type];
