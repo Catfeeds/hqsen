@@ -570,11 +570,7 @@ class List extends Component {
         {
           key: 'sign_type',
           dataIndex: 'sign_type',
-          title: '审批类型',
-          render: text =>
-            <span>
-              {this.getSignType(text)}
-            </span>
+          title: '审批类型'
         },
         {
           key: 'user_type',

@@ -47,12 +47,14 @@ export default {
       {
         label: '酒店最低价位',
         type: 'number',
-        name: 'hotel_low'
+        name: 'hotel_low',
+        rules: { required: true }
       },
       {
         label: '酒店最高价位',
         type: 'number',
-        name: 'hotel_high'
+        name: 'hotel_high',
+        rules: { required: true }
       },
       {
         label: '酒店最大容纳桌数',
@@ -75,12 +77,14 @@ export default {
       {
         label: '酒店介绍图片',
         type: 'upload',
-        name: 'hotel_image'
+        name: 'hotel_image',
+        rules: { required: true }
       },
       {
         label: '婚宴菜单',
         type: 'wedding',
-        name: 'wedding'
+        name: 'wedding',
+        rules: { required: true }
       }
     ],
     breadcrumb: ['基础信息设定', '酒店信息', '详细设定']
@@ -136,7 +140,8 @@ export default {
       {
         label: '酒店介绍图片',
         type: 'upload',
-        name: 'room_image'
+        name: 'room_image',
+        rules: { required: true }
       }
     ],
     breadcrumb: ['基础信息设定', '酒店信息', '宴会厅设置']
@@ -243,17 +248,20 @@ export default {
       {
         label: '客资提供者系数',
         type: 'text',
-        name: 'kezi_user'
+        name: 'kezi_user',
+        rules: { required: true }
       },
       {
         label: '客资跟踪者系数',
         type: 'text',
-        name: 'kezi_hotel'
+        name: 'kezi_hotel',
+        rules: { required: true }
       },
       {
         label: '搭建提供者系数',
         type: 'text',
-        name: 'dajian_user'
+        name: 'dajian_user',
+        rules: { required: true }
       }
     ],
     breadcrumb: ['设置提供者系数']

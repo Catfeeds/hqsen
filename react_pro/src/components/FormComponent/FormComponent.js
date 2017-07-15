@@ -34,13 +34,21 @@ class FormComponent extends Component {
             onChange={e => this.handleChange(e)}
           >
             {dataSource &&
-              dataSource.map(option => <Option key={option.value} value={option.value}>{option.label}</Option>)}
+              dataSource.map(option =>
+                <Option key={option.value} value={option.value}>
+                  {option.label}
+                </Option>
+              )}
           </Select>
         )
       case 'radio':
         return (
           <RadioGroup disabled={item.disabled} onChange={e => this.handleChange(e)}>
-            {dataSource.map(option => <Radio key={option.value} value={option.value}>{option.label}</Radio>)}
+            {dataSource.map(option =>
+              <Radio key={option.value} value={option.value}>
+                {option.label}
+              </Radio>
+            )}
           </RadioGroup>
         )
       case 'checkbox':
@@ -50,7 +58,7 @@ class FormComponent extends Component {
       case 'upload':
         return <UploadImage config={item} setFieldsValue={setFieldsValue} defaultValue={defaultValue} />
       case 'wedding':
-        return <WeddingMenu hoteId={id} />
+        return <WeddingMenu config={item} hoteId={id} setFieldsValue={setFieldsValue} />
       default:
         return (
           <Input
@@ -77,7 +85,7 @@ class FormComponent extends Component {
     }
     if (item.hide) {
       return null
-    } else if (item.type === 'upload') {
+    } else if (item.type === 'upload' || item.type === 'wedding') {
       return (
         <Form.Item label={item.label} {...formItemLayout}>
           {getFieldDecorator(item.name, {

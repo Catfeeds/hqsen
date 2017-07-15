@@ -17,6 +17,9 @@ class Header extends Component {
 
   constructor () {
     super()
+    this.state = {
+      collapsed: true
+    }
     this.loginOut = this.loginOut.bind(this)
     this.handleClick = this.handleClick.bind(this)
   }
@@ -44,43 +47,46 @@ class Header extends Component {
   render () {
     const { menu, headKey } = this.props
     const userName = sessionStorage.getItem('user_name')
-    const dropdownMenu = (
-      <Menu>
-        <Menu.Item>
-          <span onClick={this.loginOut}>登出</span>
-        </Menu.Item>
-      </Menu>
-    )
     return (
-      <Row>
-        <Col sm={22}>
-          <Menu
-            className="my-header"
-            mode="horizontal"
-            theme="light"
-            selectedKeys={[headKey]}
-            onClick={this.handleClick}>
-            { menu.map(item => {
-              if (item.child) {
-                return (
-                  <SubMenu key={item.key} title={item.label}>
-                    {item.child && item.child.map(sub => <Menu.Item key={sub.key}>{sub.label}</Menu.Item>)}
-                  </SubMenu>
-                )
-              } else {
-                return <Menu.Item key={item.key}>{item.label}</Menu.Item>
-              }
-            })}
-          </Menu>
-        </Col>
-        <Col sm={2} className="user-box">
-          <Dropdown overlay={dropdownMenu}>
-            <span className="header-name">
-              <Icon type="user" className="user-logo" />
-              {userName}
-            </span>
-          </Dropdown>
-        </Col>
+      <Row className="aside-hs">
+        <button onClick={this.loginOut}>退出</button>
+        <div className="user-box">
+          <span className="header-name">
+            <Icon type="user" className="user-logo" />
+            {userName}
+          </span>
+        </div>
+        <Menu
+          className="my-header"
+          defaultSelectedKeys={['1']}
+          defaultOpenKeys={['sub1']}
+          mode="inline"
+          theme="dark"
+          inlineCollapsed={this.state.collapsed}
+          selectedKeys={[headKey]}
+          onClick={this.handleClick}
+        >
+          {menu.map(item => {
+            if (item.child) {
+              return (
+                <SubMenu key={item.key} title={item.label}>
+                  {item.child &&
+                    item.child.map(sub =>
+                      <Menu.Item key={sub.key}>
+                        {sub.label}
+                      </Menu.Item>
+                    )}
+                </SubMenu>
+              )
+            } else {
+              return (
+                <Menu.Item key={item.key}>
+                  {item.label}
+                </Menu.Item>
+              )
+            }
+          })}
+        </Menu>
       </Row>
     )
   }

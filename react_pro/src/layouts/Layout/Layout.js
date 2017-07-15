@@ -24,6 +24,7 @@ class Layout extends Component {
   }
   componentWillMount () {
     const token = sessionStorage.getItem('access_token')
+    this.getConfig()
     window.onload = () => {
       if (token) {
         const { params, saveHeadKey } = this.props
@@ -32,22 +33,25 @@ class Layout extends Component {
         } else {
           saveHeadKey('account_info_password_back')
         }
-        Fetch('configData').then(
-          response => {
-            this.props.saveConfig(response.data)
-          },
-          error => {
-            if (error === '登录失效请重新登录') {
-              this.setState({ usableToken: false })
-              this.context.router.push('/login')
-            }
-          }
-        )
+        this.getConfig()
       } else {
         this.setState({ usableToken: false })
         this.context.router.push('/login')
       }
     }
+  }
+  getConfig () {
+    Fetch('configData').then(
+      response => {
+        this.props.saveConfig(response.data)
+      },
+      error => {
+        if (error === '登录失效请重新登录') {
+          this.setState({ usableToken: false })
+          this.context.router.push('/login')
+        }
+      }
+    )
   }
 
   render () {
