@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react'
-import { Menu, Icon, Row, Col, Dropdown } from 'antd'
+import { Menu, Icon, Row, Button } from 'antd'
 import './Header.scss'
 const SubMenu = Menu.SubMenu
 
@@ -49,21 +49,21 @@ class Header extends Component {
     const userName = sessionStorage.getItem('user_name')
     return (
       <Row className="aside-hs">
-        <button onClick={this.loginOut}>退出</button>
         <div className="user-box">
           <span className="header-name">
             <Icon type="user" className="user-logo" />
             {userName}
           </span>
+          <Button size="small" className="log-out" icon="logout" onClick={this.loginOut}>
+            登出
+          </Button>
         </div>
         <Menu
           className="my-header"
-          defaultSelectedKeys={['1']}
-          defaultOpenKeys={['sub1']}
+          defaultSelectedKeys={[headKey.key]}
+          defaultOpenKeys={[headKey.parentKey]}
           mode="inline"
           theme="dark"
-          inlineCollapsed={this.state.collapsed}
-          selectedKeys={[headKey]}
           onClick={this.handleClick}
         >
           {menu.map(item => {

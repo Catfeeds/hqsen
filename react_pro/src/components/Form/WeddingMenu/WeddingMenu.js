@@ -51,7 +51,7 @@ class WeddingMenu extends Component {
           menu_name: name,
           menu_money: price
         }).then(res => {
-          const wedingList = [...(wedingList || []), res.data]
+          const wedingList = [...this.state.wedingList, res.data]
           this.setState({
             wedingList
           })

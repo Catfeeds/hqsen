@@ -568,8 +568,8 @@ class List extends Component {
           title: '合同金额'
         },
         {
-          key: 'sign_type',
-          dataIndex: 'sign_type',
+          key: 'sign_type_view',
+          dataIndex: 'sign_type_view',
           title: '审批类型'
         },
         {
@@ -797,17 +797,17 @@ class List extends Component {
         {
           key: 'create_user_name',
           dataIndex: 'create_user_name',
-          title: '提供者账号'
+          title: '跟踪者账号'
         },
         {
           key: 'create_user_money',
           dataIndex: 'create_user_money',
-          title: '提供者分成'
+          title: '跟踪者分成'
         },
         {
           key: 'create_account',
           dataIndex: 'create_account',
-          title: '提供者收款账户',
+          title: '跟踪者收款账户',
           render: text =>
             text === '未设置账号'
               ? <span className="red-tip">

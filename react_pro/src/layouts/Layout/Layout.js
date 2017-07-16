@@ -19,7 +19,7 @@ class Layout extends Component {
   constructor () {
     super()
     this.state = {
-      usableToken: true
+      usableToken: false
     }
   }
   componentWillMount () {
@@ -27,12 +27,6 @@ class Layout extends Component {
     this.getConfig()
     window.onload = () => {
       if (token) {
-        const { params, saveHeadKey } = this.props
-        if (params.type) {
-          saveHeadKey(params.type)
-        } else {
-          saveHeadKey('account_info_password_back')
-        }
         this.getConfig()
       } else {
         this.setState({ usableToken: false })
@@ -40,13 +34,38 @@ class Layout extends Component {
       }
     }
   }
+  getParentType (menus, type) {
+    const parentKey = []
+    menus.map(menu => {
+      if (menu.key === type) {
+        parentKey.push(menu.parent_key)
+      }
+      if (menu.child && menu.child.length > 0) {
+        menu.child.map(item => {
+          if (item.key === type) {
+            parentKey.push(item.parent_key)
+          }
+        })
+      }
+    })
+    return parentKey
+  }
   getConfig () {
+    const { params, saveHeadKey } = this.props
     Fetch('configData').then(
       response => {
+        const menu = response.data.user_security
+        if (params.type) {
+          const parentType = this.getParentType(menu, params.type)[0]
+          saveHeadKey({ key: params.type, parentKey: parentType })
+        } else {
+          saveHeadKey({ key: 'account_info_password_back' })
+        }
         this.props.saveConfig(response.data)
+        this.setState({ usableToken: true })
       },
       error => {
-        if (error === '登录失效请重新登录') {
+        if (error.message === '登录失效请重新登录') {
           this.setState({ usableToken: false })
           this.context.router.push('/login')
         }
@@ -58,7 +77,8 @@ class Layout extends Component {
     const { children, saveHeadKey, layout: { configData, headKey } } = this.props
     return (
       <div className="content-wrapper">
-        <Header menu={configData.user_security} saveHeadKey={saveHeadKey} headKey={headKey} />
+        {configData.user_security &&
+          <Header menu={configData.user_security} saveHeadKey={saveHeadKey} headKey={headKey} />}
         <div className="core-layout__viewport">
           {this.state.usableToken ? children : null}
         </div>

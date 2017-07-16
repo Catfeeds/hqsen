@@ -19,6 +19,7 @@ export const getInit = (type, id, signId) => {
     dispatch(setBasicInfo({ ...basicInfo, type, id }))
     Fetch(basicInfo.detailUrlKey, { id, sign_other_sign_id: signId }).then(response => {
       let data = response.data
+      data.sign_status = ['2', '3', '5'].indexOf(data.sign_status) > -1 ? data.sign_status : ''
       dispatch(saveForm(data))
     })
   }

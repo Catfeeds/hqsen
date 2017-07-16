@@ -121,7 +121,7 @@ export default {
         disabled: true
       },
       {
-        label: '提供者账号',
+        label: '跟踪者账号',
         type: 'text',
         name: 'create_user_name',
         disabled: true
@@ -170,7 +170,7 @@ export default {
         disabled: true
       },
       {
-        label: '提供者账号',
+        label: '跟踪者账号',
         type: 'text',
         name: 'create_user_name',
         disabled: true
@@ -182,7 +182,7 @@ export default {
         disabled: true
       },
       {
-        label: '提供者打款额度',
+        label: '跟踪者打款额度',
         type: 'text',
         name: 'create_user_money',
         disabled: true
