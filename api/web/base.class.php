@@ -101,51 +101,51 @@ class base{
                     'key' => 'order_info',
                     'label'=>'客资/搭建信息',
                     'child' => array(
-                        array('key'=>'order_info_kezi_list', 'label'=>'客资列表'),
-                        array('key'=>'order_info_dajian_list', 'label'=>'搭建列表'),
+                        array('key'=>'order_info_kezi_list', 'label'=>'客资列表', 'parent_key'=>'order_info'),
+                        array('key'=>'order_info_dajian_list', 'label'=>'搭建列表', 'parent_key'=>'order_info'),
                     ),
                 ),
                 array(
                     'key' => 'hotel_info',
                     'label'=>'基础信息设定',
                     'child' => array(
-                        array('key'=>'hotel_info_hotel_list', 'label'=>'酒店信息'),
-                        array('key'=>'hotel_info_area_list', 'label'=>'区域信息'),
+                        array('key'=>'hotel_info_hotel_list', 'label'=>'酒店信息', 'parent_key'=>'hotel_info'),
+                        array('key'=>'hotel_info_area_list', 'label'=>'区域信息', 'parent_key'=>'hotel_info'),
                     ),
                 ),
                 array(
                     'key' => 'account_info',
                     'label'=>'帐号管理',
                     'child' => array(
-                        array('key'=>'account_info_register_list', 'label'=>'注册账号'),
-                        array('key'=>'account_info_hotel_list', 'label'=>'酒店账号'),
-                        array('key'=>'account_info_inner_list', 'label'=>'内部账号'),
-                        array('key'=>'account_info_password_back', 'label'=>'超管重置密码'),
+                        array('key'=>'account_info_register_list', 'label'=>'注册账号', 'parent_key'=>'account_info'),
+                        array('key'=>'account_info_hotel_list', 'label'=>'酒店账号', 'parent_key'=>'account_info'),
+                        array('key'=>'account_info_inner_list', 'label'=>'内部账号', 'parent_key'=>'account_info'),
+                        array('key'=>'account_info_password_back', 'label'=>'超管重置密码', 'parent_key'=>'account_info'),
                     ),
                 ),
                 array(
                     'key' => 'finance_info',
                     'label'=>'财务审批',
                     'child' => array(
-                        array('key'=>'finance_info_kezi_contract', 'label'=>'客资合同'),
-                        array('key'=>'finance_info_dajian_contract', 'label'=>'搭建合同'),
+                        array('key'=>'finance_info_kezi_contract', 'label'=>'客资合同', 'parent_key'=>'finance_info'),
+                        array('key'=>'finance_info_dajian_contract', 'label'=>'搭建合同', 'parent_key'=>'finance_info'),
                     ),
                 ),
                 array(
                     'key' => 'manager_info',
                     'label'=>'总经理审批',
                     'child' => array(
-                        array('key'=>'manager_info_kezi_contract', 'label'=>'客资合同'),
-                        array('key'=>'manager_info_dajian_contract', 'label'=>'搭建合同'),
+                        array('key'=>'manager_info_kezi_contract', 'label'=>'客资合同', 'parent_key'=>'manager_info'),
+                        array('key'=>'manager_info_dajian_contract', 'label'=>'搭建合同', 'parent_key'=>'manager_info'),
                     ),
                 ),
                 array(
                     'key' => 'remittance_info',
                     'label'=>'财务打款',
                     'child' => array(
-                        array('key'=>'remittance_info_kezi_contract', 'label'=>'客资合同'),
-                        array('key'=>'remittance_info_dajian_contract', 'label'=>'搭建合同'),
-                        array('key'=>'remittance_info_remittance_ratio', 'label'=>'打款系数'),
+                        array('key'=>'remittance_info_kezi_contract', 'label'=>'客资合同', 'parent_key'=>'remittance_info'),
+                        array('key'=>'remittance_info_dajian_contract', 'label'=>'搭建合同', 'parent_key'=>'remittance_info'),
+                        array('key'=>'remittance_info_remittance_ratio', 'label'=>'打款系数', 'parent_key'=>'remittance_info'),
                     ),
                 ),
                 array(
@@ -158,42 +158,42 @@ class base{
                     'key' => 'order_info',
                     'label'=>'客资/搭建信息',
                     'child' => array(
-                        array('key'=>'order_info_kezi_list', 'label'=>'客资列表'),
-                        array('key'=>'order_info_dajian_list', 'label'=>'搭建列表'),
+                        array('key'=>'order_info_kezi_list', 'label'=>'客资列表', 'parent_key'=>'order_info'),
+                        array('key'=>'order_info_dajian_list', 'label'=>'搭建列表', 'parent_key'=>'order_info'),
                     ),
                 ),
                 array(
                     'key' => 'hotel_info',
                     'label'=>'基础信息设定',
                     'child' => array(
-                        array('key'=>'hotel_info_hotel_list', 'label'=>'酒店信息'),
-                        array('key'=>'hotel_info_area_list', 'label'=>'区域信息'),
+                        array('key'=>'hotel_info_hotel_list', 'label'=>'酒店信息', 'parent_key'=>'hotel_info'),
+                        array('key'=>'hotel_info_area_list', 'label'=>'区域信息', 'parent_key'=>'hotel_info'),
                     ),
                 ),
                 array(
                     'key' => 'account_info',
                     'label'=>'帐号管理',
                     'child' => array(
-                        array('key'=>'account_info_register_list', 'label'=>'注册账号'),
-                        array('key'=>'account_info_hotel_list', 'label'=>'酒店账号'),
-                        array('key'=>'account_info_inner_list', 'label'=>'内部账号'),
+                        array('key'=>'account_info_register_list', 'label'=>'注册账号', 'parent_key'=>'account_info'),
+                        array('key'=>'account_info_hotel_list', 'label'=>'酒店账号', 'parent_key'=>'account_info'),
+                        array('key'=>'account_info_inner_list', 'label'=>'内部账号', 'parent_key'=>'account_info'),
                     ),
                 ),
                 array(
                     'key' => 'finance_info',
                     'label'=>'财务审批',
                     'child' => array(
-                        array('key'=>'finance_info_kezi_contract', 'label'=>'客资合同'),
-                        array('key'=>'finance_info_dajian_contract', 'label'=>'搭建合同'),
+                        array('key'=>'finance_info_kezi_contract', 'label'=>'客资合同', 'parent_key'=>'finance_info'),
+                        array('key'=>'finance_info_dajian_contract', 'label'=>'搭建合同', 'parent_key'=>'finance_info'),
                     ),
                 ),
                 array(
                     'key' => 'remittance_info',
                     'label'=>'财务打款',
                     'child' => array(
-                        array('key'=>'remittance_info_kezi_contract', 'label'=>'客资合同'),
-                        array('key'=>'remittance_info_dajian_contract', 'label'=>'搭建合同'),
-                        array('key'=>'remittance_info_remittance_ratio', 'label'=>'打款系数'),
+                        array('key'=>'remittance_info_kezi_contract', 'label'=>'客资合同', 'parent_key'=>'remittance_info'),
+                        array('key'=>'remittance_info_dajian_contract', 'label'=>'搭建合同', 'parent_key'=>'remittance_info'),
+                        array('key'=>'remittance_info_remittance_ratio', 'label'=>'打款系数', 'parent_key'=>'remittance_info'),
                     ),
                 ),
                 array(
@@ -206,25 +206,25 @@ class base{
                     'key' => 'order_info',
                     'label'=>'客资/搭建信息',
                     'child' => array(
-                        array('key'=>'order_info_kezi_list', 'label'=>'客资列表'),
-                        array('key'=>'order_info_dajian_list', 'label'=>'搭建列表'),
+                        array('key'=>'order_info_kezi_list', 'label'=>'客资列表', 'parent_key'=>'order_info'),
+                        array('key'=>'order_info_dajian_list', 'label'=>'搭建列表', 'parent_key'=>'order_info'),
                     ),
                 ),
                 array(
                     'key' => 'finance_info',
                     'label'=>'财务审批',
                     'child' => array(
-                        array('key'=>'finance_info_kezi_contract', 'label'=>'客资合同'),
-                        array('key'=>'finance_info_dajian_contract', 'label'=>'搭建合同'),
+                        array('key'=>'finance_info_kezi_contract', 'label'=>'客资合同', 'parent_key'=>'finance_info'),
+                        array('key'=>'finance_info_dajian_contract', 'label'=>'搭建合同', 'parent_key'=>'finance_info'),
                     ),
                 ),
                 array(
                     'key' => 'remittance_info',
                     'label'=>'财务打款',
                     'child' => array(
-                        array('key'=>'remittance_info_kezi_contract', 'label'=>'客资合同'),
-                        array('key'=>'remittance_info_dajian_contract', 'label'=>'搭建合同'),
-                        array('key'=>'remittance_info_remittance_ratio', 'label'=>'打款系数'),
+                        array('key'=>'remittance_info_kezi_contract', 'label'=>'客资合同', 'parent_key'=>'remittance_info'),
+                        array('key'=>'remittance_info_dajian_contract', 'label'=>'搭建合同', 'parent_key'=>'remittance_info'),
+                        array('key'=>'remittance_info_remittance_ratio', 'label'=>'打款系数', 'parent_key'=>'remittance_info'),
                     ),
                 ),
             ),
@@ -233,8 +233,8 @@ class base{
                     'key' => 'order_info',
                     'label'=>'客资/搭建信息',
                     'child' => array(
-                        array('key'=>'order_info_kezi_list', 'label'=>'客资列表'),
-                        array('key'=>'order_info_dajian_list', 'label'=>'搭建列表'),
+                        array('key'=>'order_info_kezi_list', 'label'=>'客资列表', 'parent_key'=>'order_info'),
+                        array('key'=>'order_info_dajian_list', 'label'=>'搭建列表', 'parent_key'=>'order_info'),
                     ),
                 ),
                 array(
