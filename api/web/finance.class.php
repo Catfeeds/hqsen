@@ -12,6 +12,13 @@ namespace api\web;
 
 class finance extends base {
 
+    public static $sign_type = array(
+        '0'=>'首款',
+        '1'=>'中款',
+        '2'=>'尾款',
+        '3'=>'附加款',
+        '4'=>'尾款时间',
+    );
     public function __construct()
     {
         parent::__construct();
@@ -139,12 +146,22 @@ class finance extends base {
             $item['update_time'] = date('Y-m-d H:i:s' , $one_sign['update_time']);
             $item['order_money'] = $one_sign['order_money'];
             $item['sign_type'] = $one_sign['sign_type'];// 搭建二销签单状态 0首款   1 中款  2尾款  3附加款 4尾款时间
+            $item['sign_type_view'] = self::$sign_type[$one_sign['sign_type']];// 搭建二销签单状态 0首款   1 中款  2尾款  3附加款 4尾款时间
             $item['sign_pic_count'] = count(json_decode($one_sign['sign_pic']));
             $item['del_flag'] = $one_sign['del_flag'];//0未知 1初次录入 2再次录入
             $item['sign_status'] = $one_sign['sign_status'];//财务审核 0未知 1未处理 2通过 3驳回 4 总经理驳回 5待修改
             $item['sign_other_sign_status'] = $one_sign['sign_other_sign_status'];//财务审核 0未知 1未处理 2通过 3驳回 4 总经理驳回 5待修改
+
+            $other_sign = $this->db->getRow("select *  from hqsen_user_dajian_order_other_sign where id=" . $one_sign['sign_other_sign_id']);
             if($item['sign_type'] > 0){
                 $item['sign_status'] = $item['sign_other_sign_status'];
+                if($item['sign_type'] == 4){
+                    $item['sign_type_view'] = $item['sign_type_view'] . '(' . date('Y-m-d h:i:s', $other_sign['order_time']) . ')';
+                } else {
+                    $item['sign_type_view'] = $item['sign_type_view'] . '(' . round($other_sign['order_money'], 2) . ')';
+                }
+            } else {
+                $item['sign_type_view'] = $item['sign_type_view'] . '(' . $one_sign['first_order_money'] . ')';
             }
             $list['list'][] = $item;
         }

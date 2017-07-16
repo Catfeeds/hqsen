@@ -92,10 +92,10 @@ class pay extends base {
             $pay_item['order_other_money'] = $one_sign['order_other_money'];
             $pay_item['create_user_name'] = $create_user['user_name'];
             $pay_item['create_account'] = $c_accout;
-            $pay_item['create_user_money'] = $user_order['create_user_money'];
+            $pay_item['create_user_money'] = round($user_order['create_user_money'], 2);
             $pay_item['watch_user_name'] = $watch_user['user_name'];
             $pay_item['watch_account'] = $w_accout;
-            $pay_item['watch_user_money'] = $user_order['watch_user_money'];
+            $pay_item['watch_user_money'] = round($user_order['watch_user_money'], 2);
             $pay_item['create_time'] = date('Y-m-d H:i:s' , $one_sign['create_time']);
             $pay_item['pay_status'] = $user_order['order_status'];// 客资跟踪者订单状态1待处理 2待审核 3待结算 4已结算 5已驳回 6已取消
             $data['list'][] = $pay_item;
@@ -147,10 +147,10 @@ class pay extends base {
         $pay_item['order_money'] = $one_sign['order_money'];
         $pay_item['order_other_money'] = $one_sign['order_other_money'];
         $pay_item['create_user_name'] = $user_order['user_id'];// 改成用户名字
-        $pay_item['create_user_money'] = $user_order['create_user_money'];
+        $pay_item['create_user_money'] = round($user_order['create_user_money'], 2);
         $pay_item['create_user_alipay'] = $c_accout;
         $pay_item['watch_user_name'] = $user_order['watch_user_name'];
-        $pay_item['watch_user_money'] = $user_order['watch_user_money'];
+        $pay_item['watch_user_money'] = round($user_order['watch_user_money'], 2);
         $pay_item['watch_user_alipay'] = $w_accout;
         $pay_item['pay_status'] = $user_order['order_status'];// 1未打款 2 已打款
         $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $pay_item);
@@ -183,7 +183,7 @@ class pay extends base {
             $pay_item['sign_user_id'] = $user_order['watch_user_id']; //  首销ID
             $pay_item['create_user_name'] = $user_info['user_name'];
             $pay_item['create_account'] = $c_accout;
-            $pay_item['create_user_money'] = $user_order['create_user_money'];
+            $pay_item['create_user_money'] = round($user_order['create_user_money'], 2);
             $pay_item['pay_status'] = $user_order['order_status'];// 客资跟踪者订单状态1待处理 2待审核 3待结算 4已结算 5已驳回 6已取消
             $pay_item['create_time'] = date('Y-m-d H:i:s' , $one_sign['create_time']);
             $data['list'][] = $pay_item;
@@ -222,7 +222,7 @@ class pay extends base {
         $pay_item['user_dajian_order_id'] = $one_sign['user_dajian_order_id'];
         $pay_item['order_money'] = $one_sign['order_money'];
         $pay_item['create_user_name'] = $user_order['user_id'];// 改成用户名字
-        $pay_item['create_user_money'] = $user_order['create_user_money'];
+        $pay_item['create_user_money'] = round($user_order['create_user_money'], 2);
         $pay_item['watch_user_alipay'] = $c_accout;
         $pay_item['name'] = $one_sign['first_order_money'];
         $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $pay_item);

@@ -63,22 +63,22 @@ class feedback extends base {
         $unpay = $this->db->getRow('select sum(create_user_money) as s from hqsen_user_kezi_order where user_order_status = 2 and user_id = ' . $this->user['id']);
         $pay = $this->db->getRow('select sum(create_user_money) as s from hqsen_user_kezi_order where user_order_status = 3 and user_id = ' . $this->user['id']);
 
-        $data['my_money']['unpay'] = intval($unpay['s']);
-        $data['my_money']['pay'] = intval($pay['s']);
+        $data['my_money']['unpay'] = round($unpay['s'], 2);
+        $data['my_money']['pay'] = round($pay['s'], 2);
 
         // 获取客资跟踪者 和 搭建提供者账号信息 如果是酒店账号
         if($this->user['user_type'] == 4){
             $watch_unpay = $this->db->getRow('select sum(watch_user_money) as s from hqsen_user_kezi_order where user_order_status = 2 and watch_user_id = ' . $this->user['id']);
             $watch_pay = $this->db->getRow('select sum(watch_user_money) as s from hqsen_user_kezi_order where user_order_status = 3 and watch_user_id = ' . $this->user['id']);
 
-            $data['my_money']['unpay'] = $data['my_money']['unpay'] + intval($watch_unpay['s']);
-            $data['my_money']['pay'] = $data['my_money']['pay'] + intval($watch_pay['s']);
+            $data['my_money']['unpay'] = $data['my_money']['unpay'] + round($watch_unpay['s'], 2);
+            $data['my_money']['pay'] = $data['my_money']['pay'] + round($watch_pay['s'], 2);
 
             $dajian_unpay = $this->db->getRow('select sum(create_user_money) as s from hqsen_user_dajian_order where user_order_status = 2 and user_id = ' . $this->user['id']);
             $dajian_pay = $this->db->getRow('select sum(create_user_money) as s from hqsen_user_dajian_order where user_order_status = 3 and user_id = ' . $this->user['id']);
 
-            $data['my_money']['unpay'] = $data['my_money']['unpay'] + intval($dajian_unpay['s']);
-            $data['my_money']['pay'] = $data['my_money']['pay'] + intval($dajian_pay['s']);
+            $data['my_money']['unpay'] = $data['my_money']['unpay'] + round($dajian_unpay['s'], 2);
+            $data['my_money']['pay'] = $data['my_money']['pay'] + round($dajian_pay['s'], 2);
         }
         $data['my_money']['all'] = $data['my_money']['unpay'] + $data['my_money']['pay'];
         $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $data);

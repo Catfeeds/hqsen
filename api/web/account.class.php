@@ -49,8 +49,8 @@ class account extends base {
                     'user_name' => $one_user['user_name'],
                     'create_time' => date('Y-m-d H:i:s' , $one_user['create_time']),
                     'alipay_account' => $accout,
-                    'payed' => intval($pay['s']),
-                    'unpay' => intval($unpay['s']),
+                    'payed' => round($pay['s'], 2),
+                    'unpay' => round($unpay['s'], 2),
                 );
                 $data['list'][] = $user_item;
             }
@@ -94,8 +94,8 @@ class account extends base {
                     'user_status' => $one_user['user_status'],
                     'create_time' => date('Y-m-d H:i:s' , $one_user['create_time']),
                     'alipay_account' => $one_user['alipay_account'] ? $one_user['alipay_account'] : '未设置账号',
-                    'payed' => intval($unpay['s']) + intval($watch_unpay['s']) + intval($dajian_unpay['s']),
-                    'unpay' => intval($pay['s']) + intval($watch_pay['s']) + intval($dajian_pay['s']),
+                    'payed' => round($unpay['s'], 2) + round($watch_unpay['s'], 2) + round($dajian_unpay['s'], 2),
+                    'unpay' => round($pay['s'], 2) + round($watch_pay['s'], 2) + round($dajian_pay['s'], 2),
                 );
                 $data['list'][] = $user_item;
             }

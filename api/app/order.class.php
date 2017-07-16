@@ -440,6 +440,7 @@ class order extends base {
         $user_kezi_order_sign['create_time'] = time();
         $user_kezi_order_sign['update_time'] = time();
         $user_kezi_order_sign['user_kezi_order_id'] = $user_kezi_order_id;
+        $user_kezi_order_sign['sign_status'] = 1;
         $user_kezi_order_sign['kezi_order_id'] = $user_order['kezi_order_id'];
         if($user_kezi_order_id){
             if(isset($user_kezi_order_sign['id']) and $user_kezi_order_sign['id']){
@@ -451,8 +452,8 @@ class order extends base {
             $user_order['order_status'] = 2;
             // 更新提供者佣金
             $pay_ratio = $this->db->getRow("select *  from hqsen_pay_ratio limit 1");
-            $user_order['create_user_money'] = $order_money * $pay_ratio['kezi_user'];
-            $user_order['watch_user_money'] = $order_money * $pay_ratio['kezi_hotel'];
+            $user_order['create_user_money'] = round($order_money * $pay_ratio['kezi_user'], 2);
+            $user_order['watch_user_money'] = round($order_money * $pay_ratio['kezi_hotel'], 2);
             $this->db->update('hqsen_user_kezi_order', $user_order, ' id = ' . $user_kezi_order_sign['user_kezi_order_id']);
             $this->appDie();
         } else {
@@ -910,7 +911,7 @@ class order extends base {
             $order_type_sql['order_status'] = 2;
             // 更新提供者佣金
             $pay_ratio = $this->db->getRow("select *  from hqsen_pay_ratio limit 1");
-            $order_type_sql['create_user_money'] = $order_money * $pay_ratio['dajian_user'];
+            $order_type_sql['create_user_money'] = round($order_money * $pay_ratio['dajian_user'], 2);
             $this->db->update('hqsen_user_dajian_order', $order_type_sql, ' id = ' . $user_dajian_order_id);
             $this->appDie();
         } else {
