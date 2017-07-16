@@ -253,9 +253,9 @@ class order extends base {
                         case 5:
                             $sign = $this->db->getRow("select * from hqsen_user_kezi_order_sign where user_kezi_order_id = $order_id");
                             $finance_last_follow = $this->db->getRow("select * from hqsen_user_kezi_sign_follow where sign_status = 5 and user_sign_id = " . $sign['id'] . ' order by id desc limit 1');
-                            $order_list['handle_note'] = '客资合同待重新提交:';
+                            $order_list['handle_note'] = '待重新提交:';
                             if($finance_last_follow){
-                                $order_list['handle_note'] = $order_list['handle_note'] . '  (' . $finance_last_follow['status_desc'] . ')';
+                                $order_list['handle_note'] = $order_list['handle_note'] . ' ' . $finance_last_follow['status_desc'] . '';
                             }
                             break;
                         case 6:
@@ -699,20 +699,20 @@ class order extends base {
                             $order_list['handle_note'] = '无';
                             break;
                         case 2:
-                            $order_list['handle_note'] = '该搭建合同正在被审核,请耐心等待^_^';
+                            $order_list['handle_note'] = '正在被审核,请耐心等待^_^';
                             break;
                         case 3:
-                            $order_list['handle_note'] = '相关的奖励即将发放给提供搭建信息者';
+                            $order_list['handle_note'] = '相关的奖励即将发放';
                             break;
                         case 4:
-                            $order_list['handle_note'] = '相关奖励已经发放给提供搭建信息者';
+                            $order_list['handle_note'] = '相关奖励已经发放';
                             break;
                         case 5:
                             $sign = $this->db->getRow("select * from hqsen_user_dajian_order_sign where user_dajian_order_id = $order_id");
                             $finance_last_follow = $this->db->getRow("select * from hqsen_user_dajian_sign_follow where sign_status = 5 and user_sign_id = " . $sign['id'] . ' order by id desc limit 1');
-                            $order_list['handle_note'] = '搭建合同待重新提交:';
+                            $order_list['handle_note'] = '待重新提交:';
                             if($finance_last_follow){
-                                $order_list['handle_note'] = $order_list['handle_note'] . '  (' . $finance_last_follow['status_desc'] . ')';
+                                $order_list['handle_note'] = $order_list['handle_note'] . ' ' . $finance_last_follow['status_desc'] . '';
                             }
                             break;
                         case 6:
@@ -729,29 +729,29 @@ class order extends base {
                             break;
                     }
                 } else if($this->user['user_type'] == 12){
-                    switch ($user_order['order_status']){
+                    switch ($user_order['erxiao_order_status']){
                         case 1:
                             $order_list['handle_note'] = '无';
                             break;
                         case 2:
-                            $order_list['handle_note'] = '正在被审核,请耐 等待^_^';
+                            $order_list['handle_note'] = '正在被审核,请耐心等待^_^';
                             break;
                         case 3:
                             $order_list['handle_note'] = '搭建订单已完结';
                             break;
-                        case 4:
+                        case 5:
                             $sign = $this->db->getRow("select * from hqsen_user_dajian_order_sign where user_dajian_order_id = $order_id");
                             $finance_last_follow = $this->db->getRow("select * from hqsen_user_dajian_sign_follow where user_sign_id = " . $sign['id'] . ' order by id desc limit 1');
                             $order_list['handle_note'] = '待重新提交:';
-                            if($finance_last_follow and $finance_last_follow['status_desc'] == 5){
-                                $order_list['handle_note'] = $order_list['handle_note'] . '  (' . $finance_last_follow['status_desc'] . ')';
+                            if($finance_last_follow and $finance_last_follow['sign_status'] == 5){
+                                $order_list['handle_note'] = $order_list['handle_note'] . ' ' . $finance_last_follow['status_desc'] . '';
                             }
                             break;
                     }
                 } else if($this->user['user_type'] == 4){
                     switch ($user_order['user_order_status']){
                         case 1:
-                            $order_list['handle_note'] = '跟进中(专员处中)';
+                            $order_list['handle_note'] = '跟进中(专员处理中)';
                             break;
                         case 2:
                             $order_list['handle_note'] = '待结算(等待财务打款)';
@@ -893,6 +893,7 @@ class order extends base {
         $user_dajian_order_sign['sign_pic'] = $sign_pic_json;
         $user_dajian_order_sign['first_order_money'] = $first_order_money;
         $user_dajian_order_sign['first_order_using_time'] = $first_order_using_time;
+        $user_dajian_order_sign['sign_status'] = 1;
         $user_dajian_order_sign['next_pay_time'] = $next_pay_time;
         $user_dajian_order_sign['order_time'] = time();// 订单创建时间
         $user_dajian_order_sign['create_time'] = time();
@@ -905,7 +906,7 @@ class order extends base {
             } else {
                 $this->db->insert('hqsen_user_dajian_order_sign', $user_dajian_order_sign);
             }
-            // 更新首销订单 关于二销信息
+            // 更新首销订单 关于二销/财务 信息
             $order_type_sql['order_status'] = 2;
             // 更新提供者佣金
             $pay_ratio = $this->db->getRow("select *  from hqsen_pay_ratio limit 1");
@@ -1017,7 +1018,7 @@ class order extends base {
     public function dajianOrderFollowList(){
         $user_dajian_order_id = $this->postInt('user_dajian_order_id'); // 订单ID
         if($user_dajian_order_id){
-            $user_dajian_order_follow_list = $this->db->getRows("select * from hqsen_user_dajian_order_follow where user_dajian_order_id = $user_dajian_order_id ");
+            $user_dajian_order_follow_list = $this->db->getRows("select * from hqsen_user_dajian_order_follow where user_dajian_order_id = $user_dajian_order_id order by id desc");
             $back_follows = [];
             if($user_dajian_order_follow_list){
                 foreach ($user_dajian_order_follow_list as $one_item){
