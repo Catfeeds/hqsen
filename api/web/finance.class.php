@@ -156,7 +156,7 @@ class finance extends base {
             if($item['sign_type'] > 0){
                 $item['sign_status'] = $item['sign_other_sign_status'];
                 if($item['sign_type'] == 4){
-                    $item['sign_type_view'] = $item['sign_type_view'] . '(' . date('Y-m-d h:i:s', $other_sign['order_time']) . ')';
+                    $item['sign_type_view'] = $item['sign_type_view'] . '(' . date('Y-m-d', $other_sign['order_time']) . ')';
                 } else {
                     $item['sign_type_view'] = $item['sign_type_view'] . '(' . round($other_sign['order_money'], 2) . ')';
                 }
