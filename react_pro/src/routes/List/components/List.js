@@ -1,8 +1,10 @@
 import React, { Component, PropTypes } from 'react'
 import './List.scss'
-import { Table, Input, Button, Popconfirm } from 'antd'
+import { Table, Input, Button, Popconfirm, DatePicker } from 'antd'
 import MyBreadcrumb from '../../../components/MyBreadcrumb'
+import Fetch from '../../../Fetch'
 const Search = Input.Search
+const { RangePicker } = DatePicker
 
 class List extends Component {
   static propTypes = {
@@ -31,6 +33,7 @@ class List extends Component {
   constructor (props) {
     super(props)
     this.state = {
+      rangeTime: [],
       searchBtnType: [
         {
           type: 'account_info_register_list',
@@ -52,8 +55,11 @@ class List extends Component {
         'hotel_info_hotel_list',
         'wedding_list',
         'hotel_rec_list'
-      ]
+      ],
+      downloadBtnType: ['remittance_info_kezi_contract', 'remittance_info_dajian_contract']
     }
+    this.rangeTime = this.rangeTime.bind(this)
+    this.exportFile = this.exportFile.bind(this)
   }
 
   componentWillMount () {
@@ -74,6 +80,20 @@ class List extends Component {
     const { type } = this.props.List.basicInfo
     const filterType = this.state.searchBtnType.filter(item => item.type === type)
     return filterType.length ? filterType[0] : {}
+  }
+  rangeTime (data) {
+    this.setState({
+      rangeTime: data
+    })
+  }
+  exportFile () {
+    const url = this.props.List.basicInfo.type === 'remittance_info_kezi_contract' ? 'keziDownload' : 'dajianDownload'
+    Fetch(url, {
+      start_time: this.state.rangeTime[0].valueOf(),
+      end_time: this.state.rangeTime[1].valueOf()
+    }).then(response => {
+      window.location.href = response.data.url
+    })
   }
 
   goApproveDetail (record, isSubmit) {
@@ -173,6 +193,7 @@ class List extends Component {
   }
 
   render () {
+    const { downloadBtnType, addBtnType } = this.state
     const {
       List: { pageInfo, resultInfo, searchInput, loading, basicInfo },
       handleCurrentChange,
@@ -738,7 +759,7 @@ class List extends Component {
         {
           key: 'create_user_money',
           dataIndex: 'create_user_money',
-          title: '提供者分成'
+          title: '提供者分成金额'
         },
         {
           key: 'watch_user_name',
@@ -759,7 +780,7 @@ class List extends Component {
         {
           key: 'watch_user_money',
           dataIndex: 'watch_user_money',
-          title: '跟踪者分成'
+          title: '跟踪者分成金额'
         },
         {
           key: 'pay_status',
@@ -802,7 +823,7 @@ class List extends Component {
         {
           key: 'create_user_money',
           dataIndex: 'create_user_money',
-          title: '跟踪者分成'
+          title: '跟踪者分成金额'
         },
         {
           key: 'create_account',
@@ -993,31 +1014,36 @@ class List extends Component {
       <div className="list-page">
         <MyBreadcrumb breadcrumb={basicInfo.breadcrumb} />
         <div className="control-box clearfix">
-          {this.getSearchType().type &&
-            <Search
+          {this.getSearchType().type
+            ? <Search
               placeholder={this.getSearchType().message}
               style={{ width: 200 }}
               value={searchInput}
               onChange={e => changeSearchInput(e.target.value)}
               onSearch={() => handleCurrentChange(1)}
-            />}
-          <Button
-            type="primary"
-            icon="plus-circle-o"
-            className="create-btn"
-            style={{ display: this.state.addBtnType.indexOf(basicInfo.type) > -1 ? 'block' : 'none' }}
-            onClick={() => this.addRow()}
-          >
-            新增
-          </Button>
-          <Button
-            type="primary"
-            className="create-btn"
-            style={{ marginRight: 5, display: basicInfo.type === 'hotel_info_hotel_list' ? 'block' : 'none' }}
-            onClick={() => this.toRecList()}
-          >
-            首页酒店推荐
-          </Button>
+              />
+            : null}
+          {(addBtnType.indexOf(basicInfo.type) > -1)
+            ? <Button type="primary" icon="plus-circle-o" className="create-btn" onClick={() => this.addRow()}>
+                新增
+              </Button>
+            : null}
+          {basicInfo.type === 'hotel_info_hotel_list'
+            ? <Button type="primary" className="create-btn" style={{ marginRight: 5 }} onClick={() => this.toRecList()}>
+              首页酒店推荐
+            </Button> : null}
+          {downloadBtnType.indexOf(basicInfo.type) > -1
+            ? <div className="download-box">
+              <RangePicker
+                showTime
+                format="YYYY-MM-DD HH:mm:ss"
+                value={this.state.rangeTime}
+                onChange={this.rangeTime}
+              />
+              <Button className="ml5" type="primary" icon="download" onClick={this.exportFile}>
+                导出
+              </Button>
+            </div> : null}
         </div>
         <Table
           loading={loading}

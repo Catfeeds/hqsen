@@ -25,8 +25,9 @@ class Header extends Component {
   }
 
   handleClick (e) {
+    console.log(e)
     const key = e.key
-    this.props.saveHeadKey(key)
+    this.props.saveHeadKey({ key: e.keyPath[0], parentKey: e.keyPath[1] })
     let path = ''
     switch (key) {
       case 'account_info_password_back':

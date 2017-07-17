@@ -85,10 +85,12 @@ export const urlKey = {
   payKeziOrderList: 'c=pay&f=keziOrderList',
   payKeziCompleted: 'c=pay&f=keziPayOrder',
   payKeziOrderDetail: 'c=pay&f=keziOrderDetail',
+  keziDownload: 'c=pay&f=keziDownload',
   // dajian打款
   payDajianOrderList: 'c=pay&f=dajianOrderList',
   payDajianCompleted: 'c=pay&f=dajianPayOrder',
   payDajianOrderDetail: 'c=pay&f=dajianOrderDetail',
+  dajianDownload: 'c=pay&f=dajianDownload',
   // 财务打款系数
   payDetail: 'c=pay&f=payRatioDetail',
   paySubmit: 'c=pay&f=payRatio'

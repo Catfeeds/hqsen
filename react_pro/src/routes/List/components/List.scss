@@ -4,7 +4,8 @@
     float: right;
   }
 }
-.disabled-row, .disabled-row:hover {
+.disabled-row,
+.disabled-row:hover {
   color: #ededed;
   .red-tip {
     color: #ededed;
@@ -18,4 +19,10 @@
   color: red;
   font-size: 12px;
   transform: scale(0.8);
+}
+.download-box {
+  float: right;
+}
+.ml5 {
+  margin-left: 5px;
 }

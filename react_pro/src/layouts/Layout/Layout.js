@@ -56,8 +56,12 @@ class Layout extends Component {
       response => {
         const menu = response.data.user_security
         if (params.type) {
-          const parentType = this.getParentType(menu, params.type)[0]
-          saveHeadKey({ key: params.type, parentKey: parentType })
+          let type = params.type
+          if (params.type === 'hotel_rec_list' || params.type === 'wedding_list') {
+            type = 'hotel_info_hotel_list'
+          }
+          let parentType = this.getParentType(menu, type)[0]
+          saveHeadKey({ key: type, parentKey: parentType })
         } else {
           saveHeadKey({ key: 'account_info_password_back' })
         }
@@ -77,8 +81,7 @@ class Layout extends Component {
     const { children, saveHeadKey, layout: { configData, headKey } } = this.props
     return (
       <div className="content-wrapper">
-        {configData.user_security &&
-          <Header menu={configData.user_security} saveHeadKey={saveHeadKey} headKey={headKey} />}
+        {headKey.key && <Header menu={configData.user_security} saveHeadKey={saveHeadKey} headKey={headKey} />}
         <div className="core-layout__viewport">
           {this.state.usableToken ? children : null}
         </div>
