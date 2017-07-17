@@ -35,6 +35,13 @@ class pay extends base {
             } else {
                 $this->db->insert('hqsen_pay_ratio', $pay_ratio);
             }
+
+            $update_dajian_sql = 'update hqsen_user_dajian_order as hudo , hqsen_user_dajian_order_sign as hudos set hudo.create_user_money  = hudos.order_money* ' . $dajian_user . ' where hudo.user_order_status = 2  and hudo.id=hudos.user_dajian_order_id';
+            $update_kezi_sql = 'update hqsen_user_kezi_order as hudo , hqsen_user_kezi_order_sign as hudos set hudo.create_user_money  = hudos.order_money* ' . $kezi_user . ' , watch_user_money  = hudos.order_money* ' . $kezi_hotel . '  where hudo.user_order_status = 2  and hudo.id=hudos.user_kezi_order_id';
+
+            $this->db->query($update_dajian_sql);
+            $this->db->query($update_kezi_sql);
+
             $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success']);
         } else {
             $this->appDie($this->back_code['sys']['value_empty'], $this->back_msg['sys']['value_empty']);
@@ -226,6 +233,101 @@ class pay extends base {
         $pay_item['watch_user_alipay'] = $c_accout;
         $pay_item['name'] = $one_sign['first_order_money'];
         $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $pay_item);
+    }
+
+    public function keziDownload(){
+        $start_time = $this->postString('start_time');
+        $end_time = $this->postString('end_time');
+        if($start_time and $end_time){
+            // 总经理要在财务审批通过基础上
+            $sign = $this->db->getRows("select *  from hqsen_user_kezi_order_sign  where boss_sign_status = 2 and create_time > $start_time  and create_time < $end_time  order by id desc ");
+            // 处理头部标题
+            $header = '合同金额,提供者账号,提供者收款账号,提供者分成,跟踪者账号,跟踪者收款账号,跟踪者分成,打款状态,创建时间' . PHP_EOL;
+            // 处理内容
+            $content = '';
+            foreach ($sign as $one_sign){
+                $user_order = $this->db->getRow("select *  from hqsen_user_kezi_order where id=" . $one_sign['user_kezi_order_id']);
+                $create_user = $this->db->getRow("select *  from hqsen_user where id=" . $user_order['user_id']);
+                $watch_user = $this->db->getRow("select *  from hqsen_user where id=" . $user_order['watch_user_id']);
+
+                if($create_user['alipay_account']){
+                    $c_accout = '支付宝:' . $create_user['alipay_account'];
+                } else if($create_user['bank_account']){
+                    $c_accout = $create_user['bank_name'] . ':' . $create_user['bank_account'] . '(' . $create_user['bank_user'] . ')' ;
+                } else {
+                    $c_accout = '未设置账号';
+                }
+
+                if($watch_user['alipay_account']){
+                    $w_accout = '支付宝:' . $watch_user['alipay_account'];
+                } else if($watch_user['bank_account']){
+                    $w_accout = $watch_user['bank_name'] . ':' . $watch_user['bank_account'] . '(' . $watch_user['bank_user'] . ')' ;
+                } else {
+                    $w_accout = '未设置账号';
+                }
+                $order_status = $user_order['order_status'] == 3 ? '已打款' : '未打款';
+                $content .= $one_sign['order_money'] . ',' . $create_user['user_name'] . ',' . $c_accout . ','
+                    . round($user_order['create_user_money'], 2) . ',' . $watch_user['user_name'] . ',' . $w_accout
+                    . ',' . round($user_order['watch_user_money'], 2) . ',' . $order_status . ','
+                    . date('Y-m-d H:i:s' , $one_sign['create_time'])  . PHP_EOL;
+            }
+            // 打开文件资源，不存在则创建
+            $file_name = '客资_' . date('Y-m-d' , $start_time) . '-'  . date('Y-m-d' , $end_time) . '.csv';
+            $fp = fopen(API_PATH . "/upload/" . $file_name, 'w');
+            // 拼接
+            $csv = $header.$content;
+            // 写入并关闭资源
+            fwrite($fp, $csv);
+            fclose($fp);
+            $url = 'http://dev.51isen.com' . "/api/upload/" . $file_name;
+            $data['url'] = $url;
+            $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $data);
+        } else {
+            $this->appDie($this->back_code['sys']['value_empty'], $this->back_msg['sys']['value_empty']);
+        }
+    }
+
+
+    public function dajianDownload(){
+        $start_time = $this->postString('start_time');
+        $end_time = $this->postString('end_time');
+        if($start_time and $end_time){
+            // 总经理要在财务审批通过基础上
+            $sign = $this->db->getRows("select *  from hqsen_user_dajian_order_sign  where boss_sign_status = 2  and create_time > $start_time  and create_time < $end_time  order by id desc ");
+            // 处理头部标题
+            $header = '合同金额,首付金额,跟踪者账号,跟踪者分成,跟踪者收款账户,打款状态,创建时间' . PHP_EOL;
+            // 处理内容
+            $content = '';
+            foreach ($sign as $one_sign){
+                $user_order = $this->db->getRow("select *  from hqsen_user_dajian_order where id=" . $one_sign['user_dajian_order_id']);
+                $user_info = $this->db->getRow("select *  from hqsen_user where id=" . $user_order['user_id']);
+
+                if($user_info['alipay_account']){
+                    $c_accout = '支付宝:' . $user_info['alipay_account'];
+                } else if($user_info['bank_account']){
+                    $c_accout = $user_info['bank_name'] . ':' . $user_info['bank_account'] . '(' . $user_info['bank_user'] . ')' ;
+                } else {
+                    $c_accout = '未设置账号';
+                }
+                $order_status = $user_order['order_status'] == 3 ? '已打款' : '未打款';
+                $content .= $one_sign['order_money'] . ',' . $one_sign['first_order_money'] . ',' . $user_info['user_name'] . ','
+                    . round($user_order['create_user_money'], 2) . ',' . $c_accout . ','. $order_status . ','
+                    . date('Y-m-d H:i:s' , $one_sign['create_time'])  . PHP_EOL;
+            }
+            // 打开文件资源，不存在则创建
+            $file_name = '搭建_' . date('Y-m-d' , $start_time) . '-'  . date('Y-m-d' , $end_time) . '.csv';
+            $fp = fopen(API_PATH . "/upload/" . $file_name, 'w');
+            // 拼接
+            $csv = $header.$content;
+            // 写入并关闭资源
+            fwrite($fp, $csv);
+            fclose($fp);
+            $url = 'http://dev.51isen.com' . "/api/upload/" . $file_name;
+            $data['url'] = $url;
+            $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $data);
+        } else {
+            $this->appDie($this->back_code['sys']['value_empty'], $this->back_msg['sys']['value_empty']);
+        }
     }
 
 
