@@ -236,8 +236,8 @@ class pay extends base {
     }
 
     public function keziDownload(){
-        $start_time = $this->postString('start_time');
-        $end_time = $this->postString('end_time');
+        $start_time = $this->postString('start_time')/1000;
+        $end_time = $this->postString('end_time')/1000;
         if($start_time and $end_time){
             // 总经理要在财务审批通过基础上
             $sign = $this->db->getRows("select *  from hqsen_user_kezi_order_sign  where boss_sign_status = 2 and create_time > $start_time  and create_time < $end_time  order by id desc ");
@@ -289,8 +289,8 @@ class pay extends base {
 
 
     public function dajianDownload(){
-        $start_time = $this->postString('start_time');
-        $end_time = $this->postString('end_time');
+        $start_time = $this->postString('start_time')/1000;
+        $end_time = $this->postString('end_time')/1000;
         if($start_time and $end_time){
             // 总经理要在财务审批通过基础上
             $sign = $this->db->getRows("select *  from hqsen_user_dajian_order_sign  where boss_sign_status = 2  and create_time > $start_time  and create_time < $end_time  order by id desc ");
