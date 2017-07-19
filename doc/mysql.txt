@@ -5,9 +5,12 @@ http://www.pmdaniu.com/rp/view?id=V3RSMAtrVWZQYwU3AipRNA
 
 git clone https://github.com/xiaoyunqiang/hqsen.git
 
-cd hqsen
+cd hqsen/api
 
 chmod -R 777 upload
 
+cd ../
+
 vi avf/lib/db.class.php  修改对应数据
+
 
