@@ -95,9 +95,26 @@ class user extends base{
         $url = '';
         if(isset($_FILES['file']["name"])){
             move_uploaded_file($_FILES['file']['tmp_name'], API_PATH . "/upload/" . time() . $_FILES["file"]["name"]);
-            $url = 'http://dev.51isen.com' . "/api/upload/" . time() . $_FILES["file"]["name"];
-//            $url = 'http://sendevimg.oss-cn-zhangjiakou.aliyuncs.com/user-dir/300%403x.png';
+//            $url = 'http://dev.51isen.com' . "/api/upload/" . time() . $_FILES["file"]["name"];
         }
+
+
+        // Create a cURL handle
+        $ch = curl_init('http://sendevimg.oss-cn-zhangjiakou.aliyuncs.com');
+//        $policy = '{"expiration": "2120-01-01T12:00:00.000Z","conditions":[{"bucket": "sendevimg" },["content-length-range", 0, 104857600]]}';
+//        $policy = base64_encode($policy);
+        $postData = array(
+            'OSSAccessKeyId'=> 'LTAIoOF3QnYG9bZm',
+            'policy'=> 'eyJleHBpcmF0aW9uIjogIjIxMjAtMDEtMDFUMTI6MDA6MDAuMDAwWiIsImNvbmRpdGlvbnMiOlt7ImJ1Y2tldCI6ICJzZW5kZXZpbWciIH0sWyJjb250ZW50LWxlbmd0aC1yYW5nZSIsIDAsIDEwNDg1NzYwMF1dfQ==',
+            'signature'=> 'xg7inAutAlCNgAbWEDJ1HUgBoys=',
+            'key'=> 'upload/user_web/${filename}',
+            'file'=> curl_file_create(API_PATH . "/upload/" . time() . $_FILES["file"]["name"],$_FILES["file"]["type"],time() . $_FILES["file"]["name"]),
+        );
+        curl_setopt($ch, CURLOPT_POST,1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+        // Execute the handle
+        $r = curl_exec($ch);
+        $url = 'http://sendevimg.oss-cn-zhangjiakou.aliyuncs.com/upload/user_web/' . time() . $_FILES["file"]["name"];
         $data['url'] = $url;
         $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $data);
     }
