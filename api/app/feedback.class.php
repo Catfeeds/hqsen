@@ -84,6 +84,11 @@ class feedback extends base {
         $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $data);
     }
 
+    public function autoType(){
+        $sql_user['auto_type'] = 2;
+        $this->db->update('hqsen_user_data', $sql_user, ' id = ' . $this->user['id']);
+    }
+
 
 
 }

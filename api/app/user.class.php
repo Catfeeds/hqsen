@@ -89,7 +89,8 @@ class user extends base{
                 'hotel_id' => $user_data['hotel_id'],
                 'area_id' => $user_data['area_id'],
                 'hotel_area' => $user_data['hotel_area'],
-                'user_type' => $user['user_type']
+                'user_type' => $user['user_type'],
+                'auto_type' => $user['auto_type']
             );
 //            $_SESSION['user_info'] = $user;
             $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $login_user);
