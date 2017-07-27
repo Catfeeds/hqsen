@@ -272,4 +272,70 @@ class user extends base{
         $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $this->get_sh_area());
     }
 
+    public function syncOrder(){
+        $start_time = time() - 10; //同步三天前的订单
+        // 获取三天前 未同步的指定酒店的订单
+        $order = $this->db->getRows("select * from hqsen_kezi_order where  del_flag = 1 and create_time < $start_time and sync_type = 1 and order_area_hotel_type = 2");
+        foreach ($order as $one_order){
+            $hotel_arr = explode(',', $one_order['order_area_hotel_id']);
+            foreach ($hotel_arr as $one_hotel_id){
+                $this->syncHotelOrder($one_order, $one_hotel_id);
+            }
+            // 更新同步状态
+            $update_sql['sync_type'] = 2;
+            $this->db->update('hqsen_kezi_order', $update_sql, ' id = ' . $one_order['id']);
+        }
+    }
+
+
+    // 按区域  同步同区域下所有的酒店
+    public function syncHotelOrder($order, $using_hotel_id)
+    {
+        $using_hotel = $this->db->getRow('select * from hqsen_hotel where id =' . $using_hotel_id);
+        if($using_hotel){
+            $hotel_level = $using_hotel['hotel_level'];
+        } else {
+            return '酒店错误:' . $using_hotel_id . '!';
+        }
+        $using_area_id = $using_hotel['area_id'];
+        // 分配订单 需要分配酒店账号 user_type=4
+        $user_data = $this->db->getRows("
+                    select * from (
+                            select hud.* from hqsen_user as hu 
+                            left join hqsen_user_data as hud on hu.id=hud.user_id 
+                            left join hqsen_hotel as hh on hud.hotel_id = hh.id
+                            where hu.user_type=4 and hu.del_flag = 1 and hu.user_status=1 
+                            and hud.area_id = $using_area_id and hh.hotel_level = $hotel_level
+                            order by last_order_time asc
+                        ) as c group by c.hotel_id
+                ");
+        if (!$user_data) {
+            $error_message = '区域:' . $using_hotel['hotel_name'] . '同区域不存在酒店账号,同步失败';
+            return $error_message;
+        }
+        foreach ($user_data as $one_user_data) {
+            $one_user_order_sql = [];
+            // 酒店已存在该订单  不创建
+            if($one_user_data['hotel_id'] == $using_hotel_id){
+                continue;
+            }
+            if ($one_user_data) {
+                $one_user_order_sql['user_id'] = $order['user_id'];
+                $one_user_order_sql['watch_user_name'] = $one_user_data['user_name'];
+                $one_user_order_sql['watch_user_hotel_name'] = $one_user_data['hotel_name'];
+                $one_user_order_sql['watch_user_id'] = $one_user_data['user_id'];
+                $one_user_order_sql['kezi_order_id'] = $order['id'];
+                $one_user_order_sql['create_time'] = time();
+                $one_user_order_sql['update_time'] = time();
+                $one_user_order_sql['order_phone'] = $order['order_phone'];
+                $rs = $this->db->insert('hqsen_user_kezi_order', $one_user_order_sql);
+                if ($rs) {
+                    $update_sql['last_order_time'] = time();
+                    $this->db->update('hqsen_user_data', $update_sql, ' user_id = ' . $one_user_data['user_id']);
+                }
+            }
+        }
+        return false;
+    }
+
 }
