@@ -86,7 +86,7 @@ class feedback extends base {
 
     public function autoType(){
         $sql_user['auto_type'] = 2;
-        $this->db->update('hqsen_user_data', $sql_user, ' id = ' . $this->user['id']);
+        $this->db->update('hqsen_user_data', $sql_user, ' user_id = ' . $this->user['id']);
         $this->appDie();
     }
 
