@@ -305,7 +305,8 @@ class user extends base{
                             left join hqsen_user_data as hud on hu.id=hud.user_id 
                             left join hqsen_hotel as hh on hud.hotel_id = hh.id
                             where hu.user_type=4 and hu.del_flag = 1 and hu.user_status=1 
-                            and hud.area_id = $using_area_id and hh.hotel_level = $hotel_level
+                            and hud.area_id = $using_area_id and hh.hotel_level = '$hotel_level' 
+                            and hud.auto_type = 2 
                             order by last_order_time asc
                         ) as c group by c.hotel_id
                 ");
