@@ -952,7 +952,7 @@ class order extends base {
         $order_other_sign_pic = $this->postString('order_sign_pic'); //签单凭证  json
         $sign_pic_arr = explode(',', $order_other_sign_pic);
         $sign_pic_json = json_encode($sign_pic_arr);
-        if($sign_type != 3 or $sign_type != 4){
+        if($sign_type != 3 and $sign_type != 4){
             $user_dajian_order_sign = $this->db->getRow('select * from hqsen_user_dajian_order_other_sign where user_dajian_order_id = ' . $user_dajian_order_id . ' and  sign_type = ' . $sign_type );
         }
         $user_dajian_order_sign['sign_type'] = $sign_type;
