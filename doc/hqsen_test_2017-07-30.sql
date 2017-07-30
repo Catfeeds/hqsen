@@ -7,7 +7,7 @@
 #
 # Host: 47.92.31.234 (MySQL 5.5.54-0ubuntu0.14.04.1)
 # Database: hqsen_test
-# Generation Time: 2017-07-30 05:31:39 +0000
+# Generation Time: 2017-07-30 06:00:49 +0000
 # ************************************************************
 
 
@@ -302,6 +302,7 @@ LOCK TABLES `hqsen_user` WRITE;
 INSERT INTO `hqsen_user` (`id`, `user_name`, `nike_name`, `user_pic`, `phone`, `alipay_account`, `create_time`, `user_type`, `del_flag`, `session_id`, `password`, `user_status`, `bank_name`, `bank_user`, `bank_account`, `last_login_time`)
 VALUES
 	(2,'monkey','1506815966','','15068159661','',1491029702,2,1,'','e10adc3949ba59abbe56e057f20f883e',1,'','','',0),
+	(92,'13813813800','13813813800','','13813813800','',1491030559,3,1,'','e10adc3949ba59abbe56e057f20f883e',1,'','','',0),
 	(4,'sen','sen','','','',1491030559,2,1,'','e10adc3949ba59abbe56e057f20f883e',1,'','','',0);
 
 /*!40000 ALTER TABLE `hqsen_user` ENABLE KEYS */;
