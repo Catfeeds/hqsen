@@ -113,11 +113,12 @@ class order extends base {
         $order_list['order_list'] = [];
         if($order){
             foreach ($order as $one_order){
+                $order_from = $one_order['order_from'] == 2 ? '(同步)' : '';
                 $order_item = array(
                     'id' => (int)$one_order['id'],
                     'create_time' => (string)$one_order['create_time'],
                     'order_status' => (int)$one_order['user_order_status'],// 需要返回提供者状态   不搞给错了
-                    'order_phone' => (string)$one_order['order_phone'],
+                    'order_phone' => (string)$one_order['order_phone'].$order_from,
                     'watch_user' => (string)$one_order['watch_user_name'] . '  (' . $one_order['watch_user_hotel_name'] . ')' ,
                 );
                 $order_list['order_list'][] = $order_item;
@@ -150,7 +151,7 @@ class order extends base {
         $order_list['order_list'] = [];
         if($order){
             foreach ($order as $one_order){
-                $order_from = $one_order['order_from'] == 2 ? '同步' : '';
+                $order_from = $one_order['order_from'] == 2 ? '(同步)' : '';
                 $order_item = array(
                     'id' => (int)$one_order['id'],
                     'create_time' => (string)$one_order['update_time'],

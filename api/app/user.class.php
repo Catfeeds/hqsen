@@ -276,11 +276,19 @@ class user extends base{
         $gsa = $this->get_sh_area();
         $gsa['20'] = '精选地区';
         $gsa = array_reverse($gsa, true);
+        $data['sh_area'] = $gsa;
+        $data['hotel_level'] = array(
+            '1' => '全部酒店类型',
+            '2' => '星级酒店',
+            '3' => '特色餐厅',
+            '4' => '婚礼会所',
+            '5' => '游轮婚礼',
+        );
         $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $gsa);
     }
 
     public function syncOrder(){
-        $start_time = time() - 10; //同步三天前的订单
+        $start_time = time() - 60 * 5; //同步三天前的订单
         // 获取三天前 未同步的指定酒店的订单
         $order = $this->db->getRows("select * from hqsen_kezi_order where  del_flag = 1 and create_time < $start_time and sync_type = 1 and order_area_hotel_type = 2");
         foreach ($order as $one_order){
