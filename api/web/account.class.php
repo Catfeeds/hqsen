@@ -223,6 +223,7 @@ class account extends base {
                     'user_id' => $one_user['hu_id'],
                     'user_name' => $one_user['hu_user_name'],
                     'user_type' => $user_type,
+                    'user_area' => $one_user['hotel_area'],
                     'user_status' => $one_user['user_status'],
                     'create_time' => date('Y-m-d H:i:s' , $one_user['create_time']),
                 );
