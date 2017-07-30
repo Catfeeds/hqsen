@@ -145,6 +145,9 @@ class area extends base {
                 } else {
                     $area_item['disabled'] = true;
                 }
+                if($area_item['label'] == '南汇区'){
+                    continue;
+                }
                 $data['area_sh'][] = $area_item;
             }
         }
