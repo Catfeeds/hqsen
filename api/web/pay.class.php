@@ -283,7 +283,7 @@ class pay extends base {
             // 写入并关闭资源
             fwrite($fp, $csv);
             fclose($fp);
-            $url = 'http://dev.51isen.com' . "/api/upload/" . $file_name;
+            $url = 'http://' . $_SERVER['HTTP_HOST'] . "/api/upload/" . $file_name;
             $data['url'] = $url;
             $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $data);
         } else {
@@ -326,7 +326,7 @@ class pay extends base {
             // 写入并关闭资源
             fwrite($fp, $csv);
             fclose($fp);
-            $url = 'http://dev.51isen.com' . "/api/upload/" . $file_name;
+            $url = 'http://' . $_SERVER['HTTP_HOST'] . "/api/upload/" . $file_name;
             $data['url'] = $url;
             $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $data);
         } else {
