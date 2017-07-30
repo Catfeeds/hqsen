@@ -229,17 +229,27 @@ class base{
                 ),
             ),
             'service' => array(
-                array(
-                    'key' => 'order_info',
-                    'label'=>'客资/搭建信息',
-                    'child' => array(
-                        array('key'=>'order_info_kezi_list', 'label'=>'客资列表', 'parent_key'=>'order_info'),
-                        array('key'=>'order_info_dajian_list', 'label'=>'搭建列表', 'parent_key'=>'order_info'),
-                    ),
-                ),
+//                array(
+//                    'key' => 'order_info',
+//                    'label'=>'客资/搭建信息',
+//                    'child' => array(
+//                        array('key'=>'order_info_kezi_list', 'label'=>'客资列表', 'parent_key'=>'order_info'),
+//                        array('key'=>'order_info_dajian_list', 'label'=>'搭建列表', 'parent_key'=>'order_info'),
+//                    ),
+//                ),
                 array(
                     'key' => 'feedback_info',
                     'label'=>'意见反馈'
+                ),
+            ),
+            'editor' => array(
+                array(
+                    'key' => 'hotel_info',
+                    'label'=>'基础信息设定',
+                    'child' => array(
+                        array('key'=>'hotel_info_hotel_list', 'label'=>'酒店信息', 'parent_key'=>'hotel_info'),
+                        array('key'=>'hotel_info_area_list', 'label'=>'区域信息', 'parent_key'=>'hotel_info'),
+                    ),
                 ),
             ),
 
@@ -284,6 +294,7 @@ class base{
             array('value'=>'13', 'label'=>'财务'),
             array('value'=>'14', 'label'=>'客服'),
             array('value'=>'15', 'label'=>'管理员'),
+            array('value'=>'16', 'label'=>'编辑'),
         );
     }
 

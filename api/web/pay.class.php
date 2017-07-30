@@ -265,7 +265,7 @@ class pay extends base {
                 } else {
                     $w_accout = '未设置账号';
                 }
-                $order_status = $user_order['order_status'] == 3 ? '已打款' : '未打款';
+                $order_status = $user_order['order_status'] == 3 ? '未打款' : '已打款';
                 $content .= $one_sign['order_money'] . ',' . $create_user['user_name'] . ',' . $c_accout . ','
                     . round($user_order['create_user_money'], 2) . ',' . $watch_user['user_name'] . ',' . $w_accout
                     . ',' . round($user_order['watch_user_money'], 2) . ',' . $order_status . ','
@@ -309,7 +309,7 @@ class pay extends base {
                 } else {
                     $c_accout = '未设置账号';
                 }
-                $order_status = $user_order['order_status'] == 3 ? '已打款' : '未打款';
+                $order_status = $user_order['order_status'] == 3 ? '未打款' : '已打款';
                 $content .= $one_sign['order_money'] . ',' . $one_sign['first_order_money'] . ',' . $user_info['user_name'] . ','
                     . round($user_order['create_user_money'], 2) . ',' . $c_accout . ','. $order_status . ','
                     . date('Y-m-d H:i:s' , $one_sign['create_time'])  . PHP_EOL;

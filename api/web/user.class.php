@@ -19,7 +19,7 @@ class user extends base{
             $user = $this->db->getRow("select * from hqsen_user where  user_status = 1 and user_name = '$user_name'");
 
             if($user and $user['password'] == md5($password)){
-                if(!in_array($user['user_type'], [2, 13, 14, 15])){
+                if(!in_array($user['user_type'], [2, 13, 14, 15, 16])){
                     $this->appDie($this->back_code['user']['login_err'], $this->back_msg['user']['login_err']);
                 }
                 session_start();
@@ -53,6 +53,8 @@ class user extends base{
             $config_data['user_security'] = $this->user_security('finance');
         } else if($this->user['user_type'] == 14){
             $config_data['user_security'] = $this->user_security('service');
+        } else if($this->user['user_type'] == 16){
+            $config_data['user_security'] = $this->user_security('editor');
         }
         $sh_area = $this->get_sh_area();
         foreach ($sh_area as $area_key => $area_value){
