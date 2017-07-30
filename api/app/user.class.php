@@ -177,11 +177,15 @@ class user extends base{
     // 首页酒店列表
     public function mainList(){
         $list_type = $this->postInt('list_type');
+        $area_sh_id = $this->postInt('area_sh_id');
+        if($area_sh_id == 20){
+            $list_type = 1;
+        }
         if($list_type == 1){
             $hotel = $this->db->getRows("select * from hqsen_hotel_rec as hhr 
                       left join hqsen_hotel as hh on hhr.hotel_id = hh.id left join hqsen_hotel_data as hhd on hh.id = hhd.id where hh.is_data = 1 and  hh.del_flag = 1  and  hhr.del_flag = 1  order by hhr.hotel_weight asc ");
         } else if($list_type == 2){
-            $area_sh_id = $this->postInt('area_sh_id');
+
             $hotel_type = $this->postInt('hotel_type');
             $area_sh_id_sql = '';
             $hotel_type_sql = '';
@@ -269,7 +273,10 @@ class user extends base{
     // 获取上海18个区
     public function getShArea()
     {
-        $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $this->get_sh_area());
+        $gsa = $this->get_sh_area();
+        $gsa['20'] = '精选地区';
+        $gsa = array_reverse($gsa, true);
+        $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $gsa);
     }
 
     public function syncOrder(){
