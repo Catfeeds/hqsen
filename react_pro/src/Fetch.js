@@ -2,8 +2,13 @@ import 'es6-promise'
 import axios from 'axios'
 import { Message } from 'antd'
 
-// export const domain = `${window.location.origin}/index.php?m=web&`
-export const domain = `http://dev.51isen.com/index.php?m=web&`
+const origin = window.location.origin
+export let domain = ''
+if (window.location.origin.indexOf('51isen') > -1) {
+  domain = `${origin}/index.php?m=web&`
+} else {
+  domain = `http://dev.51isen.com/index.php?m=web&`
+}
 
 export const urlKey = {
   login: 'c=user&f=login',
