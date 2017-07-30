@@ -283,6 +283,9 @@ class user extends base{
             '4' => '婚礼会所',
             '5' => '游轮婚礼',
         );
+        foreach ($data['sh_area'] as $k => $v){
+            $data['sh_area_order'][] = $k;
+        }
         $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $data);
     }
 
