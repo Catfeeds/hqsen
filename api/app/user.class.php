@@ -335,6 +335,7 @@ class user extends base{
                 $one_user_order_sql['kezi_order_id'] = $order['id'];
                 $one_user_order_sql['create_time'] = time();
                 $one_user_order_sql['update_time'] = time();
+                $one_user_order_sql['order_from'] = 2;
                 $one_user_order_sql['order_phone'] = $order['order_phone'];
                 $rs = $this->db->insert('hqsen_user_kezi_order', $one_user_order_sql);
                 if ($rs) {

@@ -59,6 +59,7 @@ class feedback extends base {
         $data['my_account']['bank_name'] = $this->user['bank_name'];
         $data['my_account']['bank_user'] = $this->user['bank_user'];
         $data['my_account']['bank_account'] = $this->user['bank_account'];
+        $user_data = $this->db->getRow('select * from hqsen_user_data where user_id=' . $this->user['id']);
         // 获取客资提供者身份 账号信息
         $unpay = $this->db->getRow('select sum(create_user_money) as s from hqsen_user_kezi_order where user_order_status = 2 and user_id = ' . $this->user['id']);
         $pay = $this->db->getRow('select sum(create_user_money) as s from hqsen_user_kezi_order where user_order_status = 3 and user_id = ' . $this->user['id']);
@@ -81,11 +82,18 @@ class feedback extends base {
             $data['my_money']['pay'] = $data['my_money']['pay'] + round($dajian_pay['s'], 2);
         }
         $data['my_money']['all'] = $data['my_money']['unpay'] + $data['my_money']['pay'];
+        $data['auto_type'] = $user_data['auto_type'];
         $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $data);
     }
 
     public function autoType(){
-        $sql_user['auto_type'] = 2;
+        $auto_type = $this->postString('auto_type');
+        if($auto_type == 1){
+            $sql_user['auto_type'] = 1;
+        } else {
+            $sql_user['auto_type'] = 2;
+        }
+
         $this->db->update('hqsen_user_data', $sql_user, ' user_id = ' . $this->user['id']);
         $this->appDie();
     }
