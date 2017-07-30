@@ -231,7 +231,7 @@ class boss extends base {
             $this->db->update('hqsen_user_data', $erxiao_sql, ' id = ' . $erxiao_user['id']);
             return $erxiao_user['user_id'];
         } else {
-            return 62;// 默认二销账号
+            return 92;// 如果没有二销账号  默认归属 苹果测试账号13813813800
         }
 
     }
