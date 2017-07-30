@@ -17,6 +17,10 @@ class boss extends base {
     {
         parent::__construct();
         $this-> loginInit();
+        // 超管才可以调用
+        if($this->user['user_type'] != 2){
+            $this->appDie();
+        }
     }
 
     // 客资订单列表

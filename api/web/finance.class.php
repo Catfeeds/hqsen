@@ -23,6 +23,10 @@ class finance extends base {
     {
         parent::__construct();
         $this-> loginInit();
+        // 超管 管理员 财务才可以调用
+        if(in_array($this->user['user_type'],[2,13,15])){
+            $this->appDie();
+        }
     }
 
     // 客资订单列表
