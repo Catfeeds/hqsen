@@ -181,6 +181,7 @@ class user extends base{
         if($area_sh_id == 20){
             $list_type = 1;
         }
+        $hotel = '';
         if($list_type == 1){
             $hotel = $this->db->getRows("select * from hqsen_hotel_rec as hhr 
                       left join hqsen_hotel as hh on hhr.hotel_id = hh.id left join hqsen_hotel_data as hhd on hh.id = hhd.id where hh.is_data = 1 and  hh.del_flag = 1  and  hhr.del_flag = 1  order by hhr.hotel_weight asc ");
@@ -201,12 +202,10 @@ class user extends base{
             if($area_sh_id){
                 $area_sh_id_sql = ' and  hh.area_sh_id = ' . $area_sh_id ;
             }
-            $hotel = $this->db->getRows("select * from hqsen_hotel_rec as hhr 
-                      left join hqsen_hotel as hh  on hhr.hotel_id = hh.id left join hqsen_hotel_data as hhd on hh.id = hhd.id where  hh.is_data = 1 and hh.del_flag = 1 $hotel_type_sql $area_sh_id_sql and  hhr.del_flag = 1  order by hh.weight asc ");
+            $hotel = $this->db->getRows("select * from hqsen_hotel as hh  left join hqsen_hotel_data as hhd on hh.id = hhd.id where  hh.is_data = 1 and hh.del_flag = 1 $hotel_type_sql $area_sh_id_sql order by hh.weight asc ");
         } else if($list_type == 3){
             $search_input = $this->postString('search_input');
-            $hotel = $this->db->getRows("select * from hqsen_hotel_rec as hhr 
-                      left join  hqsen_hotel as hh  on hhr.hotel_id = hh.id left join hqsen_hotel_data as hhd on hh.id = hhd.id where  hh.is_data = 1 and  hh.hotel_name like '%$search_input%' and hh.del_flag = 1   and  hhr.del_flag = 1  order by hh.weight asc ");
+            $hotel = $this->db->getRows("select * from hqsen_hotel as hh  left join hqsen_hotel_data as hhd on hh.id = hhd.id where  hh.is_data = 1 and  hh.hotel_name like '%$search_input%' and hh.del_flag = 1 order by hh.weight asc ");
         }
         $data = [];
         if($hotel){
