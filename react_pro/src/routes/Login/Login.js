@@ -25,8 +25,8 @@ class Login extends Component {
           sessionStorage.setItem('user_name', values.user_name)
           if (userType === '14') {
             this.context.router.push('/list/feedback_info')
-          } else if (userType === '/list/hotel_info_hotel_list') {
-            this.context.router.push('/list/feedback_info')
+          } else if (userType === '16') {
+            this.context.router.push('/list/hotel_info_hotel_list')
           } else {
             this.context.router.push('/list/order_info_kezi_list')
           }
