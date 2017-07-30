@@ -520,6 +520,11 @@ class List extends Component {
           title: '账号类型'
         },
         {
+          key: 'user_area',
+          dataIndex: 'user_area',
+          title: '所属区域'
+        },
+        {
           key: 'create_time',
           dataIndex: 'create_time',
           title: '创建时间'
