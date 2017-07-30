@@ -138,7 +138,7 @@ export default {
         rules: { required: true }
       },
       {
-        label: '酒店介绍图片',
+        label: '宴会厅介绍图片',
         type: 'upload',
         name: 'room_image',
         rules: { required: true }

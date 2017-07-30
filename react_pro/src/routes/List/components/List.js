@@ -418,8 +418,8 @@ class List extends Component {
         {
           key: 'payed',
           dataIndex: 'payed',
-          title: '佣金',
-          render: (text, record) => `${text + record.unpay}(${text}+${record.unpay})`
+          title: '佣金（元）',
+          render: (text, record) => `￥${text + record.unpay}(￥${text}+￥${record.unpay})`
         },
         {
           key: 'create_time',
@@ -482,8 +482,9 @@ class List extends Component {
         {
           key: 'payed',
           dataIndex: 'payed',
-          title: '佣金',
-          render: (text, record) => `${text + record.unpay}(${text}+${record.unpay})`
+          title: '佣金（元）',
+          width: '15%',
+          render: (text, record) => `￥${text + record.unpay}(￥${text}+￥${record.unpay})`
         },
         {
           key: 'user_status',
@@ -544,7 +545,8 @@ class List extends Component {
         {
           key: 'order_money',
           dataIndex: 'order_money',
-          title: '合同金额'
+          title: '合同金额（元）',
+          render:text => `￥${text}`
         },
         {
           key: 'sign_pic_count',
@@ -586,7 +588,8 @@ class List extends Component {
         {
           key: 'order_money',
           dataIndex: 'order_money',
-          title: '合同金额'
+          title: '合同金额（元）',
+          render:text => `￥${text}`
         },
         {
           key: 'sign_type_view',
@@ -646,7 +649,8 @@ class List extends Component {
         {
           key: 'order_money',
           dataIndex: 'order_money',
-          title: '合同金额'
+          title: '合同金额（元）',
+          render:text => `￥${text}`
         },
         {
           key: 'sign_pic_count',
@@ -692,7 +696,8 @@ class List extends Component {
         {
           key: 'order_money',
           dataIndex: 'order_money',
-          title: '合同金额'
+          title: '合同金额（元）',
+          render:text => `￥${text}`
         },
         {
           key: 'sign_pic_count',
@@ -738,7 +743,8 @@ class List extends Component {
         {
           key: 'order_money',
           dataIndex: 'order_money',
-          title: '合同金额'
+          title: '合同金额（元）',
+          render:text => `￥${text}`
         },
         {
           key: 'create_user_name',
@@ -759,7 +765,8 @@ class List extends Component {
         {
           key: 'create_user_money',
           dataIndex: 'create_user_money',
-          title: '提供者分成金额'
+          title: '提供者分成金额（元）',
+          render:text => `￥${text}`
         },
         {
           key: 'watch_user_name',
@@ -780,7 +787,8 @@ class List extends Component {
         {
           key: 'watch_user_money',
           dataIndex: 'watch_user_money',
-          title: '跟踪者分成金额'
+          title: '跟踪者分成金额（元）',
+          render:text => `￥${text}`
         },
         {
           key: 'pay_status',
@@ -808,12 +816,14 @@ class List extends Component {
         {
           key: 'order_money',
           dataIndex: 'order_money',
-          title: '合同金额'
+          title: '合同金额（元）',
+          render:text => `￥${text}`
         },
         {
           key: 'first_order_money',
           dataIndex: 'first_order_money',
-          title: '首付金额'
+          title: '首付金额（元）',
+          render:text => `￥${text}`
         },
         {
           key: 'create_user_name',
@@ -823,7 +833,8 @@ class List extends Component {
         {
           key: 'create_user_money',
           dataIndex: 'create_user_money',
-          title: '跟踪者分成金额'
+          title: '跟踪者分成金额（元）',
+          render:text => `￥${text}`
         },
         {
           key: 'create_account',

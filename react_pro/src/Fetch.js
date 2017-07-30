@@ -2,7 +2,8 @@ import 'es6-promise'
 import axios from 'axios'
 import { Message } from 'antd'
 
-export const domain = `${window.location.origin}/index.php?m=web&`
+// export const domain = `${window.location.origin}/index.php?m=web&`
+export const domain = `http://dev.51isen.com/index.php?m=web&`
 
 export const urlKey = {
   login: 'c=user&f=login',
