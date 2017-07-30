@@ -219,11 +219,20 @@ class account extends base {
                         break;
                     }
                 }
+                $user_area = $one_user['hotel_area'];
+                if(in_array($one_user['user_type'], [11,12])){
+                    $sh_area = $this->db->getRows('select * from hqsen_area_sh where link_area_id=' . $one_user['area_id']);
+                    foreach ($sh_area as $one_sh_area){
+                        if($one_sh_area){
+                            $user_area = $user_area . '|' . mb_substr($one_sh_area, 0, 1);
+                        }
+                    }
+                }
                 $user_item = array(
                     'user_id' => $one_user['hu_id'],
                     'user_name' => $one_user['hu_user_name'],
                     'user_type' => $user_type,
-                    'user_area' => $one_user['hotel_area'],
+                    'user_area' => $user_area,
                     'user_status' => $one_user['user_status'],
                     'create_time' => date('Y-m-d H:i:s' , $one_user['create_time']),
                 );
