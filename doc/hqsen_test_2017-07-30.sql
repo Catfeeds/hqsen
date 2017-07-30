@@ -435,7 +435,7 @@ CREATE TABLE `hqsen_user_data` (
   `area_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '后台编辑区域ID',
   `last_order_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后一次获取订单时间',
   `user_name` varchar(32) NOT NULL COMMENT '唯一用户名',
-  `auto_type` tinyint(2) unsigned NOT NULL DEFAULT '1' COMMENT '1不同步 2同步',
+  `auto_type` tinyint(2) unsigned NOT NULL DEFAULT '2' COMMENT '1不同步 2同步',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
