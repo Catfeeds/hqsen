@@ -5,7 +5,7 @@ const SubMenu = Menu.SubMenu
 
 class Header extends Component {
   static propTypes = {
-    headKey: PropTypes.string,
+    headKey: PropTypes.object,
     saveHeadKey: PropTypes.func,
     menu: PropTypes.array,
     router: PropTypes.object

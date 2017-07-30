@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import './List.scss'
-import { Table, Input, Button, Popconfirm, DatePicker } from 'antd'
+import { Table, Input, Button, Popconfirm, DatePicker, Message } from 'antd'
 import MyBreadcrumb from '../../../components/MyBreadcrumb'
 import Fetch from '../../../Fetch'
 const Search = Input.Search
@@ -87,13 +87,18 @@ class List extends Component {
     })
   }
   exportFile () {
-    const url = this.props.List.basicInfo.type === 'remittance_info_kezi_contract' ? 'keziDownload' : 'dajianDownload'
-    Fetch(url, {
-      start_time: this.state.rangeTime[0].valueOf(),
-      end_time: this.state.rangeTime[1].valueOf()
-    }).then(response => {
-      window.location.href = response.data.url
-    })
+    const [startTime, endTime] = this.state.rangeTime
+    if (startTime && endTime) {
+      const url = this.props.List.basicInfo.type === 'remittance_info_kezi_contract' ? 'keziDownload' : 'dajianDownload'
+      Fetch(url, {
+        start_time: startTime.valueOf(),
+        end_time: endTime.valueOf()
+      }).then(response => {
+        window.location.href = response.data.url
+      })
+    } else {
+      Message.error('导出时间区域不能为空！')
+    }
   }
 
   goApproveDetail (record, isSubmit) {
@@ -551,7 +556,7 @@ class List extends Component {
           key: 'order_money',
           dataIndex: 'order_money',
           title: '合同金额（元）',
-          render:text => `￥${text}`
+          render: text => `￥${text}`
         },
         {
           key: 'sign_pic_count',
@@ -594,7 +599,7 @@ class List extends Component {
           key: 'order_money',
           dataIndex: 'order_money',
           title: '合同金额（元）',
-          render:text => `￥${text}`
+          render: text => `￥${text}`
         },
         {
           key: 'sign_type_view',
@@ -655,7 +660,7 @@ class List extends Component {
           key: 'order_money',
           dataIndex: 'order_money',
           title: '合同金额（元）',
-          render:text => `￥${text}`
+          render: text => `￥${text}`
         },
         {
           key: 'sign_pic_count',
@@ -702,7 +707,7 @@ class List extends Component {
           key: 'order_money',
           dataIndex: 'order_money',
           title: '合同金额（元）',
-          render:text => `￥${text}`
+          render: text => `￥${text}`
         },
         {
           key: 'sign_pic_count',
@@ -749,7 +754,7 @@ class List extends Component {
           key: 'order_money',
           dataIndex: 'order_money',
           title: '合同金额（元）',
-          render:text => `￥${text}`
+          render: text => `￥${text}`
         },
         {
           key: 'create_user_name',
@@ -771,7 +776,7 @@ class List extends Component {
           key: 'create_user_money',
           dataIndex: 'create_user_money',
           title: '提供者分成金额（元）',
-          render:text => `￥${text}`
+          render: text => `￥${text}`
         },
         {
           key: 'watch_user_name',
@@ -793,7 +798,7 @@ class List extends Component {
           key: 'watch_user_money',
           dataIndex: 'watch_user_money',
           title: '跟踪者分成金额（元）',
-          render:text => `￥${text}`
+          render: text => `￥${text}`
         },
         {
           key: 'pay_status',
@@ -822,13 +827,13 @@ class List extends Component {
           key: 'order_money',
           dataIndex: 'order_money',
           title: '合同金额（元）',
-          render:text => `￥${text}`
+          render: text => `￥${text}`
         },
         {
           key: 'first_order_money',
           dataIndex: 'first_order_money',
           title: '首付金额（元）',
-          render:text => `￥${text}`
+          render: text => `￥${text}`
         },
         {
           key: 'create_user_name',
@@ -839,7 +844,7 @@ class List extends Component {
           key: 'create_user_money',
           dataIndex: 'create_user_money',
           title: '跟踪者分成金额（元）',
-          render:text => `￥${text}`
+          render: text => `￥${text}`
         },
         {
           key: 'create_account',
@@ -1039,15 +1044,16 @@ class List extends Component {
               onSearch={() => handleCurrentChange(1)}
               />
             : null}
-          {(addBtnType.indexOf(basicInfo.type) > -1)
+          {addBtnType.indexOf(basicInfo.type) > -1
             ? <Button type="primary" icon="plus-circle-o" className="create-btn" onClick={() => this.addRow()}>
                 新增
               </Button>
             : null}
           {basicInfo.type === 'hotel_info_hotel_list'
             ? <Button type="primary" className="create-btn" style={{ marginRight: 5 }} onClick={() => this.toRecList()}>
-              首页酒店推荐
-            </Button> : null}
+                首页酒店推荐
+              </Button>
+            : null}
           {downloadBtnType.indexOf(basicInfo.type) > -1
             ? <div className="download-box">
               <RangePicker
@@ -1055,11 +1061,12 @@ class List extends Component {
                 format="YYYY-MM-DD HH:mm:ss"
                 value={this.state.rangeTime}
                 onChange={this.rangeTime}
-              />
+                />
               <Button className="ml5" type="primary" icon="download" onClick={this.exportFile}>
-                导出
-              </Button>
-            </div> : null}
+                  导出
+                </Button>
+            </div>
+            : null}
         </div>
         <Table
           loading={loading}

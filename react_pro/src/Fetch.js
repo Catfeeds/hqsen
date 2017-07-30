@@ -7,7 +7,7 @@ export let domain = ''
 if (window.location.origin.indexOf('51isen') > -1) {
   domain = `${origin}/index.php?m=web&`
 } else {
-  domain = `http://dev.51isen.com/index.php?m=web&`
+  domain = `http://web.51isen.com/index.php?m=web&`
 }
 
 export const urlKey = {
