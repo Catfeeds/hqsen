@@ -92,7 +92,7 @@ class area extends base {
                 foreach ($area_sh_arr as $one_area_sh){
                     $sql_area_sh['link_area_id'] = $area_id;
                     $this->db->update('hqsen_area_sh', $sql_area_sh, ' id = ' . $one_area_sh);
-                    $this-> userHotelAreaLink($one_area_sh, $sql_order['id']);
+                    $this-> userHotelAreaLink($one_area_sh, $area_id);
                 }
             }
 
