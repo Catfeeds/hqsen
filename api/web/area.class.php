@@ -64,6 +64,7 @@ class area extends base {
             foreach ($area_sh_arr as $one_area_sh){
                 $sql_area_sh['link_area_id'] = $sql_order['id'];
                 $this->db->update('hqsen_area_sh', $sql_area_sh, ' id = ' . $one_area_sh);
+                $this-> userHotelAreaLink($one_area_sh, $sql_order['id']);
             }
             $this->appDie();
         } else {
@@ -152,6 +153,11 @@ class area extends base {
             }
         }
         $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $data);
+    }
 
+    public function userHotelAreaLink($area_sh_id, $area_id){
+        $sql_area_sh['area_id'] = $area_id;
+        $this->db->update('hqsen_hotel', $sql_area_sh, ' area_sh_id = ' . $area_sh_id);
+        $this->db->update('hqsen_user_data', $sql_area_sh, ' area_sh_id = ' . $area_sh_id);
     }
 }
