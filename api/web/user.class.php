@@ -22,12 +22,17 @@ class user extends base{
                 if(!in_array($user['user_type'], [2, 13, 14, 15, 16])){
                     $this->appDie($this->back_code['user']['login_err'], $this->back_msg['user']['login_err']);
                 }
-                session_start();
+                $user['last_login_time'] = time();
+                $user['session_id'] = md5($user['id'] . $user['last_login_time']);
+                // todo 注释使用最后登陆时间
+                $user['session_id'] = md5($user['id'] . $user['create_time']);
+                $this->db->update('hqsen_user', $user, ' id = ' . $user['id']);
+//                session_start();
                 $login_user = array(
-                    'access_token' => session_id(),
+                    'access_token' => $user['session_id'],
                     'user_type' => $user['user_type'],
                 );
-                $_SESSION['user_info'] = $user;
+//                $_SESSION['user_info'] = $user;
                 $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $login_user);
             } else {
                 $this->appDie($this->back_code['user']['login_err'], $this->back_msg['user']['login_err']);

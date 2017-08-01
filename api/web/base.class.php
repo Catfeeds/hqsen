@@ -56,12 +56,9 @@ class base{
     public function loginInit(){
         $session_id = isset($_REQUEST['access_token']) ? $_REQUEST['access_token'] : '';
         if($session_id){
-            session_id($session_id);
-            session_start();
-            if(isset($_SESSION['user_info'])){
-                $this->user = $_SESSION['user_info'];
-                // 请求权限处理
-
+            $user = $this->db->getRow("select * from hqsen_user where session_id = '$session_id'");
+            if($user){
+                $this->user = $user;
             } else {
                 $this->appDie($this->back_code['sys']['token_fail'], $this->back_msg['sys']['token_fail']);
             };
