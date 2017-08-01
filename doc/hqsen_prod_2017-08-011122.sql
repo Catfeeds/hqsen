@@ -6,8 +6,8 @@
 # https://github.com/sequelpro/sequelpro
 #
 # Host: 47.92.31.234 (MySQL 5.5.54-0ubuntu0.14.04.1)
-# Database: hqsen_test
-# Generation Time: 2017-07-31 03:09:56 +0000
+# Database: hqsen_prod
+# Generation Time: 2017-08-01 03:22:54 +0000
 # ************************************************************
 
 
@@ -34,6 +34,17 @@ CREATE TABLE `hqsen_area` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+LOCK TABLES `hqsen_area` WRITE;
+/*!40000 ALTER TABLE `hqsen_area` DISABLE KEYS */;
+
+INSERT INTO `hqsen_area` (`id`, `area_name`, `area_list`, `create_time`, `del_flag`)
+VALUES
+	(1,'浦东地区','1',1501496134,1),
+	(2,'浦西地区','2,10,3,4,5,6,7,8,12,9,15,17,16,18',1501496142,1),
+	(3,'周边地区','13,14,19',1501507286,1);
+
+/*!40000 ALTER TABLE `hqsen_area` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 # Dump of table hqsen_area_sh
@@ -55,25 +66,25 @@ LOCK TABLES `hqsen_area_sh` WRITE;
 
 INSERT INTO `hqsen_area_sh` (`id`, `area_value`, `area_label`, `link_area_id`, `del_flag`)
 VALUES
-	(1,'浦东新区','浦东新区',38,1),
-	(2,'卢湾区','卢湾区',41,1),
-	(3,'黄浦区','黄浦区',41,1),
-	(4,'虹口区','虹口区',42,1),
-	(5,'杨浦区','杨浦区',45,1),
-	(6,'闸北区','闸北区',39,1),
-	(7,'普陀区','普陀区',44,1),
-	(8,'长宁区','长宁区',44,1),
-	(9,'静安区','静安区',39,1),
-	(10,'徐汇区','徐汇区',43,1),
-	(11,'南汇区','南汇区',38,1),
-	(12,'闵行区','闵行区',47,1),
-	(13,'奉贤区','奉贤区',47,1),
-	(14,'金山区','金山区',46,1),
-	(15,'松江区','松江区',40,1),
-	(16,'青浦区','青浦区',47,1),
-	(17,'嘉定区','嘉定区',0,1),
-	(18,'宝山区','宝山区',48,1),
-	(19,'崇明县','崇明县',48,1);
+	(1,'浦东新区','浦东新区',1,1),
+	(2,'卢湾区','卢湾区',2,1),
+	(3,'黄浦区','黄浦区',2,1),
+	(4,'虹口区','虹口区',2,1),
+	(5,'杨浦区','杨浦区',2,1),
+	(6,'闸北区','闸北区',2,1),
+	(7,'普陀区','普陀区',2,1),
+	(8,'长宁区','长宁区',2,1),
+	(9,'静安区','静安区',2,1),
+	(10,'徐汇区','徐汇区',2,1),
+	(11,'南汇区','南汇区',0,1),
+	(12,'闵行区','闵行区',2,1),
+	(13,'奉贤区','奉贤区',3,1),
+	(14,'金山区','金山区',3,1),
+	(15,'松江区','松江区',2,1),
+	(16,'青浦区','青浦区',2,1),
+	(17,'嘉定区','嘉定区',2,1),
+	(18,'宝山区','宝山区',2,1),
+	(19,'崇明县','崇明县',3,1);
 
 /*!40000 ALTER TABLE `hqsen_area_sh` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -144,6 +155,24 @@ CREATE TABLE `hqsen_hotel` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+LOCK TABLES `hqsen_hotel` WRITE;
+/*!40000 ALTER TABLE `hqsen_hotel` DISABLE KEYS */;
+
+INSERT INTO `hqsen_hotel` (`id`, `hotel_name`, `hotel_address`, `area_id`, `create_time`, `del_flag`, `hotel_level`, `area_sh_id`, `weight`, `is_data`, `is_room`)
+VALUES
+	(1,'上海龙之梦万丽酒店','上海市长宁区长宁路1018号',2,1501507396,1,'A',8,1,1,1),
+	(2,'上海明捷万丽酒店','上海市普陀区铜川路50号',2,1501509451,1,'A',7,1,1,1),
+	(3,'马勒别墅饭店','上海市黄浦区陕西南路30号',2,1501510350,1,'A',3,1,1,1),
+	(4,'富建酒店','上海市闵行区七莘路1885号',2,1501551216,1,'A',12,1,1,1),
+	(5,'上海豫园万丽酒店','上海市黄浦区河南南路159号',2,1501551985,1,'A',3,2,1,1),
+	(6,'上海淳大万丽酒店','联洋新社区长柳路100号',1,1501552302,1,'A',1,1,1,1),
+	(7,'上海银星皇冠假日酒店','上海市静安区番禺路400号',2,1501552700,1,'B',9,3,1,1),
+	(8,'明天广场JW万豪酒店','上海市黄浦区南京西路399号',2,1501552964,1,'A',3,3,1,1),
+	(9,'上海三至喜来登酒店','上海市虹口区四平路59号',2,1501553468,1,'A',4,1,1,1),
+	(10,'浦东假日酒店','上海市浦东新区东方路899号',1,1501555153,1,'B',1,10,1,1);
+
+/*!40000 ALTER TABLE `hqsen_hotel` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 # Dump of table hqsen_hotel_data
@@ -162,6 +191,24 @@ CREATE TABLE `hqsen_hotel_data` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+LOCK TABLES `hqsen_hotel_data` WRITE;
+/*!40000 ALTER TABLE `hqsen_hotel_data` DISABLE KEYS */;
+
+INSERT INTO `hqsen_hotel_data` (`id`, `hotel_low`, `hotel_high`, `hotel_max_desk`, `hotel_type`, `hotel_phone`, `hotel_image`)
+VALUES
+	(1,'6588','8888','60','星级酒店','18321177032','[\"http://sendevimg.oss-cn-zhangjiakou.aliyuncs.com/upload/user_web/150150767220141104153232698.jpg\"]'),
+	(2,'6588','8588','28','星级酒店','18321177032','[\"http://sendevimg.oss-cn-zhangjiakou.aliyuncs.com/upload/user_web/150150960920141104153814889.jpg\"]'),
+	(3,'6888','9888','26','星级酒店','18321177032','[\"http://sendevimg.oss-cn-zhangjiakou.aliyuncs.com/upload/user_web/150155091420141104153841979.jpg\"]'),
+	(4,'5888','7888','60','星级酒店','18321177032','[\"http://sendevimg.oss-cn-zhangjiakou.aliyuncs.com/upload/user_web/150155125820141104153843790.jpg\",\"http://sendevimg.oss-cn-zhangjiakou.aliyuncs.com/upload/user_web/150155126220141104153843576.jpg\"]'),
+	(5,'6188','7888','23','星级酒店','18321177032','[\"http://sendevimg.oss-cn-zhangjiakou.aliyuncs.com/upload/user_web/150155202220141104153844790.jpg\"]'),
+	(6,'6880','10380','28','星级酒店','18321177032','[\"http://sendevimg.oss-cn-zhangjiakou.aliyuncs.com/upload/user_web/150155235320141104153814889.jpg\"]'),
+	(7,'5888','6688','32','星级酒店','18321177032','[\"http://sendevimg.oss-cn-zhangjiakou.aliyuncs.com/upload/user_web/150155272620141104153232698.jpg\"]'),
+	(8,'8888','12888','32','星级酒店','18321177032','[\"http://sendevimg.oss-cn-zhangjiakou.aliyuncs.com/upload/user_web/150155298620141111094634579.jpg\"]'),
+	(9,'7388','10888','30','星级酒店','18321177032','[\"http://sendevimg.oss-cn-zhangjiakou.aliyuncs.com/upload/user_web/150155405320141104153844678.jpg\"]'),
+	(10,'5688','7288','36','星级酒店','18321177032','[\"http://sendevimg.oss-cn-zhangjiakou.aliyuncs.com/upload/user_web/150155518220141111094646209.jpg\"]');
+
+/*!40000 ALTER TABLE `hqsen_hotel_data` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 # Dump of table hqsen_hotel_menu
@@ -178,6 +225,49 @@ CREATE TABLE `hqsen_hotel_menu` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+LOCK TABLES `hqsen_hotel_menu` WRITE;
+/*!40000 ALTER TABLE `hqsen_hotel_menu` DISABLE KEYS */;
+
+INSERT INTO `hqsen_hotel_menu` (`id`, `menu_name`, `menu_money`, `del_flag`, `hotel_id`)
+VALUES
+	(1,'红宝石之恋','6588',1,1),
+	(2,'情比金坚','7288',1,1),
+	(3,'至臻翡翠','7888',1,1),
+	(4,'水晶之恋','8888',1,1),
+	(5,'A套','6588',1,2),
+	(6,'B套','7588',1,2),
+	(7,'C套','8588',1,2),
+	(8,'佳偶天成宴','6888',1,3),
+	(9,'百年好合宴','7888',1,3),
+	(10,'龙凤呈祥宴','8888',1,3),
+	(11,'至尊良缘宴','9888',1,3),
+	(12,'永结同心','5888',1,4),
+	(13,'花好月圆','6888',1,4),
+	(14,'百年好合','7888',1,4),
+	(15,'百年琴瑟','8888',1,4),
+	(16,'花好月圆','6188',1,5),
+	(17,'良辰美景','6988',1,5),
+	(18,'永结同心','7888',1,5),
+	(19,'罗马假日','6880',1,6),
+	(20,'首尔恋歌','7980',1,6),
+	(21,'巴黎约定','9180',1,6),
+	(22,' 雅典神话','10380',1,6),
+	(23,'金玉良缘','5888',1,7),
+	(24,'盟结良缘','6288',1,7),
+	(25,'天赐良缘','6688',1,7),
+	(26,'珠帘玉映筳','8888',1,8),
+	(27,'缘定三生筳','10888',1,8),
+	(28,'水晶婚典','7388',1,9),
+	(29,'佳偶天成','8888',1,9),
+	(30,'百年好合','9988',1,9),
+	(31,'永结同心','10888',1,9),
+	(32,'缘定今生','5688',1,10),
+	(33,'龙凤呈祥','6188',1,10),
+	(34,'金玉满堂','6688',1,10),
+	(35,'百年好合','7288',1,10);
+
+/*!40000 ALTER TABLE `hqsen_hotel_menu` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 # Dump of table hqsen_hotel_rec
@@ -193,6 +283,22 @@ CREATE TABLE `hqsen_hotel_rec` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+LOCK TABLES `hqsen_hotel_rec` WRITE;
+/*!40000 ALTER TABLE `hqsen_hotel_rec` DISABLE KEYS */;
+
+INSERT INTO `hqsen_hotel_rec` (`id`, `hotel_id`, `hotel_weight`, `del_flag`)
+VALUES
+	(1,'1','1',1),
+	(2,'2','2',1),
+	(3,'3','3',1),
+	(4,'8','4',1),
+	(5,'9','5',1),
+	(6,'6','6',1),
+	(7,'4','7',1),
+	(8,'5','8',1);
+
+/*!40000 ALTER TABLE `hqsen_hotel_rec` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 # Dump of table hqsen_hotel_room
@@ -215,6 +321,34 @@ CREATE TABLE `hqsen_hotel_room` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+LOCK TABLES `hqsen_hotel_room` WRITE;
+/*!40000 ALTER TABLE `hqsen_hotel_room` DISABLE KEYS */;
+
+INSERT INTO `hqsen_hotel_room` (`id`, `room_name`, `room_max_desk`, `room_min_desk`, `room_best_desk`, `room_m`, `room_lz`, `room_image`, `hotel_id`, `room_high`, `del_flag`)
+VALUES
+	(1,'A 厅','23','15','20','448平方','0','[\"http://sendevimg.oss-cn-zhangjiakou.aliyuncs.com/upload/user_web/150150778220141104153232698.jpg\"]',1,'5.6米',1),
+	(2,'B厅','21','15','18','427平米','0','[\"http://sendevimg.oss-cn-zhangjiakou.aliyuncs.com/upload/user_web/150150789620141104153814889.jpg\"]',1,'5.6米',1),
+	(3,'C厅','15','10','12','338平方','0','[\"http://sendevimg.oss-cn-zhangjiakou.aliyuncs.com/upload/user_web/150150794720141104153841979.jpg\"]',1,'5.6米',1),
+	(4,'大宴会厅','28','16','20','520平米','0','[\"http://sendevimg.oss-cn-zhangjiakou.aliyuncs.com/upload/user_web/150150973620141104153232698.jpg\"]',2,'5.5米',1),
+	(5,'小会议厅','10','6','8','189平米','0','[\"http://sendevimg.oss-cn-zhangjiakou.aliyuncs.com/upload/user_web/150150982120141104153814889.jpg\"]',2,'2.8米',1),
+	(6,'2F','26','10','20','包间','0','[\"http://sendevimg.oss-cn-zhangjiakou.aliyuncs.com/upload/user_web/150155102220141104153844678.jpg\",\"http://sendevimg.oss-cn-zhangjiakou.aliyuncs.com/upload/user_web/150155102620141104153844790.jpg\"]',3,'3.2米',1),
+	(7,'国宴厅','60','20','35','1200平米','0','[\"http://sendevimg.oss-cn-zhangjiakou.aliyuncs.com/upload/user_web/150155134920141104153232698.jpg\"]',4,'8米',1),
+	(8,'富锦荟','20','10','16','400平米','0','[\"http://sendevimg.oss-cn-zhangjiakou.aliyuncs.com/upload/user_web/150155194420141104153844790.jpg\"]',4,'3.3米',1),
+	(9,'宴会厅','23','15','18','487平方','2','[\"http://sendevimg.oss-cn-zhangjiakou.aliyuncs.com/upload/user_web/150155210520141104153232698.jpg\",\"http://sendevimg.oss-cn-zhangjiakou.aliyuncs.com/upload/user_web/150155211220141104153814889.jpg\"]',5,'4.5米',1),
+	(10,'景观厅','15','10','12','315平方','4','[\"http://sendevimg.oss-cn-zhangjiakou.aliyuncs.com/upload/user_web/150155220020141104153814889.jpg\"]',5,'7.2米',1),
+	(11,'宴会厅','28','22','25','545平方','0','[\"http://sendevimg.oss-cn-zhangjiakou.aliyuncs.com/upload/user_web/150155244220141104153814889.jpg\",\"http://sendevimg.oss-cn-zhangjiakou.aliyuncs.com/upload/user_web/150155244820141104153232698.jpg\"]',6,'6米',1),
+	(12,'扬子厅','14','8','10','300平方','0','[\"http://sendevimg.oss-cn-zhangjiakou.aliyuncs.com/upload/user_web/150155249120141104153844790.jpg\"]',6,'3.6米',1),
+	(13,'金爵厅','32','25','20','550平方','0','[\"http://sendevimg.oss-cn-zhangjiakou.aliyuncs.com/upload/user_web/150155281420141104153232698.jpg\"]',7,'5.5米',1),
+	(14,'银星厅','25','18','15','450平方','0','[\"http://sendevimg.oss-cn-zhangjiakou.aliyuncs.com/upload/user_web/150155284720141104153814889.jpg\"]',7,'5米',1),
+	(15,'琥珀厅','16','10','12','350平方','0','[\"http://sendevimg.oss-cn-zhangjiakou.aliyuncs.com/upload/user_web/150155287620141104153841979.jpg\"]',7,'3米',1),
+	(16,'碧玉厅','16','10','12','350平方','0','[\"http://sendevimg.oss-cn-zhangjiakou.aliyuncs.com/upload/user_web/150155291620141104153842439.jpg\"]',7,'3米',1),
+	(17,'大宴会厅','38','8','32','600平方','0','[\"http://sendevimg.oss-cn-zhangjiakou.aliyuncs.com/upload/user_web/150155305120141104153844678.jpg\",\"http://sendevimg.oss-cn-zhangjiakou.aliyuncs.com/upload/user_web/150155305520141104153844790.jpg\"]',8,'6.6米',1),
+	(18,'大宴会厅','30','15','20','600平方','0','[\"http://sendevimg.oss-cn-zhangjiakou.aliyuncs.com/upload/user_web/150155430020141104153814889.jpg\"]',9,'7米',1),
+	(19,'水晶宴会厅 ','14','5','10','250平方','0','[\"http://sendevimg.oss-cn-zhangjiakou.aliyuncs.com/upload/user_web/150155441920141104153841979.jpg\"]',9,'4.5米',1),
+	(20,'上海厅','36','10','30','570平方','0','[\"http://sendevimg.oss-cn-zhangjiakou.aliyuncs.com/upload/user_web/150155525720141104153843576.jpg\"]',10,'4.6米',1);
+
+/*!40000 ALTER TABLE `hqsen_hotel_room` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 # Dump of table hqsen_kezi_order
@@ -302,8 +436,19 @@ LOCK TABLES `hqsen_user` WRITE;
 INSERT INTO `hqsen_user` (`id`, `user_name`, `nike_name`, `user_pic`, `phone`, `alipay_account`, `create_time`, `user_type`, `del_flag`, `session_id`, `password`, `user_status`, `bank_name`, `bank_user`, `bank_account`, `last_login_time`)
 VALUES
 	(2,'monkey','1506815966','','15068159661','',1491029702,2,1,'','e10adc3949ba59abbe56e057f20f883e',1,'','','',0),
-	(92,'13813813800','13813813800','','13813813800','',1491030559,3,1,'','e10adc3949ba59abbe56e057f20f883e',1,'','','',0),
-	(4,'sen','sen','','','',1491030559,2,1,'','e10adc3949ba59abbe56e057f20f883e',1,'','','',0);
+	(92,'13813813800','13813813800','','13813813800','',1491030559,3,1,'8d84f6b947c1a7cb7eef7934d044186f','e10adc3949ba59abbe56e057f20f883e',1,'','','',1501557302),
+	(4,'sen','sen','','','',1491030559,2,1,'','e10adc3949ba59abbe56e057f20f883e',1,'','','',0),
+	(93,'18321598476','18321598476','','18321598476','18321598476',1501548413,3,1,'ab3d73f8401751eeaa1efdf70204c090','',1,'','','',1501548413),
+	(94,'zbsx001','','','','',1501556287,11,1,'','e10adc3949ba59abbe56e057f20f883e',1,'','','',0),
+	(95,'zbex001','','','','',1501556305,12,1,'','e10adc3949ba59abbe56e057f20f883e',1,'','','',0),
+	(96,'pxsx001','','','','',1501556331,11,1,'','e10adc3949ba59abbe56e057f20f883e',1,'','','',0),
+	(97,'pxex001','','','','',1501556353,12,1,'','e10adc3949ba59abbe56e057f20f883e',1,'','','',0),
+	(98,'pdsx001','','','','',1501556373,11,1,'','e10adc3949ba59abbe56e057f20f883e',1,'','','',0),
+	(99,'pdex001','','','','',1501556394,12,1,'','e10adc3949ba59abbe56e057f20f883e',1,'','','',0),
+	(100,'pskf001','','','','',1501556502,14,1,'','e10adc3949ba59abbe56e057f20f883e',1,'','','',0),
+	(101,'pscw001','','','','',1501556518,13,1,'','e10adc3949ba59abbe56e057f20f883e',1,'','','',0),
+	(102,'psbj001','','','','',1501556543,16,1,'','e10adc3949ba59abbe56e057f20f883e',1,'','','',0),
+	(103,'psgly001','','','','',1501556568,15,1,'','e10adc3949ba59abbe56e057f20f883e',1,'','','',0);
 
 /*!40000 ALTER TABLE `hqsen_user` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -440,6 +585,24 @@ CREATE TABLE `hqsen_user_data` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+LOCK TABLES `hqsen_user_data` WRITE;
+/*!40000 ALTER TABLE `hqsen_user_data` DISABLE KEYS */;
+
+INSERT INTO `hqsen_user_data` (`id`, `hotel_name`, `hotel_area`, `hotel_id`, `user_id`, `area_id`, `last_order_time`, `user_name`, `auto_type`, `area_sh_id`)
+VALUES
+	(1,'','周边地区',0,94,3,0,'zbsx001',2,0),
+	(2,'','周边地区',0,95,3,0,'zbex001',2,0),
+	(3,'','浦西地区',0,96,2,0,'pxsx001',2,0),
+	(4,'','浦西地区',0,97,2,0,'pxex001',2,0),
+	(5,'','浦东地区',0,98,1,0,'pdsx001',2,0),
+	(6,'','浦东地区',0,99,1,0,'pdex001',2,0),
+	(7,'','',0,100,0,0,'pskf001',2,0),
+	(8,'','',0,101,0,0,'pscw001',2,0),
+	(9,'','',0,102,0,0,'psbj001',2,0),
+	(10,'','',0,103,0,0,'psgly001',2,0);
+
+/*!40000 ALTER TABLE `hqsen_user_data` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 # Dump of table hqsen_user_kezi_order
