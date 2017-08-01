@@ -178,27 +178,26 @@ class user extends base{
     public function mainList(){
         $list_type = $this->postInt('list_type');
         $area_sh_id = $this->postInt('area_sh_id');
+        $hotel_type = $this->postInt('hotel_type');
         if($area_sh_id == 20){
             $list_type = 1;
+        }
+        $hotel_type_sql = '';
+        if($hotel_type > 1){
+            $hotel_type = array(
+                '2' => '星级酒店',
+                '3' => '特色餐厅',
+                '4' => '婚礼会所',
+                '5' => '游轮婚礼',
+            )[$hotel_type];
+            $hotel_type_sql = ' and  hhd.hotel_type = "' . $hotel_type . '"';
         }
         $hotel = '';
         if($list_type == 1){
             $hotel = $this->db->getRows("select * from hqsen_hotel_rec as hhr 
-                      left join hqsen_hotel as hh on hhr.hotel_id = hh.id left join hqsen_hotel_data as hhd on hh.id = hhd.id where hh.is_data = 1 and  hh.del_flag = 1  and  hhr.del_flag = 1  order by hhr.hotel_weight asc ");
+                      left join hqsen_hotel as hh on hhr.hotel_id = hh.id left join hqsen_hotel_data as hhd on hh.id = hhd.id where hh.is_data = 1 and  hh.del_flag = 1  $hotel_type_sql and  hhr.del_flag = 1  order by hhr.hotel_weight asc ");
         } else if($list_type == 2){
-
-            $hotel_type = $this->postInt('hotel_type');
             $area_sh_id_sql = '';
-            $hotel_type_sql = '';
-            if($hotel_type > 1){
-                $hotel_type = array(
-                    '2' => '星级酒店',
-                    '3' => '特色餐厅',
-                    '4' => '婚礼会所',
-                    '5' => '游轮婚礼',
-                )[$hotel_type];
-                $hotel_type_sql = ' and  hhd.hotel_type = "' . $hotel_type . '"';
-            }
             if($area_sh_id){
                 $area_sh_id_sql = ' and  hh.area_sh_id = ' . $area_sh_id ;
             }
