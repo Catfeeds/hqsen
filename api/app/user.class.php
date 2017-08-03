@@ -332,6 +332,10 @@ class user extends base{
             if($one_user_data['hotel_id'] == $using_hotel_id){
                 continue;
             }
+            $old_order = $this->db->getRow('select * from hqsen_user_kezi_order where kezi_order_id =' . $order['id'] . " and watch_user_hotel_name=" . $using_hotel['hotel_name']);
+            if($old_order){
+                continue;
+            }
             if ($one_user_data) {
                 $one_user_order_sql['user_id'] = $order['user_id'];
                 $one_user_order_sql['watch_user_name'] = $one_user_data['user_name'];
