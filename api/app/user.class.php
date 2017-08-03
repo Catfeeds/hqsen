@@ -285,7 +285,7 @@ class user extends base{
     }
 
     public function syncOrder(){
-        $start_time = time() - 60 * 1; //同步三天前的订单
+        $start_time = time() - 60 * 2; //同步三天前的订单
         // 获取三天前 未同步的指定酒店的订单
         $order = $this->db->getRows("select * from hqsen_kezi_order where  del_flag = 1 and create_time < $start_time and sync_type = 1 and order_area_hotel_type = 2");
         foreach ($order as $one_order){
@@ -309,7 +309,7 @@ class user extends base{
         } else {
             return '酒店错误:' . $using_hotel_id . '!';
         }
-        $using_area_id = $using_hotel['area_id'];
+        $area_sh_id = $using_hotel['area_sh_id'];
         // 分配订单 需要分配酒店账号 user_type=4
         $user_data = $this->db->getRows("
                     select * from (
@@ -317,7 +317,7 @@ class user extends base{
                             left join hqsen_user_data as hud on hu.id=hud.user_id 
                             left join hqsen_hotel as hh on hud.hotel_id = hh.id
                             where hu.user_type=4 and hu.del_flag = 1 and hu.user_status=1 
-                            and hud.area_id = $using_area_id and hh.hotel_level = '$hotel_level' 
+                            and hud.area_sh_id = $area_sh_id and hh.hotel_level = '$hotel_level' 
                             and hud.auto_type = 2 
                             order by last_order_time asc
                         ) as c group by c.hotel_id
