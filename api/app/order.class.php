@@ -1086,7 +1086,7 @@ class order extends base {
 
                     }
                     if($user_dajian_order_other_sign['sign_type'] == 3){
-                        $item['title'] = '中款明细';
+                        $item['title'] = '附加款明细';
                         $item['first_input_note'] = '附加款金额';
                         $item['first_input_content'] = $user_dajian_order_other_sign['order_money'];
                         $item['second_input_note'] = '支付时间';
