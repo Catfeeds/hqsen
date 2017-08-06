@@ -146,8 +146,14 @@ class order extends base {
         if($order_status){
             $sql_status = '  order_status = ' . $order_status;
         }
+        $user_data = $this->db->getRow("select * from hqsen_user_data where user_id = " . $this->user['id']);
+        // 隐藏  同步订单
+        $sql_auto_type = '';
+        if($user_data['auto_type'] == 1 and $order_status == 1){
+            $sql_auto_type = ' and order_from =1';
+        }
         $sql_status .= ' and watch_user_id = '. $this->user['id'];
-        $order = $this->db->getRows('select * from hqsen_user_kezi_order where ' . $sql_status . $sql_limit);
+        $order = $this->db->getRows('select * from hqsen_user_kezi_order where ' . $sql_status . $sql_auto_type . $sql_limit);
         $order_list['order_list'] = [];
         if($order){
             foreach ($order as $one_order){
@@ -166,7 +172,7 @@ class order extends base {
             }
 
         }
-        $order_list['count'] = $this->db->getCount('hqsen_user_kezi_order', $sql_status);
+        $order_list['count'] = $this->db->getCount('hqsen_user_kezi_order', $sql_status . $sql_auto_type);
         $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $order_list);
     }
 
