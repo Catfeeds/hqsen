@@ -150,7 +150,7 @@ class order extends base {
         // 隐藏  同步订单
         $sql_auto_type = '';
         if($user_data['auto_type'] == 1 and $order_status == 1){
-            $sql_auto_type = ' and order_from =1';
+            $sql_auto_type = ' and order_from in (1,3) ';
         }
         $sql_status .= ' and watch_user_id = '. $this->user['id'];
         $order = $this->db->getRows('select * from hqsen_user_kezi_order where ' . $sql_status . $sql_auto_type . $sql_limit);
@@ -421,6 +421,10 @@ class order extends base {
             } else if($user_order_status == 3){
                 // 更新用户订单  待审核
                 $sql_order['order_status'] = 3;
+            }
+            $user_kezi_order = $this->db->getRow('select * from hqsen_user_kezi_order where id=' . $user_kezi_order_id);
+            if($user_kezi_order and $user_kezi_order['order_from'] == 2){
+                $sql_order['order_from'] = 3;
             }
             $this->db->update('hqsen_user_kezi_order', $sql_order, ' id = ' . $user_kezi_order_id);
             $this->appDie();
