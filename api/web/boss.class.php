@@ -129,7 +129,9 @@ class boss extends base {
         $offset = ($page - 1) * $limit;
         $sql_limit = " limit $offset , $limit";
         // 总经理要在财务审批通过基础上
-        $sign = $this->db->getRows("select *  from hqsen_user_dajian_order_sign  where boss_sign_status > 0 and sign_type = 0 order by id desc " . $sql_limit);
+        $sign_type = '  and sign_type = 0  ';
+        $sign_type = '';// 暂时总经理不对类型区分首款 中款 尾款
+        $sign = $this->db->getRows("select *  from hqsen_user_dajian_order_sign  where boss_sign_status > 0 $sign_type order by id desc " . $sql_limit);
         foreach ($sign as $one_sign){
             $item['id'] = $one_sign['id'];
             $item['dajian_order_id'] = $one_sign['dajian_order_id'];
