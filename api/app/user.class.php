@@ -127,7 +127,7 @@ class user extends base{
             $apikey = "b181d90efe2155f5fe3d74b468c0a136"; //修改为您的apikey(https://www.yunpian.com)登陆官网后获取
             if(preg_match("/^1[34578]{1}\d{9}$/",$mobile)){
                 $rand_text = rand(1000,9999);
-//                $rand_text = 1000;
+                $rand_text = 1000;
                 $text="验证码：" . $rand_text;
                 $ch = curl_init();
                 /* 设置验证方式 */
@@ -144,20 +144,20 @@ class user extends base{
                 $send_data = array('tpl_id'=>'1755704','tpl_value'=>('#code#').'='.urlencode($text),'apikey'=>$apikey,'mobile'=>$mobile);
                 curl_setopt ($ch, CURLOPT_URL, 'https://sms.yunpian.com/v2/sms/tpl_single_send.json');
                 curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($send_data));
-                $json_data = curl_exec($ch);
+//                $json_data = curl_exec($ch);
                 // 处理返回结果
-                $array = json_decode($json_data,true);
-                if(isset($array['msg']) and  $array['msg'] == '发送成功'){
+//                $array = json_decode($json_data,true);
+//                if(isset($array['msg']) and  $array['msg'] == '发送成功'){
                     $data['code'] = $rand_text;
                     $data['phone'] = $mobile;
                     $session_id = "sen-" . $data['phone'];
                     session_id($session_id);
                     session_start();
                     $_SESSION['code'] = $rand_text;
-                } else {
-                    $data['code'] = 0;
-                    $this->appDie($this->back_code['user']['phone_code_err'], $array['detail'], $data);
-                }
+//                } else {
+//                    $data['code'] = 0;
+//                    $this->appDie($this->back_code['user']['phone_code_err'], $array['detail'], $data);
+//                }
                 // 发送模板短信
                 curl_close($ch);
                 $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $data);

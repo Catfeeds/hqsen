@@ -157,7 +157,7 @@ class order extends base {
         $order_list['order_list'] = [];
         if($order){
             foreach ($order as $one_order){
-                $order_from = $one_order['order_from'] == 2 ? '(同步)' : '';
+                $order_from = $one_order['order_from'] == 1 ? '' : '(同步)';
                 $order_item = array(
                     'id' => (int)$one_order['id'],
                     'create_time' => (string)$one_order['update_time'],
@@ -250,7 +250,7 @@ class order extends base {
                             $order_list['handle_note'] = '无';
                             break;
                         case 2:
-                            $order_list['handle_note'] = '该搭建合同正在被审核,请耐心等待^_^';
+                            $order_list['handle_note'] = '该合同正在被审核,请耐心等待^_^';
                             break;
                         case 3:
                             $order_list['handle_note'] = '相关的奖励即将发放,请确保收款账号有效';
@@ -560,9 +560,13 @@ class order extends base {
                 }
 
                 if($error_msg){
-                    $this->appDie($this->back_code['order']['dajian_order_fail'], $error_msg);
+                    if($error_count >= count($area_hotel_id_array)) {
+                        $this->appDie($this->back_code['order']['dajian_order_fail'], $error_msg);
+                    } else {
+                        $this->appDie(1000, $error_msg);
+                    }
                 } else {
-                    $this->appDie();
+                    $this->appDie(1000, '创建成功');
                 }
             }
         } else {
