@@ -1067,6 +1067,7 @@ class order extends base {
                     $item = [];
                     if($user_dajian_order_other_sign['sign_type'] == 1){
                         $item['title'] = '中款明细';
+                        $item['sign_type'] = $user_dajian_order_other_sign['sign_type'];
                         $item['first_input_note'] = '中款金额';
                         $item['first_input_content'] = $user_dajian_order_other_sign['order_money'];
                         $item['second_input_note'] = '支付时间';
@@ -1077,6 +1078,7 @@ class order extends base {
                     }
                     if($user_dajian_order_other_sign['sign_type'] == 2){
                         $item['title'] = '尾款明细';
+                        $item['sign_type'] = $user_dajian_order_other_sign['sign_type'];
                         $item['first_input_note'] = '尾款金额';
                         $item['first_input_content'] = $user_dajian_order_other_sign['order_money'];
                         $item['second_input_note'] = '支付时间';
@@ -1087,6 +1089,7 @@ class order extends base {
                     }
                     if($user_dajian_order_other_sign['sign_type'] == 3){
                         $item['title'] = '附加款明细';
+                        $item['sign_type'] = $user_dajian_order_other_sign['sign_type'];
                         $item['first_input_note'] = '附加款金额';
                         $item['first_input_content'] = $user_dajian_order_other_sign['order_money'];
                         $item['second_input_note'] = '支付时间';
@@ -1097,6 +1100,7 @@ class order extends base {
                     }
                     if($user_dajian_order_other_sign['sign_type'] == 4){
                         $item['title'] = '申请时间';
+                        $item['sign_type'] = $user_dajian_order_other_sign['sign_type'];
                         $item['first_input_note'] = '原时间';
                         $item['first_input_content'] = $user_dajian_order_sign['sign_using_time'];
                         $item['second_input_note'] = '申请时间';
