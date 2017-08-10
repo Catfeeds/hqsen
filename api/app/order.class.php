@@ -84,7 +84,11 @@ class order extends base {
                 }
                 // 出现一个酒店错误  就报错
                 if($error_msg){
-                    $this->appDie($this->back_code['order']['kezi_order_fail'], $error_msg);
+                    if($error_count >= count($area_hotel_id_array)) {
+                        $this->appDie($this->back_code['order']['kezi_order_fail'], $error_msg);
+                    } else {
+                        $this->appDie(1000, $error_msg);
+                    }
                 } else {
                     $this->appDie();
                 }
