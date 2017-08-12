@@ -982,6 +982,9 @@ class order extends base {
         $user_dajian_order_sign['order_money'] = $order_other_money;
         $user_dajian_order_sign['order_time'] = $order_other_time;
         $user_dajian_order_sign['order_sign_pic'] = $sign_pic_json;
+        if($sign_type == 4){
+            $user_dajian_order_sign['old_order_time'] = $user_order['sign_using_time'];
+        }
         if($user_dajian_order_id){
             if(isset($user_dajian_order_sign['id']) and $user_dajian_order_sign['id']){
                 $this->db->update('hqsen_user_dajian_order_other_sign', $user_dajian_order_sign, ' sign_type = ' . $sign_type . ' and id = ' . $user_dajian_order_sign['id']);
@@ -1027,7 +1030,7 @@ class order extends base {
 
         foreach ($other_signs as $one_other_sign){
             $other_sign_item['sign_type'] = (string)$one_other_sign['sign_type'];
-            $other_sign_item['other_item_weikuan_old_time'] = $user_dajian_order_sign['sign_using_time']; // 尾款时间修改 sign_type =4 的时候是用
+            $other_sign_item['other_item_weikuan_old_time'] = $one_other_sign['old_order_time']; // 尾款时间修改 sign_type =4 的时候是用
             $other_sign_item['other_item_weikuan_new_time'] = $one_other_sign['order_time']; // 尾款时间修改 sign_type =4 的时候是用
             $other_sign_item['first_order_money'] = $user_dajian_order_sign['first_order_money']; // 首销数据
             $other_sign_item['first_order_using_time'] = $user_dajian_order_sign['first_order_using_time']; // 首销数据
