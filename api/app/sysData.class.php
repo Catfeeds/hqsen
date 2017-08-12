@@ -50,8 +50,9 @@ class sysData extends base {
     public function log(){
         $content = $this->postString('content');
         $uuid = $this->postString('uuid');
-        $sql['create_time'] = $content;
-        $sql['del_flag'] = $uuid;
+        $sql['log_content'] = $content;
+        $sql['create_time'] = time();
+        $sql['uuid'] = $uuid;
         $sql['id'] = $this->db->insert('hqsen_log', $sql);
         if($sql['id']){
             $this->appDie();

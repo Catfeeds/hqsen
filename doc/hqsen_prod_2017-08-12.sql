@@ -7,7 +7,7 @@
 #
 # Host: 47.92.31.234 (MySQL 5.5.54-0ubuntu0.14.04.1)
 # Database: hqsen_prod
-# Generation Time: 2017-08-12 10:17:52 +0000
+# Generation Time: 2017-08-12 10:22:03 +0000
 # ************************************************************
 
 
@@ -378,6 +378,21 @@ CREATE TABLE `hqsen_kezi_order` (
 
 
 
+# Dump of table hqsen_log
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `hqsen_log`;
+
+CREATE TABLE `hqsen_log` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增主键',
+  `uuid` varchar(100) NOT NULL COMMENT '意见反馈内容',
+  `log_content` text COMMENT '创建者账号',
+  `create_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '时间戳',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
+
 # Dump of table hqsen_pay_ratio
 # ------------------------------------------------------------
 
@@ -454,7 +469,7 @@ VALUES
 	(106,'mtgcwh001','','','','',1501562969,4,1,'','e10adc3949ba59abbe56e057f20f883e',1,'','','',0),
 	(107,'yxhg001','','','','',1501564860,4,1,'','e10adc3949ba59abbe56e057f20f883e',1,'','','',0),
 	(108,'cdwl001','','','','',1501564912,4,1,'','e10adc3949ba59abbe56e057f20f883e',1,'','','',0),
-	(109,'jywl001','','','','',1501564934,4,1,'','e10adc3949ba59abbe56e057f20f883e',1,'','','',0),
+	(109,'yywl001','','','','',1501564934,4,1,'','e10adc3949ba59abbe56e057f20f883e',1,'','','',0),
 	(110,'fjjd001','','','','',1501564960,4,1,'','e10adc3949ba59abbe56e057f20f883e',1,'','','',0),
 	(111,'mlbs001','','','','',1501564979,4,1,'','e10adc3949ba59abbe56e057f20f883e',1,'','','',0),
 	(112,'mjwl001','','','','',1501565000,4,1,'964633c9e129ef002b757f3a61ebcfc0','e10adc3949ba59abbe56e057f20f883e',1,'','','',1501565073),
