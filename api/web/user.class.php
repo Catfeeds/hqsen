@@ -50,7 +50,7 @@ class user extends base{
             'hotel_level' => $this->hotel_level(),
             'inner_type' => $this->inner_type(),
         );
-        if($this->user['user_name'] == 'monkey' or  $this->user['user_name'] == 'sen'){
+        if($this->user['user_name'] == 'monkey' or  $this->user['user_name'] == 'admin'){
             $config_data['user_security'] = $this->user_security('monkey');
         } else if($this->user['user_type'] == 15){
             $config_data['user_security'] = $this->user_security('admin');
