@@ -1,0 +1,117 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+ul,
+li {
+  list-style: none;
+}
+html,
+body {
+  height: 100%;
+  background: url('http://sendevimg.oss-cn-zhangjiakou.aliyuncs.com/upload/user_web/bg.png') no-repeat center;
+  background-size: cover;
+  overflow: hidden;
+  font-family: 'Microsoft yahei';
+}
+.content-wrapper {
+  overflow: hidden;
+  padding: 40px 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.content-logo {
+  display: block;
+  margin: 0 auto;
+  width: 80px;
+  height: 80px;
+  background: url(./logo.png) no-repeat center;
+  background-size: 80px;
+  /* width: 80px;
+  height: 80px;
+  line-height: 80px;
+  font-size: 50px;
+  text-align: center;
+  font-weight: 600;
+  color: #0d79b1;
+  border-radius: 10px;
+  border: 5px solid #0d79b1;
+  margin: 0 auto; */
+}
+.logo-desc {
+  margin-top: 20px;
+  font-size: 20px;
+  color: #f1f1f1;
+  text-align: center;
+  margin-bottom: 50px;
+  font-weight: 300;
+}
+.download-content {
+}
+.download-list {
+  display: flex;
+  width: 520px;
+  margin: 0 auto;
+}
+.download-item {
+  width: 220px;
+  padding: 0 30px;
+  text-align: center;
+}
+.download-item img {
+  display: block;
+  width: 200px;
+  height: 200px;
+  margin-bottom: 24px;
+}
+.download-item .download-desc {
+  color: #fff;
+  font-size: 24px;
+  font-weight: 300;
+  line-height: 38px;
+  padding-left: 40px;
+  background-size: 35px;
+  background-repeat: no-repeat;
+  background-position: left;
+}
+
+.download-item .download-desc.ios {
+  background-image: url('./ios.png');
+}
+.download-item .download-desc.android {
+  background-image: url('./android.png');
+}
+@media screen and (max-width: 500px) {
+  .download-list {
+    display: block;
+    width: 100%;
+  }
+  .download-item {
+    width: 170px;
+    margin-bottom: 30px;
+  }
+  .download-item img {
+    display: block;
+    width: 150px;
+    height: 150px;
+    margin: 0 auto;
+    margin-bottom: 10px;
+  }
+  .download-item .download-desc {
+    background-size: 30px;
+    line-height: 30px;
+    font-size: 20px;
+    padding-left: 30px;
+  }
+}
+
+.black-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.4);
+}
