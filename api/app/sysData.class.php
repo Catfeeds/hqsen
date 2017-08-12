@@ -15,7 +15,7 @@ class sysData extends base {
     public function __construct()
     {
         parent::__construct();
-        $this-> loginInit();
+//        $this-> loginInit();
     }
 
     // 更新数据
@@ -45,6 +45,20 @@ class sysData extends base {
 //        $data['order_area'][] = array('type'=>'3', 'type_name'=>'指定酒店');
         $data['update_status'] = array('version'=>'1.0', 'update_now'=>'1');
         $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $data);
+    }
+
+    public function log(){
+        $content = $this->postString('content');
+        $uuid = $this->postString('uuid');
+        $sql['create_time'] = $content;
+        $sql['del_flag'] = $uuid;
+        $sql['id'] = $this->db->insert('hqsen_log', $sql);
+        if($sql['id']){
+            $this->appDie();
+        } else {
+            $this->appDie($this->back_code['sys']['mysql_err'], $this->back_msg['sys']['mysql_err'], $sql);
+        }
+
     }
 
 

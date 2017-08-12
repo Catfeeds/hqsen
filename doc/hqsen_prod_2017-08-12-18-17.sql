@@ -7,7 +7,7 @@
 #
 # Host: 47.92.31.234 (MySQL 5.5.54-0ubuntu0.14.04.1)
 # Database: hqsen_prod
-# Generation Time: 2017-08-12 10:17:52 +0000
+# Generation Time: 2017-08-12 04:27:18 +0000
 # ************************************************************
 
 
@@ -523,7 +523,6 @@ CREATE TABLE `hqsen_user_dajian_order_other_sign` (
   `del_flag` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '0未知 1初次录入 2再次录入',
   `create_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
   `sign_status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '财务审核 0未知 1未处理 2通过 3驳回 4 总经理驳回 5待修改',
-  `old_order_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '尾款原时间',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
