@@ -1106,7 +1106,7 @@ class order extends base {
                         $item['title'] = '申请时间';
                         $item['sign_type'] = $user_dajian_order_other_sign['sign_type'];
                         $item['first_input_note'] = '原时间';
-                        $item['first_input_content'] = $user_dajian_order_sign['sign_using_time'];
+                        $item['first_input_content'] = date('Y-m-d' , $user_dajian_order_sign['sign_using_time']);
                         $item['second_input_note'] = '申请时间';
                         $item['second_input_content'] = $user_dajian_order_other_sign['order_time'];
                         $item['third_input_note'] = (string)'';
