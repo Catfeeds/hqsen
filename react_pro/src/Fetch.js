@@ -140,6 +140,7 @@ export default function Fetch (url, data = {}, method = 'post', showLoading = fa
         }
       })
       .catch(error => {
+        debugger
         reject(error, false)
         showLoading && loadingInstance.close()
         if (error.response) {

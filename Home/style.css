@@ -71,18 +71,18 @@ body {
   font-size: 24px;
   font-weight: 300;
   line-height: 38px;
-  padding-left: 40px;
+  /* padding-left: 40px;
   background-size: 35px;
   background-repeat: no-repeat;
-  background-position: left;
+  background-position: left; */
 }
 
-.download-item .download-desc.ios {
+/* .download-item .download-desc.ios {
   background-image: url('./ios.png');
 }
 .download-item .download-desc.android {
   background-image: url('./android.png');
-}
+} */
 @media screen and (max-width: 500px) {
   .download-list {
     display: block;

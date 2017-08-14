@@ -72,7 +72,7 @@ class UploadImage extends Component {
         })
       })
       .catch(error => {
-        message.error(error)
+        console.log(error)
       })
   }
   render () {
@@ -89,7 +89,6 @@ class UploadImage extends Component {
               <img className="upload-image" onClick={() => ViewImage({ source: item })} src={item} />
             </li>
           )}
-
         </ul>
       </div>
     )
