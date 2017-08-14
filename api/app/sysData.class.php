@@ -43,7 +43,7 @@ class sysData extends base {
 //        ]);
 //        $data['order_area'][] = array('area'=>'2', 'area_name'=>'浦东区');
 //        $data['order_area'][] = array('type'=>'3', 'type_name'=>'指定酒店');
-        $data['update_status'] = array('version'=>'1.0', 'update_now'=>'1');
+        $data['update_status'] = array('version'=>'1.0', 'update_now'=>'1');// 正常 2强制更新 3普通更新
         $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $data);
     }
 
