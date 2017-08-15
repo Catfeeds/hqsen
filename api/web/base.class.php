@@ -198,6 +198,16 @@ class base{
                     'label'=>'意见反馈'
                 ),
             ),
+            'promoter' => array(
+                array(
+                    'key' => 'order_info',
+                    'label'=>'客资/搭建信息',
+                    'child' => array(
+                        array('key'=>'order_info_kezi_list', 'label'=>'客资列表', 'parent_key'=>'order_info'),
+                        array('key'=>'order_info_dajian_list', 'label'=>'搭建列表', 'parent_key'=>'order_info'),
+                    ),
+                ),
+            ),
             'finance' => array(
                 array(
                     'key' => 'order_info',
@@ -292,6 +302,7 @@ class base{
             array('value'=>'14', 'label'=>'客服'),
             array('value'=>'15', 'label'=>'管理员'),
             array('value'=>'16', 'label'=>'编辑'),
+            array('value'=>'17', 'label'=>'推广员'),
         );
     }
 

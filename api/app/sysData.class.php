@@ -56,9 +56,9 @@ class sysData extends base {
             $appver = intval($appver);
         }
         if($appver < 10000){
-            $data['update_status'] = array('version'=>'1.0.0', 'update_now'=>'3');// 正常 2强制更新 3普通更新
+            $data['update_status'] = array('version'=>'1.0.0', 'update_now'=>'3', 'update_msg'=>'需要更新');// 正常 2强制更新 3普通更新
         } else {
-            $data['update_status'] = array('version'=>'1.0.0', 'update_now'=>'1');// 正常 2强制更新 3普通更新
+            $data['update_status'] = array('version'=>'1.0.0', 'update_now'=>'1', 'update_msg'=>'正常');// 正常 2强制更新 3普通更新
         }
 
         $data['url'] = 'http://sendevimg.oss-cn-zhangjiakou.aliyuncs.com/upload/package/sen-release.apk';

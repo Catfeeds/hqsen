@@ -60,6 +60,8 @@ class user extends base{
             $config_data['user_security'] = $this->user_security('service');
         } else if($this->user['user_type'] == 16){
             $config_data['user_security'] = $this->user_security('editor');
+        } else if($this->user['user_type'] == 17){
+            $config_data['user_security'] = $this->user_security('promoter');
         }
         $sh_area = $this->get_sh_area();
         foreach ($sh_area as $area_key => $area_value){

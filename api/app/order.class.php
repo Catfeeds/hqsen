@@ -607,6 +607,7 @@ class order extends base {
                     $order_item = array(
                         'id' => (int)$one_order['id'],
                         'create_time' => (string)$one_order['update_time'],
+                        'order_from' => (string)$user_data['user_name'] . '(' . $user_data['hotel_name'] . ')',
                         'order_status' => (int)$one_order['order_status'],
                         'order_phone' => (string)$one_order['order_phone'],
                         'watch_user' => (string)$one_order['watch_user_name'] . '  (' . $user_data['hotel_area'] . ')' ,
@@ -640,6 +641,7 @@ class order extends base {
                     $user_data = $this->db->getRow('select * from hqsen_user_data where user_id=' . $one_order['watch_user_id'] );
                     $order_item = array(
                         'id' => (int)$one_order['id'],
+                        'order_from' => (string)$user_data['user_name'] . '(' . $user_data['hotel_name'] . ')',
                         'create_time' => (string)$one_order['erxiao_unhandle_time'],
                         'order_status' => (int)$one_order['erxiao_order_status'],
                         'erxiao_sign_type' => (int)$one_order['erxiao_sign_type'],
