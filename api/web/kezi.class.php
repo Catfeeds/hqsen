@@ -38,8 +38,8 @@ class kezi extends base {
                 );
                 // 如果是1 表示是区域  如果是2 表示是酒店
                 if($one_order['order_area_hotel_type'] == 1){
-                    $area = $this->db->getRow("select * from hqsen_area  where id =  " . $one_order['order_area_hotel_id']);
-                    $kezi_item['area_hotel_name'] = (string)$area['area_name'];
+//                    $area = $this->db->getRow("select * from hqsen_area  where id =  " . $one_order['order_area_hotel_id']);
+                    $kezi_item['area_hotel_name'] = (string)$this->get_sh_area($one_order['order_area_hotel_id']);
                 } else {
                     // 多个酒店
                     $id_arr = explode(',', $one_order['order_area_hotel_id']);
@@ -81,8 +81,8 @@ class kezi extends base {
             );
             // 如果是1 表示是区域  如果是2 表示是酒店
             if($order['order_area_hotel_type'] == 1){
-                $area = $this->db->getRow("select * from hqsen_area  where id =  " . $order['order_area_hotel_id']);
-                $order_item['area_hotel_name'] = (string)$area['area_name'];
+//                $area = $this->db->getRow("select * from hqsen_area  where id =  " . $order['order_area_hotel_id']);
+                $order_item['area_hotel_name'] = (string)$this->get_sh_area($order['order_area_hotel_id']);
             } else {
                 // 多个酒店
                 $id_arr = explode(',', $order['order_area_hotel_id']);

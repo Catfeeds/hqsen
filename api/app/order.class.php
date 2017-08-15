@@ -206,8 +206,8 @@ class order extends base {
                     'order_desc' => (string)$order['order_desc'],
                 );
                 if($order['order_area_hotel_type'] == 1){
-                    $area = $this->db->getRow("select * from hqsen_area  where id =  " . $order['order_area_hotel_id']);
-                    $order_item['order_area_hotel_name'] = (string)$area['area_name'];
+//                    $area = $this->db->getRow("select * from hqsen_area  where id =  " . $order['order_area_hotel_id']);
+                    $order_item['order_area_hotel_name'] = (string)$this->get_sh_area($order['order_area_hotel_id']);
                 } else {
 //                    $hotel = $this->db->getRow("select * from hqsen_hotel  where id =  " . $order['order_area_hotel_id']);
                     $order_item['order_area_hotel_name'] = (string)$user_order['watch_user_hotel_name'];
@@ -297,12 +297,13 @@ class order extends base {
         $list['area_list'] = [];
         $list['hotel_list'] = [];
         if($hotel_area_type == 1){
-            $area = $this->db->getRows("select *  from hqsen_area  where del_flag = 1 order by id desc ");
-            foreach ($area as $one_area){
+//            $area = $this->db->getRows("select *  from hqsen_area  where del_flag = 1 order by id desc ");
+            $area = $this->get_sh_area();
+            foreach ($area as $key => $one_area){
                 if($one_area){
                     $area_item = array(
-                        'area_id' => (int)$one_area['id'],
-                        'area_name' => (string)$one_area['area_name'],
+                        'area_id' => (int)$key,
+                        'area_name' => (string)$one_area,
                     );
                     $list['area_list'][] = $area_item;
                 }
@@ -336,7 +337,7 @@ class order extends base {
                     select * from (
                             select hud.* from hqsen_user as hu 
                             left join hqsen_user_data as hud on hu.id=hud.user_id 
-                            where hu.user_type=4 and hu.del_flag = 1 and hu.user_status=1  $for_self_sql and hud.area_id = $area_hotel_id
+                            where hu.user_type=4 and hu.del_flag = 1 and hu.user_status=1  $for_self_sql and hud.area_sh_id = $area_hotel_id
                             order by last_order_time asc
                         ) as c group by c.hotel_id
                 ");
