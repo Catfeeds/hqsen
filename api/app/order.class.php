@@ -634,7 +634,7 @@ class order extends base {
 
             $order = $this->db->getRows('select hudo.id as id, hudo.erxiao_order_status as erxiao_order_status, 
               hudo.erxiao_sign_type as erxiao_sign_type, hudos.erxiao_unhandle_time as erxiao_unhandle_time,
-              hudo.order_phone as order_phone,hudo.watch_user_id as watch_user_id,hudos.update_time as update_time
+              hudo.order_phone as order_phone,hudo.user_id as user_id,hudo.watch_user_id as watch_user_id,hudos.update_time as update_time
             from hqsen_user_dajian_order as hudo left join hqsen_user_dajian_order_sign as hudos
             on hudo.id = hudos.user_dajian_order_id  where ' . $sql_status . $sql_limit);
             $order_list['order_list'] = [];
