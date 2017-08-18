@@ -46,7 +46,14 @@ class order extends base {
         $watch_user = $this->postString('watch_user');
         $order_desc = $this->postString('order_desc');
         if($order_type and $order_phone and $order_area_hotel_type and $order_area_hotel_id){
-            $order = $this->db->getRow('select * from hqsen_kezi_order where  del_flag = 1 and order_type = ' . $order_type . ' and order_phone = '. $order_phone);
+            $file_path = API_PATH . 'upload/' . $order_phone . '.txt';
+            $fp = fopen($file_path, 'w');
+            $order = '';
+            if (flock($fp, LOCK_EX)) {  // 进行排它型锁定
+                $order = $this->db->getRow('select * from hqsen_kezi_order where  del_flag = 1 and order_type = ' . $order_type . ' and order_phone = '. $order_phone);
+            } else {
+                $this->appDie($this->back_code['order']['phone_type_exist'], $this->back_msg['order']['phone_type_exist']);
+            }
             if($order){
                 $this->appDie($this->back_code['order']['phone_type_exist'], $this->back_msg['order']['phone_type_exist']);
             } else {
@@ -82,6 +89,14 @@ class order extends base {
                     $del_order['del_flag'] = 2;
                     $this->db->update('hqsen_kezi_order', $del_order, ' id = ' . $sql_order['id']);
                 }
+
+                flock($fp, LOCK_UN);    // 释放锁定
+                if(is_file($file_path)) {
+                    if(unlink($file_path)) {
+//                    echo "删除成功";
+                    }
+                }
+
                 // 出现一个酒店错误  就报错
                 if($error_msg){
                     if($error_count >= count($area_hotel_id_array)) {
@@ -529,7 +544,14 @@ class order extends base {
         $use_date = $this->postString('use_date');
         $order_desc = $this->postString('order_desc');
         if($order_type and $order_phone and $order_area_hotel_type and $order_area_hotel_id){
-            $order = $this->db->getRow('select * from hqsen_dajian_order where del_flag = 1 and order_type = ' . $order_type . ' and order_phone = '. $order_phone);
+            $file_path = API_PATH . 'upload/' . $order_phone . '.txt';
+            $fp = fopen($file_path, 'w');
+            $order = '';
+            if (flock($fp, LOCK_EX)) {  // 进行排它型锁定
+                $order = $this->db->getRow('select * from hqsen_dajian_order where del_flag = 1 and order_type = ' . $order_type . ' and order_phone = '. $order_phone);
+            } else {
+                $this->appDie($this->back_code['order']['phone_type_exist'], $this->back_msg['order']['phone_type_exist']);
+            }
             if($order){
                 $this->appDie($this->back_code['order']['phone_type_exist'], $this->back_msg['order']['phone_type_exist']);
             } else {
@@ -562,6 +584,13 @@ class order extends base {
 //                if($error_count > 0) {
                     $del_order['del_flag'] = 2;
                     $this->db->update('hqsen_dajian_order', $del_order, ' id = ' . $sql_order['id']);
+                }
+
+                flock($fp, LOCK_UN);    // 释放锁定
+                if(is_file($file_path)) {
+                    if(unlink($file_path)) {
+//                    echo "删除成功";
+                    }
                 }
 
                 if($error_msg){

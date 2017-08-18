@@ -312,9 +312,13 @@ class finance extends base {
                     // 通过修改尾款时间  订单修改尾款时间
                     if($sign['sign_type'] == 4){
                         $user_order_sign['sign_using_time'] = $other_sign['order_time'];
+                        // 如果中款已经完成 更新 二销处理时间为 最新尾款时间
+                        if(isset($finish_middle) and $finish_middle){
+                            $user_order_sign['erxiao_unhandle_time'] = $sign['sign_using_time'];
+                        }
                     }
-                    // 如果通过中款 或者尾款时间修改  更新二销待处理时间戳为尾款时间
-                    if($sign['sign_type'] == 1 or $sign['sign_type'] == 4){
+                    // 如果通过中款  更新二销待处理时间戳为尾款时间
+                    if($sign['sign_type'] == 1){
                         $user_order_sign['erxiao_unhandle_time'] = $sign['sign_using_time'];
                     }
                     $this->db->update('hqsen_user_dajian_order_sign', $user_order_sign, ' id = ' . $user_sign_id);
