@@ -41,7 +41,7 @@ class user extends base{
                 $user['last_login_time'] = time();
                 $user['session_id'] = md5($user['id'] . $user['last_login_time']);
                 // todo 注释使用最后登陆时间
-                $user['session_id'] = md5($user['id'] . $user['create_time']);
+//                $user['session_id'] = md5($user['id'] . $user['create_time']);
                 $this->db->update('hqsen_user', $user, ' id = ' . $user['id']);
                 $login_user = array(
                     'access_token' => $user['session_id'],
@@ -86,7 +86,7 @@ class user extends base{
             $user['last_login_time'] = time();
             $user['session_id'] = md5($user['id'] . $user['last_login_time']);
             // todo 注释使用最后登陆时间
-            $user['session_id'] = md5($user['id'] . $user['create_time']);
+//            $user['session_id'] = md5($user['id'] . $user['create_time']);
             $this->db->update('hqsen_user', $user, ' id = ' . $user['id']);
 //            session_id($user['session_id']);
 //            session_start();

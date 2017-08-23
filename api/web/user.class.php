@@ -25,7 +25,7 @@ class user extends base{
                 $user['last_login_time'] = time();
                 $user['session_id'] = md5($user['id'] . $user['last_login_time']);
                 // todo 注释使用最后登陆时间
-                $user['session_id'] = md5($user['id'] . $user['create_time']);
+//                $user['session_id'] = md5($user['id'] . $user['create_time']);
                 $this->db->update('hqsen_user', $user, ' id = ' . $user['id']);
 //                session_start();
                 $login_user = array(

@@ -75,7 +75,7 @@ class kezi extends base {
                 'order_phone' => $order['order_phone'],
                 'desk_count' => $order['desk_count'],
                 'order_money' => $order['order_money'],
-                'use_date' => $order['use_date'],
+                'use_date' => date('Y-m-d', $order['use_date']),
                 'watch_user' => $order['watch_user'],
                 'order_desc' => $order['order_desc'],
             );
