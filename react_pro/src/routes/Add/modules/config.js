@@ -199,15 +199,15 @@ export default {
     detailUrlKey: 'hotelAccountDetail',
     formList: [
       {
-        label: '账号名称',
-        type: 'text',
-        name: 'user_name',
-        rules: { required: true }
-      },
-      {
         label: '所属酒店',
         type: 'select',
         name: 'hotel_id',
+        rules: { required: true }
+      },
+      {
+        label: '账号名称',
+        type: 'text',
+        name: 'user_name',
         rules: { required: true }
       }
     ],
@@ -220,15 +220,15 @@ export default {
     detailUrlKey: 'innerAccountDetail',
     formList: [
       {
-        label: '账号名称',
-        type: 'text',
-        name: 'user_name',
-        rules: { required: true }
-      },
-      {
         label: '所属角色',
         type: 'select',
         name: 'user_type',
+        rules: { required: true }
+      },
+      {
+        label: '账号名称',
+        type: 'text',
+        name: 'user_name',
         rules: { required: true }
       },
       {
