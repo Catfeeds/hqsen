@@ -133,6 +133,9 @@ class List extends Component {
     const { type } = this.props.params
     this.context.router.push(`/detail/${type}?id=${id}`)
   }
+  gotoPay (id) {
+    this.context.router.push(`/pay-info?id=${id}`)
+  }
   gotoOrderDetail (record, isKezi) {
     if (isKezi) {
       this.context.router.push(`/detail/order_info_kezi_list?id=${record.kezi_order_id}`)
@@ -651,7 +654,7 @@ class List extends Component {
           key: 'control',
           dataIndex: 'control',
           title: '操作',
-          render: (text, record) => renderApproveControl(record)
+          render: (text, record) => renderApproveControl(record, true)
         }
       ],
       // 总经理审批——客资
@@ -983,7 +986,7 @@ class List extends Component {
         </div>
       )
     }
-    const renderApproveControl = record => {
+    const renderApproveControl = (record, showPay) => {
       const isKezi = basicInfo.breadcrumb[1].indexOf('客资') > -1
       const disabledBtn =
         record.sign_status === '2' ||
@@ -992,6 +995,9 @@ class List extends Component {
         record.boss_sign_status === '3'
       return (
         <div>
+          {showPay && <Button size="small" onClick={() => this.gotoPay(record.id)}>
+            付款记录
+          </Button>}
           <Button size="small" onClick={() => this.gotoOrderDetail(record, isKezi)}>
             {isKezi ? '客资信息' : '搭建信息'}
           </Button>

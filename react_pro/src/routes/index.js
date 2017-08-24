@@ -7,23 +7,28 @@ import DetailRoute from './Detail'
 import HomeRoute from './Home'
 import ApproveRoute from './Approve'
 import ResetPassword from './ResetPassword'
+import PayInfo from './PayInfo'
 /*  Note: Instead of using JSX, we recommend using react-router
     PlainRoute objects to build route definitions.   */
 
-export const createRoutes = (store) => ([{
-  path        : '/',
-  component   : Layout,
-  indexRoute  : HomeRoute,
-  childRoutes : [
-    ListRoute(store),
-    AddRoute(store),
-    DetailRoute(store),
-    ApproveRoute(store),
-    ResetPassword(store)
-  ]
-}, {
-  path        : '/login',
-  component   : LoginRoute
-}])
+export const createRoutes = store => [
+  {
+    path: '/',
+    component: Layout,
+    indexRoute: HomeRoute,
+    childRoutes: [
+      PayInfo(store),
+      ListRoute(store),
+      AddRoute(store),
+      DetailRoute(store),
+      ApproveRoute(store),
+      ResetPassword(store)
+    ]
+  },
+  {
+    path: '/login',
+    component: LoginRoute
+  }
+]
 
 export default createRoutes

@@ -80,6 +80,8 @@ export const urlKey = {
   dajianOrderSubmit: 'c=finance&f=dajianSignFollowCreate',
   dajianSignFollowCreate: 'c=finance&f=dajianSignFollowCreate',
   dajianErXiaoFollowCreate: 'c=finance&f=dajianErXiaoFollowCreate',
+  // 付款记录
+  payInfo: 'c=finance&f=dajianOrderSignOtherList',
   // 总经理审批
   bossKeziOrderList: 'c=boss&f=keziOrderSignList',
   bossKeziOrderDetail: 'c=boss&f=keziSignDetail',
