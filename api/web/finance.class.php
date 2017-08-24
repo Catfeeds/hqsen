@@ -336,5 +336,35 @@ class finance extends base {
         }
     }
 
+    // 付款记录
+    public function dajianOrderSignOtherList(){
+        $user_dajian_order_id = $this->postInt('user_dajian_order_id'); // 订单ID
+        $user_dajian_order_sign = $this->db->getRow('select * from hqsen_user_dajian_order_sign where user_dajian_order_id = ' . $user_dajian_order_id);
+        $other_signs = $this->db->getRows('select * from hqsen_user_dajian_order_other_sign where user_dajian_order_id = ' . $user_dajian_order_id . ' order by create_time asc');
+
+        $sign_item['sign_type'] = (string)5;
+        $sign_item['order_money'] = $user_dajian_order_sign['order_money'];
+        $sign_item['order_time'] = date('Y-m-d',$user_dajian_order_sign['order_time']);
+        $sign_item['first_order_money'] = $user_dajian_order_sign['first_order_money'];
+        $sign_item['first_order_using_time'] = date('Y-m-d',$user_dajian_order_sign['first_order_using_time']);
+        $sign_item['other_item_weikuan_old_time'] = date('Y-m-d',$user_dajian_order_sign['sign_using_time']); // 尾款时间修改 sign_type =4 的时候是用
+        $sign_item['other_item_weikuan_new_time'] = (string)0; // 尾款时间修改 sign_type =4 的时候是用
+        $sign_item['order_sign_pic'] = $user_dajian_order_sign['sign_pic'] ? json_decode($user_dajian_order_sign['sign_pic'], true) : [];
+        $list['sign_list'][] = $sign_item;
+
+        foreach ($other_signs as $one_other_sign){
+            $other_sign_item['sign_type'] = (string)$one_other_sign['sign_type'];
+            $other_sign_item['other_item_weikuan_old_time'] = date('Y-m-d',$one_other_sign['old_order_time']); // 尾款时间修改 sign_type =4 的时候是用
+            $other_sign_item['other_item_weikuan_new_time'] = date('Y-m-d',$one_other_sign['order_time']); // 尾款时间修改 sign_type =4 的时候是用
+            $other_sign_item['first_order_money'] = $user_dajian_order_sign['first_order_money']; // 首销数据
+            $other_sign_item['first_order_using_time'] = date('Y-m-d',$user_dajian_order_sign['first_order_using_time']); // 首销数据
+            $other_sign_item['order_money'] = $one_other_sign['order_money'];
+            $other_sign_item['order_time'] = date('Y-m-d',$one_other_sign['order_time']);
+            $other_sign_item['order_sign_pic'] = $one_other_sign['order_sign_pic'] ? json_decode($one_other_sign['order_sign_pic'], true) : [];
+            $list['sign_list'][] = $other_sign_item;
+        }
+        $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $list);
+    }
+
 
 }
