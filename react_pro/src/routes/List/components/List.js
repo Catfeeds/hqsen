@@ -192,7 +192,7 @@ class List extends Component {
       case '1':
         return '中款'
       case '2':
-        return '尾款'
+        return '举办'
       case '3':
         return '附加款'
       case '4':

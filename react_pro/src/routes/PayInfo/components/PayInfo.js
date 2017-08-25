@@ -120,10 +120,10 @@ class PayInfo extends Component {
       ]
     }
     const weikuan = {
-      title: '尾款明细与凭证',
+      title: '举办明细与凭证',
       form: [
         {
-          label: '尾款金额',
+          label: '举办金额',
           type: 'text',
           name: 'order_money',
           disabled: true
@@ -135,7 +135,7 @@ class PayInfo extends Component {
           disabled: true
         },
         {
-          label: '尾款图片',
+          label: '举办图片',
           type: 'image',
           name: 'order_sign_pic',
           disabled: true
