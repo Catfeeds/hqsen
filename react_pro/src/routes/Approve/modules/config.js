@@ -12,7 +12,7 @@ export default {
         disabled: true
       },
       {
-        label: '尾款时间',
+        label: '举办时间',
         type: 'date',
         name: 'sign_using_time',
         disabled: true
@@ -37,7 +37,7 @@ export default {
         disabled: true
       },
       {
-        label: '尾款时间',
+        label: '举办时间',
         type: 'date',
         name: 'sign_using_time',
         disabled: true
@@ -62,7 +62,7 @@ export default {
         disabled: true
       },
       {
-        label: '尾款时间',
+        label: '举办时间',
         type: 'date',
         name: 'sign_using_time',
         disabled: true
@@ -99,7 +99,7 @@ export default {
         disabled: true
       },
       {
-        label: '尾款时间',
+        label: '举办时间',
         type: 'date',
         name: 'sign_using_time',
         disabled: true
@@ -137,7 +137,7 @@ export default {
         disabled: true
       },
       {
-        label: '尾款时间',
+        label: '举办时间',
         type: 'date',
         name: 'sign_using_time',
         disabled: true
@@ -193,7 +193,7 @@ export default {
         disabled: true
       },
       {
-        label: '尾款时间',
+        label: '举办时间',
         type: 'date',
         name: 'sign_using_time',
         disabled: true
@@ -236,11 +236,11 @@ export default {
       }
     ]
   },
-  // 尾款-搭建
+  // 举办-搭建
   final: {
     submitKey: 'dajianErXiaoFollowCreate',
     detailUrlKey: 'dajianOrderDetail',
-    breadcrumb: ['财务审批', '搭建审核列表（尾款）', '财务审批'],
+    breadcrumb: ['财务审批', '搭建审核列表（举办）', '财务审批'],
     formList: [
       {
         label: '合同金额',
@@ -249,7 +249,7 @@ export default {
         disabled: true
       },
       {
-        label: '尾款时间',
+        label: '举办时间',
         type: 'date',
         name: 'sign_using_time',
         disabled: true
@@ -273,19 +273,19 @@ export default {
         disabled: true
       },
       {
-        label: '尾款金额',
+        label: '举办金额',
         type: 'text',
         name: 'other_item_order_money',
         disabled: true
       },
       {
-        label: '尾款时间',
+        label: '举办时间',
         type: 'date',
         name: 'other_item_order_time',
         disabled: true
       },
       {
-        label: '尾款附件',
+        label: '举办附件',
         type: 'image',
         name: 'other_item_order_sign_pic',
         disabled: true
@@ -296,10 +296,10 @@ export default {
   time: {
     submitKey: 'dajianErXiaoFollowCreate',
     detailUrlKey: 'dajianOrderDetail',
-    breadcrumb: ['财务审批', '搭建审核列表（尾款时间）', '财务审批'],
+    breadcrumb: ['财务审批', '搭建审核列表（举办时间）', '财务审批'],
     formList: [
       {
-        label: '原尾款时间',
+        label: '原举办时间',
         type: 'date',
         name: 'other_item_weikuan_old_time',
         disabled: true
