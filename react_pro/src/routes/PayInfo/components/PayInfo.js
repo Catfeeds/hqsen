@@ -31,7 +31,7 @@ class PayInfo extends Component {
           disabled: true
         },
         {
-          label: '尾款时间',
+          label: '举办时间',
           type: 'date',
           name: 'other_item_weikuan_old_time',
           disabled: true
@@ -103,7 +103,7 @@ class PayInfo extends Component {
       ]
     }
     const weikuanshijian = {
-      title: '修改尾款时间',
+      title: '修改举办时间',
       form: [
         {
           label: '原时间',

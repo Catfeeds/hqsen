@@ -196,7 +196,7 @@ class List extends Component {
       case '3':
         return '附加款'
       case '4':
-        return '尾款时间'
+        return '举办时间'
     }
   }
 
