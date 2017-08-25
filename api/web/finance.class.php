@@ -17,7 +17,7 @@ class finance extends base {
         '1'=>'中款',
         '2'=>'尾款',
         '3'=>'附加款',
-        '4'=>'尾款时间',
+        '4'=>'举办时间',
     );
     public function __construct()
     {
