@@ -339,8 +339,8 @@ class finance extends base {
     // 付款记录
     public function dajianOrderSignOtherList(){
         $user_dajian_order_id = $this->postInt('user_dajian_order_id'); // 订单ID
-        $user_dajian_order_sign = $this->db->getRow('select * from hqsen_user_dajian_order_sign where user_dajian_order_id = ' . $user_dajian_order_id);
-        $other_signs = $this->db->getRows('select * from hqsen_user_dajian_order_other_sign where user_dajian_order_id = ' . $user_dajian_order_id . ' order by create_time asc');
+        $user_dajian_order_sign = $this->db->getRow('select * from hqsen_user_dajian_order_sign where id = ' . $user_dajian_order_id);
+        $other_signs = $this->db->getRows('select * from hqsen_user_dajian_order_other_sign where user_dajian_order_id = ' . $user_dajian_order_sign['user_dajian_order_id'] . ' order by create_time asc');
 
         $sign_item['sign_type'] = (string)5;
         $sign_item['order_money'] = $user_dajian_order_sign['order_money'];
