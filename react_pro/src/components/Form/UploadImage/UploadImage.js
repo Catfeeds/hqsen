@@ -61,6 +61,7 @@ class UploadImage extends Component {
     data.append('file', file)
     if (file.size > 1 * 1024 * 1024) {
       Message.error('上传附件不能大于1M')
+      this.refs.upload.value = ''
       return
     }
     axios
@@ -68,7 +69,7 @@ class UploadImage extends Component {
       .then(response => response.data)
       .then(response => {
         if (response.data.url) {
-          Message.error('上传成功')
+          Message.success('上传成功')
           const uploadList = [...this.state.uploadList, response.data.url]
           this.setState({
             uploadList
@@ -79,10 +80,13 @@ class UploadImage extends Component {
         } else {
           Message.error('上传失败')
         }
+        this.refs.upload.value = ''
       })
       .catch(error => {
         console.log(error)
         Message.error('上传失败')
+        console.log(this.refs)
+        this.refs.upload.value = ''
       })
   }
   render () {
@@ -90,7 +94,12 @@ class UploadImage extends Component {
       <div className="uploa-image-box">
         <div className="upload-btn-box">
           <Button icon="upload">上传图片</Button>
-          <input type="file" accept="image/jpg,image/jpeg,image/png,image/gif" onChange={e => this.uploadImage(e)} />
+          <input
+            type="file"
+            ref="upload"
+            accept="image/jpg,image/jpeg,image/png,image/gif"
+            onChange={e => this.uploadImage(e)}
+          />
         </div>
         <ul className="upload-list">
           {this.state.uploadList.map((item, index) => (
