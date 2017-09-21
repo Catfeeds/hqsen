@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react'
-import { message, Button, Icon } from 'antd'
+import { Message, Button, Icon } from 'antd'
 import axios from 'axios'
 import { domain, urlKey } from 'root/Fetch'
 import ViewImage from '../../ViewImage'
@@ -59,20 +59,30 @@ class UploadImage extends Component {
     const file = e.target.files[0]
     const data = new FormData()
     data.append('file', file)
+    if (file.size > 1 * 1024 * 1024) {
+      Message.error('上传附件不能大于1M')
+      return
+    }
     axios
       .post(`${domain}${urlKey.uploadPic}`, data)
       .then(response => response.data)
       .then(response => {
-        const uploadList = [...this.state.uploadList, response.data.url]
-        this.setState({
-          uploadList
-        })
-        setFieldsValue({
-          [config.name]: JSON.stringify(uploadList)
-        })
+        if (response.data.url) {
+          Message.error('上传成功')
+          const uploadList = [...this.state.uploadList, response.data.url]
+          this.setState({
+            uploadList
+          })
+          setFieldsValue({
+            [config.name]: JSON.stringify(uploadList)
+          })
+        } else {
+          Message.error('上传失败')
+        }
       })
       .catch(error => {
         console.log(error)
+        Message.error('上传失败')
       })
   }
   render () {
@@ -83,18 +93,16 @@ class UploadImage extends Component {
           <input type="file" accept="image/jpg,image/jpeg,image/png,image/gif" onChange={e => this.uploadImage(e)} />
         </div>
         <ul className="upload-list">
-          {this.state.uploadList.map((item, index) =>
+          {this.state.uploadList.map((item, index) => (
             <li key={index} className="upload-item">
               <Icon className="upload-close" type="close" onClick={() => this.removeImage(item)} />
               <img className="upload-image" onClick={() => ViewImage({ source: item })} src={item} />
             </li>
-          )}
+          ))}
         </ul>
       </div>
     )
   }
 }
-
-UploadImage.propTypes = {}
 
 export default UploadImage
