@@ -164,7 +164,7 @@ class hotel extends base {
         $hotel_type = $this->postString('hotel_type');
         $hotel_phone = $this->postString('hotel_phone');
         $hotel_image = $this->postString('hotel_image');
-        if($hotel_id){
+        if($hotel_id and $hotel_low and $hotel_high and $hotel_max_desk and $hotel_phone and $hotel_type and $hotel_image and json_decode($hotel_image, true)[0]){
             $hotel_data = $this->db->getRow("select * from hqsen_hotel_data  where id =  " . $hotel_id);
             $sql_order['id'] = $hotel_id;
             $sql_order['hotel_low'] = $hotel_low;
@@ -222,7 +222,7 @@ class hotel extends base {
         $hotel_type = $this->postString('hotel_type');
         $hotel_phone = $this->postString('hotel_phone');
         $hotel_image = $this->postString('hotel_image');
-        if($hotel_id and ($hotel_low or $hotel_high or $hotel_max_desk or $hotel_phone or $hotel_type or $hotel_image)){
+        if($hotel_id and ($hotel_low and $hotel_high and $hotel_max_desk and $hotel_phone and $hotel_type and $hotel_image and json_decode($hotel_image, true)[0])){
             $sql_order = [];
             if($hotel_low){
                 $sql_order['hotel_low'] = $hotel_low;
