@@ -324,7 +324,9 @@ class order extends base {
                 }
             }
         } else {
-            $hotel = $this->db->getRows("select *  from hqsen_hotel  where del_flag = 1 order by id desc ");
+            // 只展示有酒店账号的酒店
+//            $hotel = $this->db->getRows("select *  from hqsen_hotel  where del_flag = 1 order by id desc ");
+            $hotel = $this->db->getRows("select hqsen_hotel.*  from hqsen_hotel join hqsen_user_data on hqsen_hotel.id=hqsen_user_data.hotel_id  where hqsen_hotel.del_flag = 1 group by hqsen_hotel.id order by hqsen_hotel.id desc ");
             foreach ($hotel as $one_hotel){
                 if($one_hotel){
                     $hotel_item = array(
