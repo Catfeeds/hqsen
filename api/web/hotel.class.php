@@ -106,9 +106,9 @@ class hotel extends base {
             if($hotel_address){
                 $sql_order['hotel_address'] = $hotel_address;
             }
-            if($weight){
-                $sql_order['weight'] = $weight;
-            }
+//            if($weight){
+                $sql_order['weight'] = intval($weight);
+//            }
             if($area_sh_id){
                 $area_sh = $this->db->getRow("select * from hqsen_area_sh  where id =  " . $area_sh_id);
                 $sql_order['area_id'] = isset($area_sh['link_area_id']) ? $area_sh['link_area_id'] : 0;
