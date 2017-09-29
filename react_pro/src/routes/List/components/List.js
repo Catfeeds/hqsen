@@ -1055,11 +1055,11 @@ class List extends Component {
                 新增
               </Button>
             : null}
-          {basicInfo.type === 'hotel_info_hotel_list'
+          {/* {basicInfo.type === 'hotel_info_hotel_list'
             ? <Button type="primary" className="create-btn" style={{ marginRight: 5 }} onClick={() => this.toRecList()}>
                 首页酒店推荐
               </Button>
-            : null}
+            : null} */}
           {downloadBtnType.indexOf(basicInfo.type) > -1
             ? <div className="download-box">
               <RangePicker

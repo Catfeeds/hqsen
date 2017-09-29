@@ -185,8 +185,12 @@ const initialState = {
     area_id: [],
     hotel_type: [
       {
-        label: '星级酒店',
-        value: '星级酒店'
+        label: '五星酒店',
+        value: '五星酒店'
+      },
+      {
+        label: '四星酒店',
+        value: '四星酒店'
       },
       {
         label: '特色餐厅',
