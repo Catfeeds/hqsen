@@ -191,26 +191,31 @@ class user extends base{
         $hotel_type_sql = '';
         if($hotel_type > 1){
             $hotel_type = array(
-                '2' => '星级酒店',
+                '2' => '五星酒店',
                 '3' => '特色餐厅',
                 '4' => '婚礼会所',
                 '5' => '游轮婚礼',
+                '6' => '四星酒店',
             )[$hotel_type];
             $hotel_type_sql = ' and  hhd.hotel_type = "' . $hotel_type . '"';
         }
         $hotel = '';
         if($list_type == 1){
-            $hotel = $this->db->getRows("select * from hqsen_hotel_rec as hhr 
-                      left join hqsen_hotel as hh on hhr.hotel_id = hh.id left join hqsen_hotel_data as hhd on hh.id = hhd.id where hh.is_data = 1 and  hh.del_flag = 1  $hotel_type_sql and  hhr.del_flag = 1  order by hhr.hotel_weight asc  , hh.id asc");
+//            $hotel = $this->db->getRows("select * from hqsen_hotel_rec as hhr
+//                      left join hqsen_hotel as hh on hhr.hotel_id = hh.id
+//                      left join hqsen_hotel_data as hhd on hh.id = hhd.id
+//                      where hh.is_data = 1 and  hh.del_flag = 1  $hotel_type_sql and  hhr.del_flag = 1
+//                      order by hhr.hotel_weight asc  , hh.id asc");
+            $hotel = $this->db->getRows("select * from hqsen_hotel as hh  left join hqsen_hotel_data as hhd on hh.id = hhd.id where  hh.is_data = 1 and hh.del_flag = 1 $hotel_type_sql  order by hh.weight desc  , hh.id asc");
         } else if($list_type == 2){
             $area_sh_id_sql = '';
             if($area_sh_id){
                 $area_sh_id_sql = ' and  hh.area_sh_id = ' . $area_sh_id ;
             }
-            $hotel = $this->db->getRows("select * from hqsen_hotel as hh  left join hqsen_hotel_data as hhd on hh.id = hhd.id where  hh.is_data = 1 and hh.del_flag = 1 $hotel_type_sql $area_sh_id_sql order by hh.weight asc  , hh.id asc");
+            $hotel = $this->db->getRows("select * from hqsen_hotel as hh  left join hqsen_hotel_data as hhd on hh.id = hhd.id where  hh.is_data = 1 and hh.del_flag = 1 $hotel_type_sql $area_sh_id_sql order by hh.weight desc  , hh.id asc");
         } else if($list_type == 3){
             $search_input = $this->postString('search_input');
-            $hotel = $this->db->getRows("select * from hqsen_hotel as hh  left join hqsen_hotel_data as hhd on hh.id = hhd.id where  hh.is_data = 1 and  hh.hotel_name like '%$search_input%' and hh.del_flag = 1 order by hh.weight asc  , hh.id asc");
+            $hotel = $this->db->getRows("select * from hqsen_hotel as hh  left join hqsen_hotel_data as hhd on hh.id = hhd.id where  hh.is_data = 1 and  hh.hotel_name like '%$search_input%' and hh.del_flag = 1 order by hh.weight desc  , hh.id asc");
         }
         $data = [];
         if($hotel){
@@ -283,10 +288,11 @@ class user extends base{
         $data['sh_area'] = $gsa;
         $data['hotel_level'] = array(
             '1' => '全部酒店类型',
-            '2' => '星级酒店',
+            '2' => '五星酒店',
             '3' => '特色餐厅',
             '4' => '婚礼会所',
             '5' => '游轮婚礼',
+            '6' => '四星酒店',
         );
         foreach ($data['sh_area'] as $k => $v){
             $data['sh_area_order'][] = $k;
