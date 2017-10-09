@@ -64,7 +64,7 @@ class hotel extends base {
                 $data['list'][] = $hotel_item;
             }
         }
-        $data['count'] = $this->db->getCount('hqsen_hotel', 'del_flag = 1');
+        $data['count'] = $this->db->getCount('hqsen_hotel', 'del_flag = 1 ' . $search_sql);
         $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $data);
     }
 
