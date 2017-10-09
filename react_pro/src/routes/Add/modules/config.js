@@ -30,7 +30,7 @@ export default {
         rules: { required: true }
       },
       {
-        label: '同区酒店排序权重',
+        label: '酒店排序权重',
         type: 'text',
         name: 'weight',
         rules: { required: true }

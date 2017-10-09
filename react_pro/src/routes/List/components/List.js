@@ -45,7 +45,7 @@ class List extends Component {
         },
         {
           type: 'hotel_info_hotel_list',
-          message: '所在区'
+          message: '搜索酒店名称或所在区'
         }
       ],
       addBtnType: [
