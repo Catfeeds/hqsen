@@ -27,7 +27,7 @@ class hotel extends base {
         $sql_limit = " limit $offset , $limit";
         $search_sql = '';
         if($search_input){
-            $hotel_name_like = " hotel_name like %$search_input% ";
+            $hotel_name_like = " hotel_name like '%$search_input%' ";
             $area_in = ' in( ';
             $count = 0;
             foreach ($this-> get_sh_area() as $one_value){
