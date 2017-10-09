@@ -27,6 +27,7 @@ class hotel extends base {
         $sql_limit = " limit $offset , $limit";
         $search_sql = '';
         if($search_input){
+            $hotel_name_like = " hotel_name like %$search_input% ";
             $area_in = ' in( ';
             $count = 0;
             foreach ($this-> get_sh_area() as $one_value){
@@ -40,7 +41,9 @@ class hotel extends base {
             $area_in = trim($area_in, ',');
             $area_in = $area_in . ' )';
             if($count){
-                $search_sql = " and area_sh_id $area_in" ;
+                $search_sql = " and ( area_sh_id $area_in or $hotel_name_like )" ;
+            } else {
+                $search_sql = " and $hotel_name_like" ;
             }
         }
         $hotel = $this->db->getRows("select *  from hqsen_hotel  where del_flag = 1 $search_sql order by id desc " . $sql_limit);
