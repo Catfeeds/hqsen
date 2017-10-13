@@ -81,13 +81,13 @@ class base{
         return isset($_GET[$get_key]) ? (int)$_GET[$get_key] : $default;
     }
     public function getString($get_key, $default = ''){
-        return isset($_GET[$get_key]) ? (string)addslashes($_GET[$get_key]) : (string)$default;
+        return isset($_GET[$get_key]) ? (string)$_GET[$get_key] : (string)$default;
     }
     public function postInt($post_key, $default = 0){
         return isset($_POST[$post_key]) ? (int)$_POST[$post_key] : $default;
     }
     public function postString($post_key, $default = ''){
-        return isset($_POST[$post_key]) ? (string)addslashes($_POST[$post_key]) : (string)$default;
+        return isset($_POST[$post_key]) ? (string)$_POST[$post_key] : (string)$default;
     }
 
 
