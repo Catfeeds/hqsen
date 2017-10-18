@@ -29,9 +29,11 @@ class kezi extends base {
         $data = [];
         foreach ($order as $one_order){
             if($one_order){
+                $create_user =  $this->db->getRow("select * from hqsen_user  where id =  " . $one_order['user_id']);
                 $kezi_item = array(
                     'order_id' => $one_order['id'],
                     'customer_name' => $one_order['customer_name'],
+                    'create_user_name' => $create_user['user_name'],
                     'order_phone' => $one_order['order_phone'],
                     'order_type' => $one_order['order_type'],
                     'create_time' => date('Y-m-d H:i:s', $one_order['create_time']),
