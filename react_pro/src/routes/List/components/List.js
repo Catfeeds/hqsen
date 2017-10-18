@@ -231,17 +231,18 @@ class List extends Component {
           render: text => {
             const orderType = configData.order_type
             const name = orderType.length ? orderType.filter(item => item.value === text)[0].label : ''
-            return (
-              <span>
-                {name}
-              </span>
-            )
+            return <span>{name}</span>
           }
         },
         {
           key: 'area_hotel_name',
           dataIndex: 'area_hotel_name',
           title: '酒店/区域名称'
+        },
+        {
+          key: 'create_user_name',
+          dataIndex: 'create_user_name',
+          title: '创建者'
         },
         {
           key: 'create_time',
@@ -291,6 +292,11 @@ class List extends Component {
           width: '20%'
         },
         {
+          key: 'create_user_name',
+          dataIndex: 'create_user_name',
+          title: '创建者'
+        },
+        {
           key: 'create_time',
           dataIndex: 'create_time',
           title: '创建时间'
@@ -326,12 +332,8 @@ class List extends Component {
             }
             return (
               <div>
-                <p>
-                  {text}
-                </p>
-                <p className="red-tip">
-                  {data.join(',')}
-                </p>
+                <p>{text}</p>
+                <p className="red-tip">{data.join(',')}</p>
               </div>
             )
           }
@@ -416,12 +418,7 @@ class List extends Component {
           key: 'alipay_account',
           dataIndex: 'alipay_account',
           title: '收款账号',
-          render: text =>
-            text === '未设置账号'
-              ? <span className="red-tip">
-                {text}
-              </span>
-              : text
+          render: text => (text === '未设置账号' ? <span className="red-tip">{text}</span> : text)
         },
         {
           key: 'payed',
@@ -480,12 +477,7 @@ class List extends Component {
           key: 'alipay_account',
           dataIndex: 'alipay_account',
           title: '收款账号',
-          render: text =>
-            text === '未设置账号'
-              ? <span className="red-tip">
-                {text}
-              </span>
-              : text
+          render: text => (text === '未设置账号' ? <span className="red-tip">{text}</span> : text)
         },
         {
           key: 'payed',
@@ -498,10 +490,7 @@ class List extends Component {
           key: 'user_status',
           dataIndex: 'user_status',
           title: '状态',
-          render: text =>
-            <span>
-              {text === '1' ? '已启用' : '已禁用'}
-            </span>
+          render: text => <span>{text === '1' ? '已启用' : '已禁用'}</span>
         },
         {
           key: 'create_time',
@@ -541,10 +530,7 @@ class List extends Component {
           key: 'user_status',
           dataIndex: 'user_status',
           title: '状态',
-          render: text =>
-            <span>
-              {text === '1' ? '已启用' : '已禁用'}
-            </span>
+          render: text => <span>{text === '1' ? '已启用' : '已禁用'}</span>
         },
         {
           key: 'control',
@@ -565,19 +551,13 @@ class List extends Component {
           key: 'sign_pic_count',
           dataIndex: 'sign_pic_count',
           title: '合同附件',
-          render: text =>
-            <span>
-              {text}图片
-            </span>
+          render: text => <span>{text}图片</span>
         },
         {
           key: 'sign_status',
           dataIndex: 'sign_status',
           title: '处理阶段',
-          render: text =>
-            <span>
-              {this.getStatus(text)}
-            </span>
+          render: text => <span>{this.getStatus(text)}</span>
         },
         {
           key: 'create_time',
@@ -613,19 +593,13 @@ class List extends Component {
           key: 'user_type',
           dataIndex: 'user_type',
           title: '提交审批者',
-          render: (text, record) =>
-            <span>
-              {record.sign_type === '0' ? '首销' : '二销'}
-            </span>
+          render: (text, record) => <span>{record.sign_type === '0' ? '首销' : '二销'}</span>
         },
         {
           key: 'sign_pic_count',
           dataIndex: 'sign_pic_count',
           title: '合同附件',
-          render: text =>
-            <span>
-              {text}图片
-            </span>
+          render: text => <span>{text}图片</span>
         },
         {
           key: 'sign_status',
@@ -633,11 +607,7 @@ class List extends Component {
           title: '处理阶段',
           render: text => {
             let data = this.getStatus(text)
-            return (
-              <span>
-                {data}
-              </span>
-            )
+            return <span>{data}</span>
           }
         },
         {
@@ -669,10 +639,7 @@ class List extends Component {
           key: 'sign_pic_count',
           dataIndex: 'sign_pic_count',
           title: '合同附件',
-          render: text =>
-            <span>
-              {text}图片
-            </span>
+          render: text => <span>{text}图片</span>
         },
         {
           key: 'boss_sign_status',
@@ -680,11 +647,7 @@ class List extends Component {
           title: '处理阶段',
           render: text => {
             let data = this.getStatus(text)
-            return (
-              <span>
-                {data}
-              </span>
-            )
+            return <span>{data}</span>
           }
         },
         {
@@ -716,10 +679,7 @@ class List extends Component {
           key: 'sign_pic_count',
           dataIndex: 'sign_pic_count',
           title: '合同附件',
-          render: text =>
-            <span>
-              {text}图片
-            </span>
+          render: text => <span>{text}图片</span>
         },
         {
           key: 'boss_sign_status',
@@ -727,11 +687,7 @@ class List extends Component {
           title: '处理阶段',
           render: text => {
             let data = this.getStatus(text)
-            return (
-              <span>
-                {data}
-              </span>
-            )
+            return <span>{data}</span>
           }
         },
         {
@@ -768,12 +724,7 @@ class List extends Component {
           key: 'create_account',
           dataIndex: 'create_account',
           title: '提供者收款账号',
-          render: text =>
-            text === '未设置账号'
-              ? <span className="red-tip">
-                {text}
-              </span>
-              : text
+          render: text => (text === '未设置账号' ? <span className="red-tip">{text}</span> : text)
         },
         {
           key: 'create_user_money',
@@ -790,12 +741,7 @@ class List extends Component {
           key: 'watch_account',
           dataIndex: 'watch_account',
           title: '跟踪者收款账号',
-          render: text =>
-            text === '未设置账号'
-              ? <span className="red-tip">
-                {text}
-              </span>
-              : text
+          render: text => (text === '未设置账号' ? <span className="red-tip">{text}</span> : text)
         },
         {
           key: 'watch_user_money',
@@ -807,10 +753,7 @@ class List extends Component {
           key: 'pay_status',
           dataIndex: 'pay_status',
           title: '打款状态',
-          render: text =>
-            <span>
-              {text === '4' ? '已打款' : '待打款'}
-            </span>
+          render: text => <span>{text === '4' ? '已打款' : '待打款'}</span>
         },
         {
           key: 'create_time',
@@ -853,21 +796,13 @@ class List extends Component {
           key: 'create_account',
           dataIndex: 'create_account',
           title: '跟踪者收款账户',
-          render: text =>
-            text === '未设置账号'
-              ? <span className="red-tip">
-                {text}
-              </span>
-              : text
+          render: text => (text === '未设置账号' ? <span className="red-tip">{text}</span> : text)
         },
         {
           key: 'pay_status',
           dataIndex: 'pay_status',
           title: '打款状态',
-          render: text =>
-            <span>
-              {text === '4' ? '已打款' : '待打款'}
-            </span>
+          render: text => <span>{text === '4' ? '已打款' : '待打款'}</span>
         },
         {
           key: 'create_time',
@@ -947,10 +882,11 @@ class List extends Component {
           key: 'control',
           dataIndex: 'control',
           title: '操作',
-          render: (text, record) =>
+          render: (text, record) => (
             <Popconfirm title="确定删除该条数据?" onConfirm={() => deleteRow(record.id)}>
               <Button type="danger" icon="delete" ghost shape="circle" />
             </Popconfirm>
+          )
         }
       ]
     }
@@ -959,7 +895,7 @@ class List extends Component {
       const dataStatus = record['user_status']
       return (
         <div>
-          {showDisabled &&
+          {showDisabled && (
             <Popconfirm
               title={`确定${dataStatus === '1' ? '禁用' : '启用'}该条数据?`}
               onConfirm={() => disabledRow(id, dataStatus)}
@@ -971,7 +907,8 @@ class List extends Component {
                 shape="circle"
                 style={{ marginRight: 5 }}
               />
-            </Popconfirm>}
+            </Popconfirm>
+          )}
           <Button
             type="primary"
             icon="edit"
@@ -995,9 +932,11 @@ class List extends Component {
         record.boss_sign_status === '3'
       return (
         <div>
-          {showPay && <Button size="small" onClick={() => this.gotoPay(record.id)}>
-            付款记录
-          </Button>}
+          {showPay && (
+            <Button size="small" onClick={() => this.gotoPay(record.id)}>
+              付款记录
+            </Button>
+          )}
           <Button size="small" onClick={() => this.gotoOrderDetail(record, isKezi)}>
             {isKezi ? '客资信息' : '搭建信息'}
           </Button>
@@ -1016,13 +955,15 @@ class List extends Component {
           <Button size="small" style={{ marginRight: 5 }} onClick={() => this.gotoDetail(record.id)}>
             查看信息
           </Button>
-          {record.pay_status === '4'
-            ? <span className="completed-pay">已完成</span>
-            : <Popconfirm title="是否完成打款?" onConfirm={() => payCompleted(record)}>
+          {record.pay_status === '4' ? (
+            <span className="completed-pay">已完成</span>
+          ) : (
+            <Popconfirm title="是否完成打款?" onConfirm={() => payCompleted(record)}>
               <Button type="primary" size="small">
-                  完成打款
-                </Button>
-            </Popconfirm>}
+                完成打款
+              </Button>
+            </Popconfirm>
+          )}
         </div>
       )
     }
@@ -1041,38 +982,38 @@ class List extends Component {
       <div className="list-page">
         <MyBreadcrumb breadcrumb={basicInfo.breadcrumb} />
         <div className="control-box clearfix">
-          {this.getSearchType().type
-            ? <Search
+          {this.getSearchType().type ? (
+            <Search
               placeholder={this.getSearchType().message}
               style={{ width: 200 }}
               value={searchInput}
               onChange={e => changeSearchInput(e.target.value)}
               onSearch={() => handleCurrentChange(1)}
-              />
-            : null}
-          {addBtnType.indexOf(basicInfo.type) > -1
-            ? <Button type="primary" icon="plus-circle-o" className="create-btn" onClick={() => this.addRow()}>
-                新增
-              </Button>
-            : null}
+            />
+          ) : null}
+          {addBtnType.indexOf(basicInfo.type) > -1 ? (
+            <Button type="primary" icon="plus-circle-o" className="create-btn" onClick={() => this.addRow()}>
+              新增
+            </Button>
+          ) : null}
           {/* {basicInfo.type === 'hotel_info_hotel_list'
             ? <Button type="primary" className="create-btn" style={{ marginRight: 5 }} onClick={() => this.toRecList()}>
                 首页酒店推荐
               </Button>
             : null} */}
-          {downloadBtnType.indexOf(basicInfo.type) > -1
-            ? <div className="download-box">
+          {downloadBtnType.indexOf(basicInfo.type) > -1 ? (
+            <div className="download-box">
               <RangePicker
                 showTime
                 format="YYYY-MM-DD HH:mm:ss"
                 value={this.state.rangeTime}
                 onChange={this.rangeTime}
-                />
+              />
               <Button className="ml5" type="primary" icon="download" onClick={this.exportFile}>
-                  导出
-                </Button>
+                导出
+              </Button>
             </div>
-            : null}
+          ) : null}
         </div>
         <Table
           loading={loading}
