@@ -33,10 +33,15 @@ class dajian extends base {
                     '2' => '同步',
                 );
                 $create_user =  $this->db->getRow("select * from hqsen_user  where id =  " . $one_order['user_id']);
+                $create_user_name = $create_user['user_name'];
+                if($create_user['user_type'] == 4){
+                    $create_user_data =  $this->db->getRow("select * from hqsen_user_data  where user_id =  " . $one_order['user_id']);
+                    $create_user_name = $create_user_data['hotel_name'] . '(' . $create_user_name . ')';
+                }
                 $dajian_item = array(
                     'order_id' => $one_order['id'],
                     'customer_name' => $one_order['customer_name'],
-                    'create_user_name' => $create_user['user_name'],
+                    'create_user_name' => $create_user_name,
                     'order_phone' => $one_order['order_phone'],
                     'create_time' => date('Y-m-d H:i:s', $one_order['create_time']),
                     'order_type' => $one_order['order_type'],
