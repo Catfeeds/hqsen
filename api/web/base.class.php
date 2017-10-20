@@ -328,6 +328,8 @@ class base{
             '17'=>'嘉定区',
             '18'=>'宝山区',
             '19'=>'崇明县',
+//            '20'=>'精选地区',
+            '21'=>'三木区',
         );
         $return = isset($sh_area[$sh_area_id]) ?  $sh_area[$sh_area_id] : $sh_area;
         return $return;
