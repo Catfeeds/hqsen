@@ -23,9 +23,18 @@ class kezi extends base {
         $page = $this->postInt('page', 1);
         $limit = 10;
         $offset = ($page - 1) * $limit;
+        $begin_time = $this->postInt('begin_time');
+        $end_time = $this->postInt('end_time');
         $order_by = ' order by id desc ';
         $sql_limit = " limit $offset , $limit";
-        $order = $this->db->getRows("select * from hqsen_kezi_order  where del_flag = 1 $order_by " . $sql_limit);
+        $where = '';
+        if($begin_time){
+            $where .= ' and create_time > ' . $begin_time;
+        }
+        if($end_time){
+            $where .= ' and create_time < ' . $end_time;
+        }
+        $order = $this->db->getRows("select * from hqsen_kezi_order  where del_flag = 1 $where $order_by " . $sql_limit);
         $data = [];
         foreach ($order as $one_order){
             if($one_order){
@@ -110,5 +119,15 @@ class kezi extends base {
         } else {
             $this->appDie($this->back_code['sys']['value_empty'], $this->back_msg['sys']['value_empty']);
         }
+    }
+
+    public function getSyncDetail(){
+        $kezi_id = $this->postString('id');
+        $user_kezi_order = $this->db->getRows("select * from hqsen_user_kezi_order  where kezi_order_id = $kezi_id and order_from != 1 ");
+        $sync_info['hotel_names'] = '';
+        foreach ($user_kezi_order as $one){
+            $sync_info['hotel_names'] .= $one['watch_user_hotel_name'] . ' ,';
+        }
+        $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $sync_info);
     }
 }
