@@ -881,7 +881,7 @@ class order extends base {
                 if ($user_data) {
                     $one_user_order_sql['user_id'] = $this->user['id'];
                     $one_user_order_sql['watch_user_name'] = $user_data['user_name'];
-                    $one_user_order_sql['watch_user_hotel_name'] = $user_data['hotel_name'];
+                    $one_user_order_sql['watch_user_hotel_name'] = $user_data['hotel_area'];
                     $one_user_order_sql['watch_user_id'] = $user_data['user_id'];
                     $one_user_order_sql['dajian_order_id'] = $order_id;
                     $one_user_order_sql['create_time'] = time();

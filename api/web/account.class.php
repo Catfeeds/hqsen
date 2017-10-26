@@ -359,4 +359,118 @@ left join hqsen_user_data as hud on hu.id=hud.user_id where hu.id = " . $user_id
         $data['list'] = array_slice($data['list'], $offset, $limit);
         $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $data);
     }
+
+
+    // 用户客资列表
+    public function userKeziList(){
+        $order_page = $this->postInt('order_page', 1);
+        $user_id = $this->postInt('user_id', 1);
+        $limit = 10;
+        $offset = ($order_page - 1) * $limit;
+        $sql_limit = " order by create_time desc limit $offset , $limit";
+        $sql_status = '  user_order_status != 0 ';
+        $sql_status .= ' and user_id = '. $user_id;// 以注册用户纬度获取  客资列表信息
+        $order = $this->db->getRows('select * from hqsen_user_kezi_order where ' . $sql_status . $sql_limit);
+        $order_list['order_list'] = [];
+        $status_detail = array(
+            '1'=>'跟进中',
+            '2'=>'待结算',
+            '3'=>'已结算',
+            '4'=>'已取消'
+        );
+        if($order){
+            foreach ($order as $one_order){
+                $order_from = $one_order['order_from'] == 2 ? '(同步)' : '';
+                $order_from = '';
+                $order_monkey = $one_order['create_user_money'] ? '￥(' . $one_order['create_user_money'] . ')' : '';
+                $order_item = array(
+                    'id' => (int)$one_order['id'],
+                    'create_time' => (string)date('Y-m-d h:i:s', $one_order['create_time']),
+                    'order_status' => $status_detail[$one_order['user_order_status']] . $order_monkey,// 需要返回提供者状态   不搞给错了
+                    'order_phone' => (string)$one_order['order_phone'].$order_from,
+                    'watch_user' => (string)$one_order['watch_user_name'] . '  (' . $one_order['watch_user_hotel_name'] . ')' ,
+                );
+                $order_list['order_list'][] = $order_item;
+            }
+
+        }
+        $order_list['count'] = $this->db->getCount('hqsen_user_kezi_order', $sql_status); // 总的订单数
+        $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $order_list);
+    }
+
+
+    // 酒店账号搭建列表
+    public function userDajianList(){
+        $order_page = $this->postInt('order_page', 1);
+        $user_id = $this->postInt('user_id', 1);
+        $limit = 10;
+        $offset = ($order_page - 1) * $limit;
+        $sql_limit = " order by create_time desc limit $offset , $limit";
+        $sql_status = '  user_order_status != 0 ';
+        $sql_status .= ' and user_id = '. $user_id;// 以注册用户纬度获取  客资列表信息
+        $order = $this->db->getRows('select * from hqsen_user_dajian_order where ' . $sql_status . $sql_limit);
+        $order_list['order_list'] = [];
+        $status_detail = array(
+            '1'=>'跟进中',
+            '2'=>'待结算',
+            '3'=>'已结算',
+            '4'=>'已取消'
+        );
+        if($order){
+            foreach ($order as $one_order){
+                $order_monkey = $one_order['create_user_money'] ? '￥(' . $one_order['create_user_money'] . ')' : '';
+                $order_item = array(
+                    'id' => (int)$one_order['id'],
+                    'create_time' => (string)date('Y-m-d h:i:s', $one_order['create_time']),
+                    'order_status' => $status_detail[$one_order['user_order_status']] . $order_monkey,// 需要返回提供者状态   不搞给错了
+                    'order_phone' => (string)$one_order['order_phone'],
+                    'watch_user' => (string)$one_order['watch_user_name'] . '  (' . $one_order['watch_user_hotel_name'] . ')' ,
+                );
+                $order_list['order_list'][] = $order_item;
+            }
+
+        }
+        $order_list['count'] = $this->db->getCount('hqsen_user_dajian_order', $sql_status); // 总的订单数
+        $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $order_list);
+    }
+
+    // 酒店账号跟踪客资列表
+    public function hotelFollowList(){
+        $order_page = $this->postInt('order_page', 1);
+        $user_id = $this->postInt('user_id', 1);
+        $limit = 10;
+        $offset = ($order_page - 1) * $limit;
+        $sql_limit = " order by create_time desc limit $offset , $limit";
+        $sql_status = '  user_order_status != 0 ';
+        $sql_status .= ' and watch_user_id = '. $user_id;// 以注册用户纬度获取  客资列表信息
+        $order = $this->db->getRows('select * from hqsen_user_kezi_order where ' . $sql_status . $sql_limit);
+        $order_list['order_list'] = [];
+        $status_detail = array(
+            '1'=>'跟进中',
+            '2'=>'待结算',
+            '3'=>'已结算',
+            '4'=>'已取消'
+        );
+        if($order){
+            foreach ($order as $one_order){
+                $order_from = $one_order['order_from'] == 2 ? '(同步)' : '';
+                $order_from = '';
+                $order_monkey = $one_order['create_user_money'] ? '￥(' . $one_order['create_user_money'] . ')' : '';
+                $order_item = array(
+                    'id' => (int)$one_order['id'],
+                    'create_time' => (string)date('Y-m-d h:i:s', $one_order['create_time']),
+                    'order_status' => $status_detail[$one_order['user_order_status']] . $order_monkey,// 需要返回提供者状态   不搞给错了
+                    'order_phone' => (string)$one_order['order_phone'].$order_from,
+                    'watch_user' => (string)$one_order['watch_user_name'] . '  (' . $one_order['watch_user_hotel_name'] . ')' ,
+                );
+                $order_list['order_list'][] = $order_item;
+            }
+
+        }
+        $order_list['count'] = $this->db->getCount('hqsen_user_kezi_order', $sql_status); // 总的订单数
+        $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $order_list);
+    }
+
+    // 首销账号跟进搭建列表
+
 }
