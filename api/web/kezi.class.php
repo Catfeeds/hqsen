@@ -23,8 +23,8 @@ class kezi extends base {
         $page = $this->postInt('page', 1);
         $limit = 10;
         $offset = ($page - 1) * $limit;
-        $begin_time = $this->postInt('begin_time');
-        $end_time = $this->postInt('end_time');
+        $begin_time = strtotime($this->postString('begin_time'));
+        $end_time = strtotime($this->postString('end_time'));
         $order_by = ' order by id desc ';
         $sql_limit = " limit $offset , $limit";
         $where = '';
@@ -75,7 +75,7 @@ class kezi extends base {
                 $data['list'][] = $kezi_item;
             }
         }
-        $data['count'] = $this->db->getCount('hqsen_kezi_order', 'del_flag = 1');
+        $data['count'] = $this->db->getCount('hqsen_kezi_order', 'del_flag = 1 ' . $where);
         $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $data);
     }
 

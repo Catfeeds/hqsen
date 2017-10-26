@@ -24,7 +24,18 @@ class dajian extends base {
         $limit = 10;
         $offset = ($page - 1) * $limit;
         $sql_limit = " limit $offset , $limit";
-        $order = $this->db->getRows("select * from hqsen_dajian_order  where del_flag = 1  order by id desc " . $sql_limit);
+
+        $begin_time = strtotime($this->postString('begin_time'));
+        $end_time = strtotime($this->postString('end_time'));
+        $where = '';
+        if($begin_time){
+            $where .= ' and create_time > ' . $begin_time;
+        }
+        if($end_time){
+            $where .= ' and create_time < ' . $end_time;
+        }
+
+        $order = $this->db->getRows("select * from hqsen_dajian_order  where del_flag = 1 $where order by id desc " . $sql_limit);
         $data = [];
         foreach ($order as $one_order){
             if($one_order){
@@ -71,7 +82,7 @@ class dajian extends base {
                 $data['list'][] = $dajian_item;
             }
         }
-        $data['count'] = $this->db->getCount('hqsen_dajian_order', 'del_flag = 1');
+        $data['count'] = $this->db->getCount('hqsen_dajian_order', 'del_flag = 1 ' . $where);
         $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $data);
     }
 
