@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { Form, Icon, Input, Button } from 'antd'
-import Fetch from '../../Fetch'
+import Fetch from 'root/Fetch'
 const FormItem = Form.Item
 import './Login.scss'
 

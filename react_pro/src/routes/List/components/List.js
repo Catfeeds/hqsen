@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react'
 import './List.scss'
-import { Table, Input, Button, Popconfirm, DatePicker, Message } from 'antd'
-import MyBreadcrumb from '../../../components/MyBreadcrumb'
-import Fetch from '../../../Fetch'
+import { Table, Input, Button, Popconfirm, DatePicker, Message, Modal } from 'antd'
+import MyBreadcrumb from 'components/MyBreadcrumb'
+import Fetch from 'root/Fetch'
 const Search = Input.Search
 const { RangePicker } = DatePicker
 
@@ -23,7 +23,8 @@ class List extends Component {
     params: PropTypes.object,
     type: PropTypes.string,
     location: PropTypes.object,
-    saveId: PropTypes.func
+    saveId: PropTypes.func,
+    saveSearchTime: PropTypes.func
   }
 
   static contextTypes = {
@@ -34,6 +35,7 @@ class List extends Component {
     super(props)
     this.state = {
       rangeTime: [],
+      searchTime: [],
       searchBtnType: [
         {
           type: 'account_info_register_list',
@@ -73,6 +75,7 @@ class List extends Component {
     const { List: { basicInfo }, initData, location: { query } } = this.props
     const type = nextProps.params.type
     if (type !== basicInfo.type) {
+      this.setState({ searchTime: [] })
       initData(type, query.id)
     }
   }
@@ -200,6 +203,27 @@ class List extends Component {
     }
   }
 
+  showAsync (id) {
+    Fetch('getAsyncHotel', { id }).then(
+      response => {
+        console.log(response)
+        Modal.success({
+          title: '已同步到以下酒店',
+          className: 'async-hotel',
+          okText: '关闭',
+          content: response.data.hotel_names
+        })
+      },
+      () => {
+        Message.error('数据获取失败')
+      }
+    )
+  }
+  searchTime (e) {
+    this.setState({
+      searchTime: e
+    })
+  }
   render () {
     const { downloadBtnType, addBtnType } = this.state
     const {
@@ -209,7 +233,8 @@ class List extends Component {
       deleteRow,
       configData,
       disabledRow,
-      payCompleted
+      payCompleted,
+      saveSearchTime
     } = this.props
     const columns = {
       // 客资信息
@@ -256,9 +281,14 @@ class List extends Component {
           render: (text, record) => {
             const id = record[basicInfo.uniqueKey]
             return (
-              <Button type="default" size="small" onClick={() => this.gotoDetail(id)}>
-                查看详情
-              </Button>
+              <div>
+                <Button type="default" size="small" onClick={() => this.gotoDetail(id)}>
+                  查看详情
+                </Button>
+                <Button type="default" size="small" onClick={() => this.showAsync(id)}>
+                  同步详情
+                </Button>
+              </div>
             )
           }
         }
@@ -982,7 +1012,7 @@ class List extends Component {
       <div className="list-page">
         <MyBreadcrumb breadcrumb={basicInfo.breadcrumb} />
         <div className="control-box clearfix">
-          {this.getSearchType().type ? (
+          {this.getSearchType().type && (
             <Search
               placeholder={this.getSearchType().message}
               style={{ width: 200 }}
@@ -990,18 +1020,31 @@ class List extends Component {
               onChange={e => changeSearchInput(e.target.value)}
               onSearch={() => handleCurrentChange(1)}
             />
-          ) : null}
-          {addBtnType.indexOf(basicInfo.type) > -1 ? (
+          )}
+          {addBtnType.indexOf(basicInfo.type) > -1 && (
             <Button type="primary" icon="plus-circle-o" className="create-btn" onClick={() => this.addRow()}>
               新增
             </Button>
-          ) : null}
-          {/* {basicInfo.type === 'hotel_info_hotel_list'
-            ? <Button type="primary" className="create-btn" style={{ marginRight: 5 }} onClick={() => this.toRecList()}>
-                首页酒店推荐
+          )}
+          {basicInfo.type === 'order_info_kezi_list' && (
+            <div>
+              <RangePicker
+                showTime
+                format="YYYY-MM-DD HH:mm:ss"
+                value={this.state.searchTime}
+                onChange={e => this.searchTime(e)}
+              />
+              <Button
+                className="ml5"
+                type="primary"
+                icon="search"
+                onClick={() => saveSearchTime(this.state.searchTime)}
+              >
+                搜索
               </Button>
-            : null} */}
-          {downloadBtnType.indexOf(basicInfo.type) > -1 ? (
+            </div>
+          )}
+          {downloadBtnType.indexOf(basicInfo.type) > -1 && (
             <div className="download-box">
               <RangePicker
                 showTime
@@ -1013,7 +1056,7 @@ class List extends Component {
                 导出
               </Button>
             </div>
-          ) : null}
+          )}
         </div>
         <Table
           loading={loading}

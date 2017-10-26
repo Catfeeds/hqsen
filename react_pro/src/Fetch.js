@@ -7,7 +7,7 @@ export let domain = ''
 if (window.location.origin.indexOf('51isen') > -1) {
   domain = `${origin}/index.php?m=web&`
 } else {
-  domain = `http://web.51isen.com/index.php?m=web&`
+  domain = `http://dev.51isen.com/index.php?m=web&`
 }
 
 export const urlKey = {
@@ -27,6 +27,7 @@ export const urlKey = {
   hotelMenuCreate: 'c=hotel&f=hotelMenuCreate',
   hotelMenuDelete: 'c=hotel&f=hotelMenuDelete',
   uploadPic: 'c=user&f=uploadPic',
+  getAsyncHotel: 'c=kezi&f=getSyncDetail',
   // 宴会厅
   hotelRoomList: 'c=hotel&f=hotelRoomList',
   hotelRoomCreate: 'c=hotel&f=hotelRoomCreate',
@@ -113,9 +114,8 @@ const formatData = param => {
   return newData.substring(0, newData.length - 1)
 }
 
-export default function Fetch (url, data = {}, method = 'post', showLoading = false) {
+export default function Fetch (url, data = {}, method = 'post') {
   // 开启loding
-  let loadingInstance
   const token = sessionStorage.getItem('access_token') || ''
 
   if (method === 'get') {
@@ -130,8 +130,7 @@ export default function Fetch (url, data = {}, method = 'post', showLoading = fa
     }
   })
   const defer = new Promise((resolve, reject) => {
-    instance
-      [method](`${domain}${urlKey[url]}`, data)
+    instance[method](`${domain}${urlKey[url]}`, data)
       .then(response => response.data)
       .then(response => {
         if (response.status === 200) {
@@ -142,9 +141,7 @@ export default function Fetch (url, data = {}, method = 'post', showLoading = fa
         }
       })
       .catch(error => {
-        debugger
         reject(error, false)
-        showLoading && loadingInstance.close()
         if (error.response) {
           Message.error('网络响应错误')
         } else if (error.message.indexOf('timeout') > -1) {

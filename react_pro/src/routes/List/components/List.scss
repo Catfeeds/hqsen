@@ -26,3 +26,9 @@
 .ml5 {
   margin-left: 5px;
 }
+.async-hotel {
+  .ant-confirm-content {
+    max-height: 200px;
+    overflow-y: auto;
+  }
+}

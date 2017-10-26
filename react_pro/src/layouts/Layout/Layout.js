@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
-import Header from '../../components/Header'
-import Fetch from '../../Fetch'
+import Header from 'components/Header'
+import Fetch from 'root/Fetch'
 import './Layout.scss'
 import '../../styles/core.scss'
 

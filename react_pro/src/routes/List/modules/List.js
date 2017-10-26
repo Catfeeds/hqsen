@@ -12,15 +12,16 @@ export const setResultInfo = createAction('获取结果数据', (current, data) 
 export const toggleLoading = createAction('切换loading')
 export const changeSearchInput = createAction('记录输入框数据')
 export const setInitialState = createAction('初始化数据')
+export const changeSearchTime = createAction('保存搜索时间', (start, end) => ({ start, end }))
 export const setDisableRow = createAction('禁用数据', (id, updateStatus) => ({ id, updateStatus }))
 // 分页
-export const handleCurrentChange = current => {
+export const handleCurrentChange = (current = 1) => {
   return (dispatch, getState) => {
-    const { searchInput, basicInfo, searchId } = getState().List
+    const { searchInput, basicInfo, searchId, searchTime } = getState().List
     const data =
       basicInfo.type === 'wedding_list'
         ? { page: current, search_input: searchInput, id: searchId }
-        : { page: current, search_input: searchInput }
+        : { page: current, search_input: searchInput, ...searchTime }
     dispatch(toggleLoading(true))
     Fetch(basicInfo.listUrlKey, data).then(
       response => {
@@ -93,7 +94,20 @@ export const payCompleted = data => {
   }
 }
 
+export const saveSearchTime = data => {
+  return dispatch => {
+    if (data[0]) {
+      const startDate = data[0].format('YYYY-MM-DD HH:mm:ss')
+      const endDate = data[1].format('YYYY-MM-DD HH:mm:ss')
+      console.log(startDate, endDate)
+      dispatch(changeSearchTime(startDate, endDate))
+    }
+    dispatch(handleCurrentChange())
+  }
+}
+
 export const actions = {
+  saveSearchTime,
   setBasicInfo,
   handleCurrentChange,
   setResultInfo,
@@ -111,6 +125,13 @@ export const actions = {
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
+  [changeSearchTime]: (state, action) => ({
+    ...state,
+    searchTime: {
+      begin_time: action.payload.start,
+      end_time: action.payload.end
+    }
+  }),
   [saveId]: (state, action) => ({
     ...state,
     searchId: action.payload
@@ -181,6 +202,7 @@ const initialState = {
     breadcrumb: []
   },
   searchInput: '',
+  searchTime: {},
   searchId: '',
   loading: false
 }
