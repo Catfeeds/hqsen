@@ -547,4 +547,46 @@ left join hqsen_user_data as hud on hu.id=hud.user_id where hu.id = " . $user_id
         $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $order_list);
     }
 
+    //客资 订单跟进记录列表
+    public function keziOrderFollowList(){
+        $user_kezi_order_id = $this->postInt('id'); // 订单ID
+        if($user_kezi_order_id){
+            $user_kezi_order_follow_list = $this->db->getRows("select * from hqsen_user_kezi_order_follow where user_kezi_order_id = $user_kezi_order_id ");
+            $back_follows = [];
+            if($user_kezi_order_follow_list){
+                foreach ($user_kezi_order_follow_list as $one_item){
+                    $follow_item['order_follow_time'] = $one_item['user_order_status'] == 2 ? '已取消' : date('Y-m-d h:i:s', $one_item['order_follow_time']);
+                    $follow_item['order_follow_desc'] = $one_item['order_follow_desc'];
+                    $follow_item['order_follow_create_time'] = date('Y-m-d h:i:s', $one_item['order_follow_create_time']);
+                    $follow_item['user_order_status'] = $one_item['user_order_status'];
+                    $back_follows[] = $follow_item;
+                }
+            }
+            $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $back_follows);
+        } else {
+            $this->appDie($this->back_code['sys']['value_empty'], $this->back_msg['sys']['value_empty']);
+        }
+    }
+
+    // 搭建订单日志列表
+    public function dajianOrderFollowList(){
+        $user_dajian_order_id = $this->postInt('id'); // 订单ID
+        if($user_dajian_order_id){
+            $user_dajian_order_follow_list = $this->db->getRows("select * from hqsen_user_dajian_order_follow where user_dajian_order_id = $user_dajian_order_id order by id desc");
+            $back_follows = [];
+            if($user_dajian_order_follow_list){
+                foreach ($user_dajian_order_follow_list as $one_item){
+                    $follow_item['order_follow_time'] = $one_item['user_order_status'] == 2 ? '已取消' : date('Y-m-d h:i:s', $one_item['order_follow_time']);
+                    $follow_item['order_follow_desc'] = $one_item['order_follow_desc'];
+                    $follow_item['order_follow_create_time'] = date('Y-m-d h:i:s', $one_item['order_follow_create_time']);
+                    $follow_item['user_order_status'] = $one_item['user_order_status'];
+                    $back_follows[] = $follow_item;
+                }
+            }
+            $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $back_follows);
+        } else {
+            $this->appDie($this->back_code['sys']['value_empty'], $this->back_msg['sys']['value_empty']);
+        }
+    }
+
 }
