@@ -7,6 +7,7 @@ import Fetch from 'root/Fetch'
 // ------------------------------------
 export const setBasicInfo = createAction('获取基础信息')
 export const saveForm = createAction('保存详情数据')
+export const clearAll = createAction('清除数据')
 
 export const getInit = (type, id) => {
   return (dispatch, getState) => {
@@ -21,6 +22,7 @@ export const getInit = (type, id) => {
 }
 
 export const actions = {
+  clearAll,
   getInit
 }
 
@@ -28,6 +30,7 @@ export const actions = {
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
+  [clearAll]: (state, action) => initialState,
   [setBasicInfo]: (state, action) => {
     return {
       ...state,

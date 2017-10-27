@@ -103,7 +103,15 @@ export const urlKey = {
   dajianDownload: 'c=pay&f=dajianDownload',
   // 财务打款系数
   payDetail: 'c=pay&f=payRatioDetail',
-  paySubmit: 'c=pay&f=payRatio'
+  paySubmit: 'c=pay&f=payRatio',
+  // 明细
+  userKeziList: 'c=account&f=userKeziList',
+  userDajianList: 'c=account&f=userDajianList',
+  hotelFollowList: 'c=account&f=hotelFollowList',
+  sxFollowList: 'c=account&f=sxFollowList',
+  exFollowList: 'c=account&f=exFollowList',
+  keziOrderFollowList: 'c=account&f=keziOrderFollowList',
+  dajianOrderFollowList: 'c=account&f=dajianOrderFollowList'
 }
 
 const formatData = param => {

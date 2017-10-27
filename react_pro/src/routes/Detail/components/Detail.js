@@ -8,37 +8,40 @@ class Detail extends Component {
   static propTypes = {
     configData: PropTypes.object,
     form: PropTypes.object,
-    getFieldDecorator:PropTypes.func,
+    getFieldDecorator: PropTypes.func,
     Detail: PropTypes.object,
     basicInfo: PropTypes.object,
     location: PropTypes.object,
     params: PropTypes.object,
-    getInit: PropTypes.func
+    getInit: PropTypes.func,
+    clearAll: PropTypes.func
   }
   componentWillMount () {
     const { type } = this.props.params
     const { id } = this.props.location.query
     this.props.getInit(type, id)
   }
+  componentWillUnmount () {
+    this.props.clearAll()
+  }
+
   render () {
-    const {
-      configData,
-      Detail: { basicInfo, formData },
-      form: { getFieldDecorator }
-    } = this.props
+    const { configData, Detail: { basicInfo, formData }, form: { getFieldDecorator } } = this.props
     return (
       <div className="detail-page">
         <MyBreadcrumb breadcrumb={basicInfo.breadcrumb} />
         <Form className="vertival-form">
-          { basicInfo.formList.map((item, index) => {
-            return <FormComponent
-              key={index}
-              getFieldDecorator={getFieldDecorator}
-              item={item}
-              dataSource={configData[item.name]}
-              defaultValue={formData[item.name]} />
-          })
-          }
+          {basicInfo.formList.map((item, index) => {
+            return (
+              <FormComponent
+                key={index}
+                getFieldDecorator={getFieldDecorator}
+                item={item}
+                dataSource={configData[item.name]}
+                defaultValue={formData[item.name]}
+              />
+            )
+          })}
         </Form>
       </div>
     )

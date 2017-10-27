@@ -11,17 +11,22 @@ export const setBasicInfo = createAction('获取基础信息', type => ({ ...con
 export const setResultInfo = createAction('获取结果数据', (current, data) => ({ current, data }))
 export const toggleLoading = createAction('切换loading')
 export const changeSearchInput = createAction('记录输入框数据')
+export const changePhoneInput = createAction('记录输入框手机数据')
+
 export const setInitialState = createAction('初始化数据')
 export const changeSearchTime = createAction('保存搜索时间', (start, end) => ({ start, end }))
 export const setDisableRow = createAction('禁用数据', (id, updateStatus) => ({ id, updateStatus }))
 // 分页
 export const handleCurrentChange = (current = 1) => {
   return (dispatch, getState) => {
-    const { searchInput, basicInfo, searchId, searchTime } = getState().List
-    const data =
+    const { searchInput, phoneInput, basicInfo, searchId, searchTime } = getState().List
+    let data =
       basicInfo.type === 'wedding_list'
         ? { page: current, search_input: searchInput, id: searchId }
         : { page: current, search_input: searchInput, ...searchTime }
+    if (['finance_info_dajian_contract', 'finance_info_kezi_contract'].indexOf(basicInfo.type) > -1) {
+      data = { ...data, search_text: phoneInput }
+    }
     dispatch(toggleLoading(true))
     Fetch(basicInfo.listUrlKey, data).then(
       response => {
@@ -107,6 +112,7 @@ export const saveSearchTime = data => {
 }
 
 export const actions = {
+  changePhoneInput,
   saveSearchTime,
   setBasicInfo,
   handleCurrentChange,
@@ -125,13 +131,16 @@ export const actions = {
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  [changeSearchTime]: (state, action) => ({
-    ...state,
-    searchTime: {
-      begin_time: action.payload.start,
-      end_time: action.payload.end
+  [changeSearchTime]: (state, action) => {
+    const { start, end } = action.payload
+    return {
+      ...state,
+      searchTime: {
+        begin_time: start,
+        end_time: end
+      }
     }
-  }),
+  },
   [saveId]: (state, action) => ({
     ...state,
     searchId: action.payload
@@ -159,6 +168,12 @@ const ACTION_HANDLERS = {
     return {
       ...state,
       searchInput: action.payload
+    }
+  },
+  [changePhoneInput]: (state, action) => {
+    return {
+      ...state,
+      phoneInput: action.payload
     }
   },
   [setDisableRow]: (state, action) => {
@@ -202,6 +217,7 @@ const initialState = {
     breadcrumb: []
   },
   searchInput: '',
+  phoneInput: '',
   searchTime: {},
   searchId: '',
   loading: false

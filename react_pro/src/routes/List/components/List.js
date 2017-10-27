@@ -24,7 +24,8 @@ class List extends Component {
     type: PropTypes.string,
     location: PropTypes.object,
     saveId: PropTypes.func,
-    saveSearchTime: PropTypes.func
+    saveSearchTime: PropTypes.func,
+    changePhoneInput: PropTypes.func
   }
 
   static contextTypes = {
@@ -50,6 +51,7 @@ class List extends Component {
           message: '搜索酒店名称或所在区'
         }
       ],
+      timeBtnType: ['order_info_kezi_list', 'order_info_dajian_list'],
       addBtnType: [
         'account_info_hotel_list',
         'account_info_inner_list',
@@ -58,6 +60,7 @@ class List extends Component {
         'wedding_list',
         'hotel_rec_list'
       ],
+      searchPhoneBtn: ['finance_info_kezi_contract', 'finance_info_dajian_contract'],
       downloadBtnType: ['remittance_info_kezi_contract', 'remittance_info_dajian_contract']
     }
     this.rangeTime = this.rangeTime.bind(this)
@@ -147,6 +150,10 @@ class List extends Component {
     }
   }
 
+  goFollow (id, type) {
+    this.context.router.push(`/follow?id=${id}&type=${type}`)
+  }
+
   addRow (id) {
     const { type } = this.props.params
     const paramId = id ? `?id=${id}` : ''
@@ -225,16 +232,17 @@ class List extends Component {
     })
   }
   render () {
-    const { downloadBtnType, addBtnType } = this.state
+    const { downloadBtnType, addBtnType, timeBtnType, searchPhoneBtn } = this.state
     const {
-      List: { pageInfo, resultInfo, searchInput, loading, basicInfo },
+      List: { pageInfo, resultInfo, searchInput, phoneInput, loading, basicInfo },
       handleCurrentChange,
       changeSearchInput,
       deleteRow,
       configData,
       disabledRow,
       payCompleted,
-      saveSearchTime
+      saveSearchTime,
+      changePhoneInput
     } = this.props
     const columns = {
       // 客资信息
@@ -338,7 +346,7 @@ class List extends Component {
           render: (text, record) => {
             const id = record[basicInfo.uniqueKey]
             return (
-              <Button type="default" onClick={() => this.gotoDetail(id)}>
+              <Button size="small" onClick={() => this.gotoDetail(id)}>
                 查看详情
               </Button>
             )
@@ -460,6 +468,16 @@ class List extends Component {
           key: 'create_time',
           dataIndex: 'create_time',
           title: '注册时间'
+        },
+        {
+          key: 'user_id',
+          dataIndex: 'user_id',
+          title: '订单明细',
+          render: text => (
+            <Button onClick={() => this.goFollow(text, 'userKeziList')} size="small">
+              客资明细
+            </Button>
+          )
         }
       ],
       // 意见反馈
@@ -532,6 +550,24 @@ class List extends Component {
           dataIndex: 'control',
           title: '操作',
           render: (text, record) => renderControlBtn(record, true)
+        },
+        {
+          key: 'user_id',
+          dataIndex: 'user_id',
+          title: '订单明细',
+          render: (text, record) => (
+            <div>
+              <Button size="small" onClick={() => this.goFollow(text, 'userKeziList')}>
+                客资
+              </Button>
+              <Button size="small" onClick={() => this.goFollow(text, 'userDajianList')}>
+                搭建
+              </Button>
+              <Button size="small" onClick={() => this.goFollow(text, 'hotelFollowList')}>
+                跟踪
+              </Button>
+            </div>
+          )
         }
       ],
       // 内部账号
@@ -567,6 +603,27 @@ class List extends Component {
           dataIndex: 'control',
           title: '操作',
           render: (text, record) => renderControlBtn(record, true)
+        },
+        {
+          key: 'user_id',
+          dataIndex: 'user_id',
+          title: '订单明细',
+          render: (text, record) => {
+            if (record.user_type === '首销' || record.user_type === '二销') {
+              let key = ''
+              if (record.user_type === '首销') {
+                key = 'sxFollowList'
+              } else {
+                key = 'exFollowList'
+              }
+              return (
+                <Button size="small" onClick={() => this.goFollow(text, key)}>
+                  跟踪明细
+                </Button>
+              )
+            }
+            return <span>暂无明细！</span>
+          }
         }
       ],
       // 财务审批——客资
@@ -582,6 +639,11 @@ class List extends Component {
           dataIndex: 'sign_pic_count',
           title: '合同附件',
           render: text => <span>{text}图片</span>
+        },
+        {
+          key: 'order_phone',
+          dataIndex: 'order_phone',
+          title: '联系人'
         },
         {
           key: 'sign_status',
@@ -618,6 +680,11 @@ class List extends Component {
           key: 'sign_type_view',
           dataIndex: 'sign_type_view',
           title: '审批类型'
+        },
+        {
+          key: 'order_phone',
+          dataIndex: 'order_phone',
+          title: '联系人'
         },
         {
           key: 'user_type',
@@ -1021,12 +1088,22 @@ class List extends Component {
               onSearch={() => handleCurrentChange(1)}
             />
           )}
+
+          {searchPhoneBtn.indexOf(basicInfo.type) > -1 && (
+            <Search
+              placeholder="联系人手机号"
+              style={{ width: 200 }}
+              value={phoneInput}
+              onChange={e => changePhoneInput(e.target.value)}
+              onSearch={() => handleCurrentChange(1)}
+            />
+          )}
           {addBtnType.indexOf(basicInfo.type) > -1 && (
             <Button type="primary" icon="plus-circle-o" className="create-btn" onClick={() => this.addRow()}>
               新增
             </Button>
           )}
-          {basicInfo.type === 'order_info_kezi_list' && (
+          {timeBtnType.indexOf(basicInfo.type) > -1 && (
             <div>
               <RangePicker
                 showTime
@@ -1066,6 +1143,7 @@ class List extends Component {
           dataSource={resultInfo.list}
           rowClassName={record => this.setRowClass(record)}
           columns={columns[basicInfo.type]}
+          scroll={basicInfo.type === 'finance_info_dajian_contract' ? { x: 1100 } : {}}
         />
       </div>
     )

@@ -8,6 +8,7 @@ import HomeRoute from './Home'
 import ApproveRoute from './Approve'
 import ResetPassword from './ResetPassword'
 import PayInfo from './PayInfo'
+import Follow from './Follow'
 /*  Note: Instead of using JSX, we recommend using react-router
     PlainRoute objects to build route definitions.   */
 
@@ -17,6 +18,7 @@ export const createRoutes = store => [
     component: Layout,
     indexRoute: HomeRoute,
     childRoutes: [
+      Follow(store),
       PayInfo(store),
       ListRoute(store),
       AddRoute(store),
