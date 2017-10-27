@@ -472,5 +472,79 @@ left join hqsen_user_data as hud on hu.id=hud.user_id where hu.id = " . $user_id
     }
 
     // 首销账号跟进搭建列表
+    public function sxFollowList(){
+        $order_page = $this->postInt('order_page', 1);
+        $user_id = $this->postInt('user_id', 1);
+        $limit = 10;
+        $offset = ($order_page - 1) * $limit;
+        $sql_limit = " order by create_time desc limit $offset , $limit";
+        $sql_status = '  order_status != 0 ';
+        $sql_status .= ' and watch_user_id = '. $user_id;// 以注册用户纬度获取  客资列表信息
+        $order = $this->db->getRows('select * from hqsen_user_dajian_order where ' . $sql_status . $sql_limit);
+        $order_list['order_list'] = [];
+        $status_detail = array(
+            1=>'待处理',
+            2=>'待审核',
+            3=>'待结算',
+            4=>'已结算',
+            5=>'已驳回',
+            6=>'已取消'
+        );
+        if($order){
+            foreach ($order as $one_order){
+                $order_monkey = $one_order['create_user_money'] ? '￥(' . $one_order['create_user_money'] . ')' : '';
+                $create_user = $this->db->getRow('select * from hqsen_user_data where user_id = '. $one_order['user_id']);
+                $order_item = array(
+                    'id' => (int)$one_order['id'],
+                    'create_time' => (string)date('Y-m-d h:i:s', $one_order['create_time']),
+                    'order_status' => $status_detail[$one_order['order_status']] . $order_monkey,// 需要返回提供者状态   不搞给错了
+                    'order_phone' => (string)$one_order['order_phone'],
+                    'watch_user' => (string)$one_order['watch_user_name'] . '  (' . $one_order['watch_user_hotel_name'] . ')' ,
+                    'create_user' => (string)$create_user['user_name'] . '  (' . $create_user['hotel_name'] . ')' ,
+                );
+                $order_list['order_list'][] = $order_item;
+            }
+
+        }
+        $order_list['count'] = $this->db->getCount('hqsen_user_dajian_order', $sql_status); // 总的订单数
+        $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $order_list);
+    }
+
+    // 二销账号跟进搭建列表
+    public function exFollowList(){
+        $order_page = $this->postInt('order_page', 1);
+        $user_id = $this->postInt('user_id', 1);
+        $limit = 10;
+        $offset = ($order_page - 1) * $limit;
+        $sql_limit = " order by create_time desc limit $offset , $limit";
+        $sql_status = '  erxiao_order_status != 0 ';
+        $sql_status .= ' and erxiao_user_id = '. $user_id;// 以注册用户纬度获取  客资列表信息
+        $order = $this->db->getRows('select * from hqsen_user_dajian_order where ' . $sql_status . $sql_limit);
+        $order_list['order_list'] = [];
+        $status_detail = array(
+            1=>'待处理',
+            2=>'待审核',
+            3=>'已完结',
+        );
+        if($order){
+            $watch_user = $this->db->getRow('select * from hqsen_user_data where user_id = '. $user_id);
+            foreach ($order as $one_order){
+                $order_monkey = $one_order['create_user_money'] ? '￥(' . $one_order['create_user_money'] . ')' : '';
+                $create_user = $this->db->getRow('select * from hqsen_user_data where user_id = '. $one_order['user_id']);
+                $order_item = array(
+                    'id' => (int)$one_order['id'],
+                    'create_time' => (string)date('Y-m-d h:i:s', $one_order['create_time']),
+                    'order_status' => $status_detail[$one_order['erxiao_order_status']] . $order_monkey,// 需要返回提供者状态   不搞给错了
+                    'order_phone' => (string)$one_order['order_phone'],
+                    'watch_user' => (string)$watch_user['user_name'] . '  (' . $watch_user['hotel_area'] . ')' ,
+                    'create_user' => (string)$create_user['user_name'] . '  (' . $create_user['hotel_name'] . ')' ,
+                );
+                $order_list['order_list'][] = $order_item;
+            }
+
+        }
+        $order_list['count'] = $this->db->getCount('hqsen_user_dajian_order', $sql_status); // 总的订单数
+        $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $order_list);
+    }
 
 }
