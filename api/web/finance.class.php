@@ -35,7 +35,12 @@ class finance extends base {
         $limit = 10;
         $offset = ($page - 1) * $limit;
         $sql_limit = " limit $offset , $limit";
-        $sign = $this->db->getRows("select *  from hqsen_user_kezi_order_sign order by update_time desc " . $sql_limit);
+        $search_input = $this->postInt('search_input');
+        $where = '';
+        if($search_input){
+            $where = " where huko.order_phone like '%$search_input%' ";
+        }
+        $sign = $this->db->getRows("select hukos.*,huko.order_phone  from hqsen_user_kezi_order_sign as hukos left join hqsen_user_kezi_order as huko on hukos.user_kezi_order_id=huko.id $where order by update_time desc " . $sql_limit);
         foreach ($sign as $one_sign){
             $item['id'] = $one_sign['id'];
             $item['order_money'] = $one_sign['order_money'];
