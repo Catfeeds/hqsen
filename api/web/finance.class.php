@@ -35,7 +35,7 @@ class finance extends base {
         $limit = 10;
         $offset = ($page - 1) * $limit;
         $sql_limit = " limit $offset , $limit";
-        $search_input = $this->postInt('search_input');
+        $search_input = $this->postInt('search_text');
         $where = '';
         if($search_input){
             $where = " where huko.order_phone like '%$search_input%' ";
@@ -44,6 +44,7 @@ class finance extends base {
         foreach ($sign as $one_sign){
             $item['id'] = $one_sign['id'];
             $item['order_money'] = $one_sign['order_money'];
+            $item['order_phone'] = $one_sign['order_phone'];
             $item['kezi_order_id'] = $one_sign['kezi_order_id'];
             $item['create_time'] = date('Y-m-d H:i:s' , $one_sign['create_time']);
             $item['update_time'] = date('Y-m-d H:i:s' , $one_sign['update_time']);
@@ -146,9 +147,15 @@ class finance extends base {
         $limit = 10;
         $offset = ($page - 1) * $limit;
         $sql_limit = " limit $offset , $limit";
-        $sign = $this->db->getRows("select *  from hqsen_user_dajian_order_sign order by update_time desc " . $sql_limit);
+        $search_input = $this->postInt('search_text');
+        $where = '';
+        if($search_input){
+            $where = " where huko.order_phone like '%$search_input%' ";
+        }
+        $sign = $this->db->getRows("select hukos.*,huko.order_phone  from hqsen_user_dajian_order_sign as hukos left join hqsen_user_dajian_order as huko on hukos.user_dajian_order_id=huko.id $where order by update_time desc " . $sql_limit);
         foreach ($sign as $one_sign){
             $item['id'] = $one_sign['id'];
+            $item['order_phone'] = $one_sign['order_phone'];
             $item['sign_other_sign_id'] = $one_sign['sign_other_sign_id'];
             $item['dajian_order_id'] = $one_sign['dajian_order_id'];
             $item['create_time'] = date('Y-m-d H:i:s' , $one_sign['create_time']);
