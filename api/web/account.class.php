@@ -557,6 +557,7 @@ left join hqsen_user_data as hud on hu.id=hud.user_id where hu.id = " . $user_id
                 foreach ($user_kezi_order_follow_list as $one_item){
                     $follow_item['order_follow_time'] = $one_item['user_order_status'] == 2 ? '已取消' : date('Y-m-d h:i:s', $one_item['order_follow_time']);
                     $follow_item['order_follow_desc'] = $one_item['order_follow_desc'];
+                    $follow_item['id'] = $one_item['id'];
                     $follow_item['order_follow_create_time'] = date('Y-m-d h:i:s', $one_item['order_follow_create_time']);
                     $follow_item['user_order_status'] = $one_item['user_order_status'];
                     $back_follows[] = $follow_item;
@@ -578,6 +579,7 @@ left join hqsen_user_data as hud on hu.id=hud.user_id where hu.id = " . $user_id
                 foreach ($user_dajian_order_follow_list as $one_item){
                     $follow_item['order_follow_time'] = $one_item['user_order_status'] == 2 ? '已取消' : date('Y-m-d h:i:s', $one_item['order_follow_time']);
                     $follow_item['order_follow_desc'] = $one_item['order_follow_desc'];
+                    $follow_item['id'] = $one_item['id'];
                     $follow_item['order_follow_create_time'] = date('Y-m-d h:i:s', $one_item['order_follow_create_time']);
                     $follow_item['user_order_status'] = $one_item['user_order_status'];
                     $back_follows[] = $follow_item;
