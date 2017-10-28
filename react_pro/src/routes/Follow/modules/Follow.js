@@ -33,7 +33,7 @@ export const searchLog = id => {
   return (dispatch, getState) => {
     const { type } = getState().follow
     const url = type === 'userKeziList' ? 'keziOrderFollowList' : 'dajianOrderFollowList'
-    Fetch(url, { id: 44 }).then(response => {
+    Fetch(url, { id }).then(response => {
       dispatch(saveLogInfo(response.data))
     })
   }
