@@ -29,14 +29,22 @@ class boss extends base {
         $limit = 10;
         $offset = ($page - 1) * $limit;
         $sql_limit = " limit $offset , $limit";
+        $search_input = $this->postInt('search_text');
+        $where = '';
+        if($search_input){
+            $where = " and huko.order_phone like '%$search_input%' ";
+        }
         // 总经理要在财务审批通过基础上
-        $sign = $this->db->getRows("select *  from hqsen_user_kezi_order_sign  where boss_sign_status > 0 order by id desc " . $sql_limit);
+        $sign = $this->db->getRows("select hukos.*,huko.order_phone  from hqsen_user_kezi_order_sign  as hukos
+                                    left join hqsen_user_kezi_order as huko on hukos.user_kezi_order_id = huko.id
+                                    where hukos.boss_sign_status > 0 $where order by hukos.id desc " . $sql_limit);
         foreach ($sign as $one_sign){
             $item['id'] = $one_sign['id'];
             $item['kezi_order_id'] = $one_sign['kezi_order_id'];
             $item['create_time'] = date('Y-m-d H:i:s' , $one_sign['create_time']);
             $item['update_time'] = date('Y-m-d H:i:s' , $one_sign['update_time']);
             $item['order_money'] = $one_sign['order_money'];
+            $item['order_phone'] = $one_sign['order_phone'];
             $item['order_other_money'] = $one_sign['order_other_money'];
             $item['sign_pic_count'] = count(json_decode($one_sign['sign_pic']));
             $item['boss_sign_status'] = $one_sign['boss_sign_status'];//1未处理 2通过 3驳回
@@ -128,13 +136,21 @@ class boss extends base {
         $limit = 10;
         $offset = ($page - 1) * $limit;
         $sql_limit = " limit $offset , $limit";
+        $search_input = $this->postInt('search_text');
+        $where = '';
+        if($search_input){
+            $where = " and hudo.order_phone like '%$search_input%' ";
+        }
         // 总经理要在财务审批通过基础上
-        $sign_type = '  and sign_type = 0  ';
+        $sign_type = '  and hudos.sign_type = 0  ';
         $sign_type = '';// 暂时总经理不对类型区分首款 中款 尾款
-        $sign = $this->db->getRows("select *  from hqsen_user_dajian_order_sign  where boss_sign_status > 0 $sign_type order by id desc " . $sql_limit);
+        $sign = $this->db->getRows("select hudos.*,hudo.order_phone  from hqsen_user_dajian_order_sign  as hudos
+                                    left join  hqsen_user_dajian_order as hudo on hudos.user_dajian_order_id=hudo.id 
+                                    where hudos.boss_sign_status > 0 $where $sign_type order by hudos.id desc " . $sql_limit);
         foreach ($sign as $one_sign){
             $item['id'] = $one_sign['id'];
             $item['dajian_order_id'] = $one_sign['dajian_order_id'];
+            $item['order_phone'] = $one_sign['order_phone'];
             $item['create_time'] = date('Y-m-d H:i:s' , $one_sign['create_time']);
             $item['update_time'] = date('Y-m-d H:i:s' , $one_sign['update_time']);
             $item['order_money'] = $one_sign['order_money'];

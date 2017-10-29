@@ -40,12 +40,13 @@ class finance extends base {
         if($search_input){
             $where = " where huko.order_phone like '%$search_input%' ";
         }
-        $sign = $this->db->getRows("select hukos.*,huko.order_phone  from hqsen_user_kezi_order_sign as hukos left join hqsen_user_kezi_order as huko on hukos.user_kezi_order_id=huko.id $where order by update_time desc " . $sql_limit);
+        $sign = $this->db->getRows("select hukos.*,huko.order_phone,huko.watch_user_name  from hqsen_user_kezi_order_sign as hukos left join hqsen_user_kezi_order as huko on hukos.user_kezi_order_id=huko.id $where order by update_time desc " . $sql_limit);
         foreach ($sign as $one_sign){
             $item['id'] = $one_sign['id'];
             $item['order_money'] = $one_sign['order_money'];
             $item['order_phone'] = $one_sign['order_phone'];
             $item['kezi_order_id'] = $one_sign['kezi_order_id'];
+            $item['watch_user_name'] = $one_sign['watch_user_name'];
             $item['create_time'] = date('Y-m-d H:i:s' , $one_sign['create_time']);
             $item['update_time'] = date('Y-m-d H:i:s' , $one_sign['update_time']);
             $item['order_other_money'] = $one_sign['order_other_money'];// 客资附加款  去掉不用 0607
@@ -152,12 +153,13 @@ class finance extends base {
         if($search_input){
             $where = " where huko.order_phone like '%$search_input%' ";
         }
-        $sign = $this->db->getRows("select hukos.*,huko.order_phone  from hqsen_user_dajian_order_sign as hukos left join hqsen_user_dajian_order as huko on hukos.user_dajian_order_id=huko.id $where order by update_time desc " . $sql_limit);
+        $sign = $this->db->getRows("select hukos.*,huko.order_phone,huko.watch_user_name  from hqsen_user_dajian_order_sign as hukos left join hqsen_user_dajian_order as huko on hukos.user_dajian_order_id=huko.id $where order by update_time desc " . $sql_limit);
         foreach ($sign as $one_sign){
             $item['id'] = $one_sign['id'];
             $item['order_phone'] = $one_sign['order_phone'];
             $item['sign_other_sign_id'] = $one_sign['sign_other_sign_id'];
             $item['dajian_order_id'] = $one_sign['dajian_order_id'];
+            $item['watch_user_name'] = $one_sign['watch_user_name'];
             $item['create_time'] = date('Y-m-d H:i:s' , $one_sign['create_time']);
             $item['update_time'] = date('Y-m-d H:i:s' , $one_sign['update_time']);
             $item['order_money'] = $one_sign['order_money'];

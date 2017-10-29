@@ -34,7 +34,10 @@ class dajian extends base {
         if($end_time){
             $where .= ' and create_time < ' . $end_time;
         }
-
+        $search_input = $this->postInt('search_text');
+        if($search_input){
+            $where .= " and order_phone like '%$search_input%' ";
+        }
         $order = $this->db->getRows("select * from hqsen_dajian_order  where del_flag = 1 $where order by id desc " . $sql_limit);
         $data = [];
         foreach ($order as $one_order){

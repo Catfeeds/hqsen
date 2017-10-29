@@ -34,6 +34,10 @@ class kezi extends base {
         if($end_time){
             $where .= ' and create_time < ' . $end_time;
         }
+        $search_input = $this->postInt('search_text');
+        if($search_input){
+            $where .= " and order_phone like '%$search_input%' ";
+        }
         $order = $this->db->getRows("select * from hqsen_kezi_order  where del_flag = 1 $where $order_by " . $sql_limit);
         $data = [];
         foreach ($order as $one_order){
@@ -50,6 +54,7 @@ class kezi extends base {
                     'create_user_name' => $create_user_name,
                     'order_phone' => $one_order['order_phone'],
                     'order_type' => $one_order['order_type'],
+                    'order_area_hotel_type' => $one_order['order_area_hotel_type'],
                     'create_time' => date('Y-m-d H:i:s', $one_order['create_time']),
                 );
                 // 如果是1 表示是区域  如果是2 表示是酒店
