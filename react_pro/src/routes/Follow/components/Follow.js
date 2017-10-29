@@ -86,9 +86,11 @@ class Follow extends Component {
               <Button size="small" onClick={() => this.goDetail(record[detailId])}>
                 {type === 'userKeziList' ? '客资详情' : '搭建详情'}
               </Button>
-              <Button size="small" onClick={() => this.lookLog(text)}>
-                跟进日志
-              </Button>
+              {type !== 'exFollowList' && (
+                <Button size="small" onClick={() => this.lookLog(text)}>
+                  跟进日志
+                </Button>
+              )}
             </div>
           )
         }

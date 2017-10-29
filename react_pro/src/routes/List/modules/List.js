@@ -23,10 +23,8 @@ export const handleCurrentChange = (current = 1) => {
     let data =
       basicInfo.type === 'wedding_list'
         ? { page: current, search_input: searchInput, id: searchId }
-        : { page: current, search_input: searchInput, ...searchTime }
-    if (['finance_info_dajian_contract', 'finance_info_kezi_contract'].indexOf(basicInfo.type) > -1) {
-      data = { ...data, search_text: phoneInput }
-    }
+        : { page: current, search_input: searchInput, search_text: phoneInput, ...searchTime }
+
     dispatch(toggleLoading(true))
     Fetch(basicInfo.listUrlKey, data).then(
       response => {

@@ -33,6 +33,27 @@ class Layout extends Component {
         this.context.router.push('/login')
       }
     }
+
+    if (window.history && window.history.pushState) {
+      window.addEventListener(
+        'popstate',
+        function () {
+          var hashLocation = location.hash
+          var hashSplit = hashLocation.split('#!/')
+          var hashName = hashSplit[1]
+
+          if (hashName !== '') {
+            var hash = window.location.hash
+            if (hash === '') {
+              alert('後退按鈕點擊')
+            }
+          }
+        },
+        false
+      )
+
+      // window.history.pushState('forward', null, './#forward')
+    }
   }
   getParentType (menus, type) {
     const parentKey = []
@@ -82,9 +103,7 @@ class Layout extends Component {
     return (
       <div className="content-wrapper">
         {headKey.key && <Header menu={configData.user_security} saveHeadKey={saveHeadKey} headKey={headKey} />}
-        <div className="core-layout__viewport">
-          {this.state.usableToken ? children : null}
-        </div>
+        <div className="core-layout__viewport">{this.state.usableToken ? children : null}</div>
       </div>
     )
   }

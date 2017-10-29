@@ -60,7 +60,14 @@ class List extends Component {
         'wedding_list',
         'hotel_rec_list'
       ],
-      searchPhoneBtn: ['finance_info_kezi_contract', 'finance_info_dajian_contract'],
+      searchPhoneBtn: [
+        'finance_info_kezi_contract',
+        'finance_info_dajian_contract',
+        'order_info_kezi_list',
+        'order_info_dajian_list',
+        'manager_info_kezi_contract',
+        'manager_info_dajian_contract'
+      ],
       downloadBtnType: ['remittance_info_kezi_contract', 'remittance_info_dajian_contract']
     }
     this.rangeTime = this.rangeTime.bind(this)
@@ -230,6 +237,7 @@ class List extends Component {
     this.setState({
       searchTime: e
     })
+    this.props.saveSearchTime(e)
   }
   render () {
     const { downloadBtnType, addBtnType, timeBtnType, searchPhoneBtn } = this.state
@@ -241,7 +249,6 @@ class List extends Component {
       configData,
       disabledRow,
       payCompleted,
-      saveSearchTime,
       changePhoneInput
     } = this.props
     const columns = {
@@ -293,9 +300,11 @@ class List extends Component {
                 <Button type="default" size="small" onClick={() => this.gotoDetail(id)}>
                   查看详情
                 </Button>
-                <Button type="default" size="small" onClick={() => this.showAsync(id)}>
-                  同步详情
-                </Button>
+                {record.order_area_hotel_type === '2' && (
+                  <Button type="default" size="small" onClick={() => this.showAsync(id)}>
+                    同步详情
+                  </Button>
+                )}
               </div>
             )
           }
@@ -646,6 +655,11 @@ class List extends Component {
           title: '联系人'
         },
         {
+          key: 'watch_user_name',
+          dataIndex: 'watch_user_name',
+          title: '跟踪者'
+        },
+        {
           key: 'sign_status',
           dataIndex: 'sign_status',
           title: '处理阶段',
@@ -685,6 +699,11 @@ class List extends Component {
           key: 'order_phone',
           dataIndex: 'order_phone',
           title: '联系人'
+        },
+        {
+          key: 'watch_user_name',
+          dataIndex: 'watch_user_name',
+          title: '跟踪者'
         },
         {
           key: 'user_type',
@@ -739,6 +758,11 @@ class List extends Component {
           render: text => <span>{text}图片</span>
         },
         {
+          key: 'order_phone',
+          dataIndex: 'order_phone',
+          title: '联系人'
+        },
+        {
           key: 'boss_sign_status',
           dataIndex: 'boss_sign_status',
           title: '处理阶段',
@@ -777,6 +801,11 @@ class List extends Component {
           dataIndex: 'sign_pic_count',
           title: '合同附件',
           render: text => <span>{text}图片</span>
+        },
+        {
+          key: 'order_phone',
+          dataIndex: 'order_phone',
+          title: '联系人'
         },
         {
           key: 'boss_sign_status',
@@ -1079,13 +1108,12 @@ class List extends Component {
       <div className="list-page">
         <MyBreadcrumb breadcrumb={basicInfo.breadcrumb} />
         <div className="control-box clearfix">
-          {this.getSearchType().type && (
-            <Search
-              placeholder={this.getSearchType().message}
-              style={{ width: 200 }}
-              value={searchInput}
-              onChange={e => changeSearchInput(e.target.value)}
-              onSearch={() => handleCurrentChange(1)}
+          {timeBtnType.indexOf(basicInfo.type) > -1 && (
+            <RangePicker
+              showTime
+              format="YYYY-MM-DD HH:mm:ss"
+              value={this.state.searchTime}
+              onOk={e => this.searchTime(e)}
             />
           )}
 
@@ -1098,29 +1126,21 @@ class List extends Component {
               onSearch={() => handleCurrentChange(1)}
             />
           )}
+          {this.getSearchType().type && (
+            <Search
+              placeholder={this.getSearchType().message}
+              style={{ width: 200 }}
+              value={searchInput}
+              onChange={e => changeSearchInput(e.target.value)}
+              onSearch={() => handleCurrentChange(1)}
+            />
+          )}
           {addBtnType.indexOf(basicInfo.type) > -1 && (
             <Button type="primary" icon="plus-circle-o" className="create-btn" onClick={() => this.addRow()}>
               新增
             </Button>
           )}
-          {timeBtnType.indexOf(basicInfo.type) > -1 && (
-            <div>
-              <RangePicker
-                showTime
-                format="YYYY-MM-DD HH:mm:ss"
-                value={this.state.searchTime}
-                onChange={e => this.searchTime(e)}
-              />
-              <Button
-                className="ml5"
-                type="primary"
-                icon="search"
-                onClick={() => saveSearchTime(this.state.searchTime)}
-              >
-                搜索
-              </Button>
-            </div>
-          )}
+
           {downloadBtnType.indexOf(basicInfo.type) > -1 && (
             <div className="download-box">
               <RangePicker
@@ -1143,11 +1163,15 @@ class List extends Component {
           dataSource={resultInfo.list}
           rowClassName={record => this.setRowClass(record)}
           columns={columns[basicInfo.type]}
-          scroll={basicInfo.type === 'finance_info_dajian_contract' ? { x: 1100 } : {}}
+          scroll={{ x: tableWidth[basicInfo.type] || 0 }}
         />
       </div>
     )
   }
 }
 
+const tableWidth = {
+  remittance_info_kezi_contract: 1200,
+  finance_info_dajian_contract: 1300
+}
 export default List
