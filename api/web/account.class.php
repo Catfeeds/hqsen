@@ -55,7 +55,7 @@ class account extends base {
                 $data['list'][] = $user_item;
             }
         }
-        $data['count'] = $this->db->getCount('hqsen_user', ' del_flag = 1 and user_type = 3 ');
+        $data['count'] = $this->db->getCount('hqsen_user', ' del_flag = 1 and user_type = 3 ' . $search_sql);
         $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $data);
 
     }
@@ -100,7 +100,8 @@ class account extends base {
                 $data['list'][] = $user_item;
             }
         }
-        $data['count'] = $this->db->getCount('hqsen_user', ' del_flag = 1 and user_type = 4 ');
+        $count = $this->db->getRow("select count(1) as c from hqsen_user as hu left join hqsen_user_data as hud on hu.id=hud.user_id where  hu.del_flag = 1 and hu.user_type = 4 $search_sql ");
+        $data['count'] = isset($count['c']) ? $count['c'] : 0;
         $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $data);
     }
 
@@ -382,7 +383,6 @@ left join hqsen_user_data as hud on hu.id=hud.user_id where hu.id = " . $user_id
             foreach ($order as $one_order){
                 $order_from = $one_order['order_from'] == 2 ? '(同步)' : '';
                 $order_monkey = '';
-                $order_from = '';
                 // 订单成功才有金额
                 if(in_array($one_order['user_order_status'],[2,3])){
                     $order_monkey = $one_order['create_user_money'] ? '￥(' . $one_order['create_user_money'] . ')' : '';
@@ -463,7 +463,6 @@ left join hqsen_user_data as hud on hu.id=hud.user_id where hu.id = " . $user_id
         if($order){
             foreach ($order as $one_order){
                 $order_from = $one_order['order_from'] == 2 ? '(同步)' : '';
-                $order_from = '';
                 $order_monkey = $one_order['create_user_money'] ? '￥(' . $one_order['create_user_money'] . ')' : '';
                 $order_item = array(
                     'id' => (int)$one_order['id'],
