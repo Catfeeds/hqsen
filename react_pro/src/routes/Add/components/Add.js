@@ -3,6 +3,7 @@ import { Form, Button, Popconfirm } from 'antd'
 import MyBreadcrumb from 'components/MyBreadcrumb'
 import FormComponent from 'components/FormComponent'
 import ConfirmComponent from './ConfirmComponent'
+import Back from 'components/Back'
 import './Add.scss'
 
 class Add extends Component {
@@ -83,6 +84,7 @@ class Add extends Component {
   render () {
     const {
       form: { getFieldDecorator, setFieldsValue },
+      location: { query: { page, type } },
       Add: { basicInfo, dataSource, formData, loading }
     } = this.props
     let configData = { ...this.props.configData, ...dataSource }
@@ -92,6 +94,7 @@ class Add extends Component {
     configData.user_type = configData.inner_type
     return (
       <div className="add-page">
+        <Back type={type} page={page} />
         <MyBreadcrumb breadcrumb={basicInfo.breadcrumb} />
         <Form className="vertival-form">
           {basicInfo.formList.map((item, index) => {
@@ -111,9 +114,13 @@ class Add extends Component {
           {this.state.showConfirm && basicInfo.type && <ConfirmComponent form={this.props.form} id={basicInfo.id} />}
           <Form.Item>
             <Popconfirm title="确认提交?" onConfirm={this.handleSubmit}>
-              <Button className="add-btn" type="primary" loading={loading}>提交</Button>
+              <Button className="add-btn" type="primary" loading={loading}>
+                提交
+              </Button>
             </Popconfirm>
-            <Button className="add-btn" type="default" size="default" onClick={this.cancleSubmit}>取消</Button>
+            <Button className="add-btn" type="default" size="default" onClick={this.cancleSubmit}>
+              取消
+            </Button>
           </Form.Item>
         </Form>
       </div>

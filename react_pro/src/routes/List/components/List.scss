@@ -20,6 +20,7 @@
   color: red;
   font-size: 12px;
   transform: scale(0.8);
+  transform-origin: left;
 }
 .download-box {
   float: right;
@@ -35,4 +36,7 @@
 }
 .ant-calendar-picker {
   margin-right: 10px;
+}
+.add-btn-box {
+  flex: 1;
 }

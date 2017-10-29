@@ -21,10 +21,35 @@ body {
   box-sizing: inherit;
 }
 
-.ant-table-tbody > tr > td,
-.ant-table-thead > tr > th {
-  text-align: center !important;
-}
+// .ant-table-tbody > tr > td,
+// .ant-table-thead > tr > th {
+//   text-align: center !important;
+// }
 .ant-btn {
   margin: 2px;
+}
+.go-back-btn {
+  position: fixed;
+  right: -20px;
+  top: -20px;
+  width: 60px;
+  height: 60px;
+  background: rgba(0, 0, 0, 0.379);
+  border-radius: 50%;
+  color: #fff;
+  cursor: pointer;
+  &:hover {
+    i {
+      transform: scale(1.2);
+    }
+  }
+  i {
+    transition: all 0.3s;
+    font-size: 20px;
+    line-height: 60px;
+    font-size: 24px;
+    line-height: 72px;
+    width: 50px;
+    font-weight: bold;
+  }
 }

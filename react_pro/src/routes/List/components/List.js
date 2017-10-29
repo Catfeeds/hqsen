@@ -78,7 +78,7 @@ class List extends Component {
     const { setBasicInfo, saveId, handleCurrentChange, params: { type }, location: { query } } = this.props
     saveId(query.id)
     setBasicInfo(type)
-    handleCurrentChange(1)
+    handleCurrentChange(query.page || 1)
   }
 
   componentWillReceiveProps (nextProps) {
@@ -86,7 +86,7 @@ class List extends Component {
     const type = nextProps.params.type
     if (type !== basicInfo.type) {
       this.setState({ searchTime: [] })
-      initData(type, query.id)
+      initData(type, query)
     }
   }
   getSearchType () {
@@ -116,7 +116,7 @@ class List extends Component {
 
   goApproveDetail (record, isSubmit) {
     const { sign_other_sign_id: signId, sign_type: signType, id } = record
-    const { type } = this.props.params
+    const { params: { type }, List: { pageInfo: { page } } } = this.props
     if (type === 'finance_info_dajian_contract') {
       let buildType = ''
       switch (signType) {
@@ -136,38 +136,43 @@ class List extends Component {
           buildType = 'time'
           break
       }
-      this.context.router.push(`/approve/${buildType}?id=${id}&signId=${signId}&isSubmit=${isSubmit}`)
+      this.context.router.push(
+        `/approve/${buildType}?id=${id}&signId=${signId}&isSubmit=${isSubmit}&type=${type}&page=${page}`
+      )
     } else {
-      this.context.router.push(`/approve/${type}?id=${id}&isSubmit=${isSubmit}`)
+      this.context.router.push(`/approve/${type}?id=${id}&isSubmit=${isSubmit}&type=${type}&page=${page}`)
     }
   }
 
   gotoDetail (id) {
-    const { type } = this.props.params
-    this.context.router.push(`/detail/${type}?id=${id}`)
+    const { params: { type }, List: { pageInfo: { page } } } = this.props
+    this.context.router.push(`/detail/${type}?id=${id}&type=${type}&page=${page}`)
   }
   gotoPay (id) {
-    this.context.router.push(`/pay-info?id=${id}`)
+    const { params: { type }, List: { pageInfo: { page } } } = this.props
+    this.context.router.push(`/pay-info?id=${id}&type=${type}&page=${page}`)
   }
   gotoOrderDetail (record, isKezi) {
+    const { params: { type }, List: { pageInfo: { page } } } = this.props
     if (isKezi) {
-      this.context.router.push(`/detail/order_info_kezi_list?id=${record.kezi_order_id}`)
+      this.context.router.push(`/detail/order_info_kezi_list?id=${record.kezi_order_id}&type=${type}&page=${page}`)
     } else {
-      this.context.router.push(`/detail/order_info_dajian_list?id=${record.dajian_order_id}`)
+      this.context.router.push(`/detail/order_info_dajian_list?id=${record.dajian_order_id}&type=${type}&page=${page}`)
     }
   }
 
   goFollow (id, type) {
-    this.context.router.push(`/follow?id=${id}&type=${type}`)
+    const { params, List: { pageInfo: { page } } } = this.props
+    this.context.router.push(`/follow?id=${id}&type=${type}&page=${page}&returnKey=${params.type}`)
   }
 
   addRow (id) {
-    const { type } = this.props.params
-    const paramId = id ? `?id=${id}` : ''
+    const { location, params: { type }, List: { pageInfo: { page } } } = this.props
+    const paramId = id ? `id=${id}` : ''
     if (type === 'wedding_list') {
-      this.context.router.push(`/add/${type}${paramId}${id ? '&' : '?'}hotelId=${this.props.location.query.id}`)
+      this.context.router.push(`/add/${type}?page=${page}&type=${type}&${paramId}&hotelId=${location.query.id}`)
     } else {
-      this.context.router.push(`/add/${type}${paramId}`)
+      this.context.router.push(`/add/${type}?page=${page}&type=${type}&${paramId}`)
     }
   }
 
@@ -177,13 +182,16 @@ class List extends Component {
     }
   }
   goHotelDetail (record) {
-    this.context.router.push(`/add/hotel_detail?id=${record['hotel_id']}`)
+    const { params: { type }, List: { pageInfo: { page } } } = this.props
+    this.context.router.push(`/add/hotel_detail?id=${record['hotel_id']}&page=${page}&type=${type}`)
   }
   setWedding (record) {
-    this.context.router.push(`/list/wedding_list?id=${record['hotel_id']}`)
+    const { params: { type }, List: { pageInfo: { page } } } = this.props
+    this.context.router.push(`/list/wedding_list?id=${record['hotel_id']}&type=${type}&page=${page}`)
   }
   toRecList () {
-    this.context.router.push('/list/hotel_rec_list')
+    const { params: { type }, List: { pageInfo: { page } } } = this.props
+    this.context.router.push(`/list/hotel_rec_list?type=${type}&page=${page}`)
   }
 
   getStatus (text) {
@@ -1066,7 +1074,8 @@ class List extends Component {
           <Button size="small" onClick={() => this.gotoOrderDetail(record, isKezi)}>
             {isKezi ? '客资信息' : '搭建信息'}
           </Button>
-          <Button style={{ margin: '0 5px' }} size="small" onClick={() => this.goApproveDetail(record, false)}>
+          {showPay && <br />}
+          <Button style={{ marginRight: 5 }} size="small" onClick={() => this.goApproveDetail(record, false)}>
             签单信息
           </Button>
           <Button type="primary" size="small" disabled={disabledBtn} onClick={() => this.goApproveDetail(record, true)}>
@@ -1135,11 +1144,6 @@ class List extends Component {
               onSearch={() => handleCurrentChange(1)}
             />
           )}
-          {addBtnType.indexOf(basicInfo.type) > -1 && (
-            <Button type="primary" icon="plus-circle-o" className="create-btn" onClick={() => this.addRow()}>
-              新增
-            </Button>
-          )}
 
           {downloadBtnType.indexOf(basicInfo.type) > -1 && (
             <div className="download-box">
@@ -1154,6 +1158,14 @@ class List extends Component {
               </Button>
             </div>
           )}
+
+          {addBtnType.indexOf(basicInfo.type) > -1 && (
+            <div className="add-btn-box">
+              <Button type="primary" icon="plus-circle-o" className="create-btn" onClick={() => this.addRow()}>
+                新增
+              </Button>
+            </div>
+          )}
         </div>
         <Table
           loading={loading}
@@ -1163,15 +1175,10 @@ class List extends Component {
           dataSource={resultInfo.list}
           rowClassName={record => this.setRowClass(record)}
           columns={columns[basicInfo.type]}
-          scroll={{ x: tableWidth[basicInfo.type] || 0 }}
         />
       </div>
     )
   }
 }
 
-const tableWidth = {
-  remittance_info_kezi_contract: 1200,
-  finance_info_dajian_contract: 1300
-}
 export default List

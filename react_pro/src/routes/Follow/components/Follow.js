@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import MyBreadcrumb from 'components/MyBreadcrumb'
+import Back from 'components/Back'
 import { Table, Button, Modal } from 'antd'
 import './Follow.scss'
 
@@ -49,7 +50,11 @@ class Follow extends Component {
   }
 
   render () {
-    const { follow: { pageInfo, resultInfo, loading, logInfo, type }, handleCurrentChange, searchLog } = this.props
+    const {
+      follow: { pageInfo, resultInfo, loading, logInfo, type },
+      handleCurrentChange,
+      location: { query: { page, returnKey } }
+    } = this.props
     const breadcrumbItem = {
       userKeziList: '客资明细',
       userDajianList: '搭建明细'
@@ -135,6 +140,7 @@ class Follow extends Component {
 
     return (
       <div className="list-page">
+        <Back type={returnKey} page={page} />
         <MyBreadcrumb breadcrumb={['账号管理', breadcrumbItem[type] || '跟进明细']} />
         <div className="control-box clearfix" />
         <Table

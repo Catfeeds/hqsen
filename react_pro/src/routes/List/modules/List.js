@@ -30,7 +30,7 @@ export const handleCurrentChange = (current = 1) => {
       response => {
         if (basicInfo.type === 'wedding_list' && !searchId) {
         } else {
-          dispatch(setResultInfo(current, response.data))
+          dispatch(setResultInfo(parseInt(current), response.data))
         }
       },
       () => {
@@ -71,12 +71,13 @@ export const disabledRow = (id, userStatus) => {
   }
 }
 // 初始化
-export const initData = (type, id) => {
+export const initData = (type, query) => {
   return (dispatch, getState) => {
+    const { id, page } = query
     dispatch(setInitialState())
     dispatch(saveId(id))
     dispatch(setBasicInfo(type))
-    dispatch(handleCurrentChange(1))
+    dispatch(handleCurrentChange(page || 1))
   }
 }
 // 完成打款

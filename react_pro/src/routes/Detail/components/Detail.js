@@ -1,7 +1,8 @@
 import React, { Component, PropTypes } from 'react'
-import { Form } from 'antd'
+import { Form, Icon } from 'antd'
 import MyBreadcrumb from 'components/MyBreadcrumb'
 import FormComponent from 'components/FormComponent'
+import Back from 'components/Back'
 import './Detail.scss'
 
 class Detail extends Component {
@@ -26,9 +27,15 @@ class Detail extends Component {
   }
 
   render () {
-    const { configData, Detail: { basicInfo, formData }, form: { getFieldDecorator } } = this.props
+    const {
+      location: { query: { page, type } },
+      configData,
+      Detail: { basicInfo, formData },
+      form: { getFieldDecorator }
+    } = this.props
     return (
       <div className="detail-page">
+        <Back type={type} page={page} />
         <MyBreadcrumb breadcrumb={basicInfo.breadcrumb} />
         <Form className="vertival-form">
           {basicInfo.formList.map((item, index) => {

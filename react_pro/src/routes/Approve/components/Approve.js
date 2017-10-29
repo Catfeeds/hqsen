@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { Form, Button, Popconfirm } from 'antd'
 import MyBreadcrumb from 'components/MyBreadcrumb'
 import FormComponent from 'components/FormComponent'
+import Back from 'components/Back'
 import MyCard from 'components//MyCard'
 import './Approve.scss'
 
@@ -59,9 +60,14 @@ class Approve extends Component {
   }
 
   render () {
-    const { form: { getFieldDecorator }, Approve: { basicInfo, formData, loading, dataSource } } = this.props
+    const {
+      form: { getFieldDecorator },
+      Approve: { basicInfo, formData, loading, dataSource },
+      location: { query: { type, page } }
+    } = this.props
     return (
       <div className="approve-page">
+        <Back type={type} page={page} />
         <MyBreadcrumb breadcrumb={basicInfo.breadcrumb} />
         <div className="form-data">
           <Form>
@@ -76,7 +82,7 @@ class Approve extends Component {
                 />
               )
             })}
-            {this.state.isSubmit === 'true' &&
+            {this.state.isSubmit === 'true' && (
               <div>
                 <h1 className="approve-title">审批</h1>
                 <div className="approve-form-box">
@@ -95,11 +101,16 @@ class Approve extends Component {
                 </div>
                 <Form.Item>
                   <Popconfirm title="确认提交?" onConfirm={this.handleSubmit}>
-                    <Button className="approve-btn" type="primary" loading={loading}>提交</Button>
+                    <Button className="approve-btn" type="primary" loading={loading}>
+                      提交
+                    </Button>
                   </Popconfirm>
-                  <Button className="approve-btn" type="default" size="default" onClick={this.cancleSubmit}>取消</Button>
+                  <Button className="approve-btn" type="default" size="default" onClick={this.cancleSubmit}>
+                    取消
+                  </Button>
                 </Form.Item>
-              </div>}
+              </div>
+            )}
           </Form>
           {formData.follow_list.length ? <h1 className="approve-title">历史审批记录</h1> : null}
           {formData.follow_list.map((item, index) => <MyCard key={index} data={item} />)}

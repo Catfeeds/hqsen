@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { Form } from 'antd'
 import MyBreadcrumb from 'components/MyBreadcrumb'
 import FormComponent from 'components/FormComponent'
+import Back from 'components/Back'
 import './PayInfo.scss'
 
 class PayInfo extends Component {
@@ -20,7 +21,12 @@ class PayInfo extends Component {
     this.props.getInit(id)
   }
   render () {
-    const { configData, PayInfo: { list }, form: { getFieldDecorator } } = this.props
+    const {
+      configData,
+      PayInfo: { list },
+      form: { getFieldDecorator },
+      location: { query: { page, type } }
+    } = this.props
     const shoukuan = {
       title: '首款明细与凭证',
       form: [
@@ -144,6 +150,7 @@ class PayInfo extends Component {
     }
     return (
       <div className="PayInfo-page">
+        <Back type={type} page={page} />
         <MyBreadcrumb breadcrumb={['财务审批', '搭建列表', '付款记录']} />
         <Form className="vertival-form">
           {list.map((listItem, listIndex) => {
@@ -167,10 +174,8 @@ class PayInfo extends Component {
             }
             return (
               <div key={listIndex}>
-                <p className="pay-info-title">
-                  {type.title}
-                </p>
-                {type.form.map((item, index) =>
+                <p className="pay-info-title">{type.title}</p>
+                {type.form.map((item, index) => (
                   <FormComponent
                     key={`${item.name}-${listIndex}`}
                     getFieldDecorator={getFieldDecorator}
@@ -178,7 +183,7 @@ class PayInfo extends Component {
                     dataSource={configData[item.name]}
                     defaultValue={listItem[item.name]}
                   />
-                )}
+                ))}
               </div>
             )
           })}
