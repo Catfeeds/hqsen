@@ -207,6 +207,13 @@ class base{
                         array('key'=>'order_info_dajian_list', 'label'=>'搭建列表', 'parent_key'=>'order_info'),
                     ),
                 ),
+                array(
+                    'key' => 'account_info',
+                    'label'=>'帐号管理',
+                    'child' => array(
+                        array('key'=>'account_info_register_list', 'label'=>'注册账号', 'parent_key'=>'account_info'),
+                    ),
+                ),
             ),
             'finance' => array(
                 array(

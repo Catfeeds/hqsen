@@ -19,7 +19,7 @@ class user extends base{
             $user = $this->db->getRow("select * from hqsen_user where  user_status = 1 and user_name = '$user_name'");
 
             if($user and $user['password'] == md5($password)){
-                if(!in_array($user['user_type'], [2, 13, 14, 15, 16])){
+                if(!in_array($user['user_type'], [2, 13, 14, 15, 16, 17])){
                     $this->appDie($this->back_code['user']['login_err'], $this->back_msg['user']['login_err']);
                 }
                 $user['last_login_time'] = time();

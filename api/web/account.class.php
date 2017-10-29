@@ -381,12 +381,16 @@ left join hqsen_user_data as hud on hu.id=hud.user_id where hu.id = " . $user_id
         if($order){
             foreach ($order as $one_order){
                 $order_from = $one_order['order_from'] == 2 ? '(同步)' : '';
+                $order_monkey = '';
                 $order_from = '';
-                $order_monkey = $one_order['create_user_money'] ? '￥(' . $one_order['create_user_money'] . ')' : '';
+                // 订单成功才有金额
+                if(in_array($one_order['user_order_status'],[2,3])){
+                    $order_monkey = $one_order['create_user_money'] ? '￥(' . $one_order['create_user_money'] . ')' : '';
+                }
                 $order_item = array(
                     'id' => (int)$one_order['id'],
                     'kezi_order_id' => (int)$one_order['kezi_order_id'],
-                    'create_time' => (string)date('Y-m-d h:i:s', $one_order['create_time']),
+                    'create_time' => (string)date('Y-m-d H:i:s', $one_order['create_time']),
                     'order_status' => $status_detail[$one_order['user_order_status']] . $order_monkey,// 需要返回提供者状态   不搞给错了
                     'order_phone' => (string)$one_order['order_phone'].$order_from,
                     'watch_user' => (string)$one_order['watch_user_name'] . '  (' . $one_order['watch_user_hotel_name'] . ')' ,
@@ -419,11 +423,14 @@ left join hqsen_user_data as hud on hu.id=hud.user_id where hu.id = " . $user_id
         );
         if($order){
             foreach ($order as $one_order){
-                $order_monkey = $one_order['create_user_money'] ? '￥(' . $one_order['create_user_money'] . ')' : '';
+                $order_monkey = '';
+                if(in_array($one_order['user_order_status'],[2,3])){
+                    $order_monkey = $one_order['create_user_money'] ? '￥(' . $one_order['create_user_money'] . ')' : '';
+                }
                 $order_item = array(
                     'id' => (int)$one_order['id'],
                     'dajian_order_id' => (int)$one_order['dajian_order_id'],
-                    'create_time' => (string)date('Y-m-d h:i:s', $one_order['create_time']),
+                    'create_time' => (string)date('Y-m-d H:i:s', $one_order['create_time']),
                     'order_status' => $status_detail[$one_order['user_order_status']] . $order_monkey,// 需要返回提供者状态   不搞给错了
                     'order_phone' => (string)$one_order['order_phone'],
                     'watch_user' => (string)$one_order['watch_user_name'] . '  (' . $one_order['watch_user_hotel_name'] . ')' ,
@@ -460,7 +467,7 @@ left join hqsen_user_data as hud on hu.id=hud.user_id where hu.id = " . $user_id
                 $order_monkey = $one_order['create_user_money'] ? '￥(' . $one_order['create_user_money'] . ')' : '';
                 $order_item = array(
                     'id' => (int)$one_order['id'],
-                    'create_time' => (string)date('Y-m-d h:i:s', $one_order['create_time']),
+                    'create_time' => (string)date('Y-m-d H:i:s', $one_order['create_time']),
                     'order_status' => $status_detail[$one_order['user_order_status']] . $order_monkey,// 需要返回提供者状态   不搞给错了
                     'order_phone' => (string)$one_order['order_phone'].$order_from,
                     'watch_user' => (string)$one_order['watch_user_name'] . '  (' . $one_order['watch_user_hotel_name'] . ')' ,
@@ -494,12 +501,12 @@ left join hqsen_user_data as hud on hu.id=hud.user_id where hu.id = " . $user_id
         );
         if($order){
             foreach ($order as $one_order){
-                $order_monkey = $one_order['create_user_money'] ? '￥(' . $one_order['create_user_money'] . ')' : '';
+                $order_monkey = '';
                 $create_user = $this->db->getRow('select * from hqsen_user_data where user_id = '. $one_order['user_id']);
                 $order_item = array(
                     'id' => (int)$one_order['id'],
                     'dajian_order_id' => (int)$one_order['dajian_order_id'],
-                    'create_time' => (string)date('Y-m-d h:i:s', $one_order['create_time']),
+                    'create_time' => (string)date('Y-m-d H:i:s', $one_order['create_time']),
                     'order_status' => $status_detail[$one_order['order_status']] . $order_monkey,// 需要返回提供者状态   不搞给错了
                     'order_phone' => (string)$one_order['order_phone'],
                     'watch_user' => (string)$one_order['watch_user_name'] . '  (' . $one_order['watch_user_hotel_name'] . ')' ,
@@ -532,12 +539,12 @@ left join hqsen_user_data as hud on hu.id=hud.user_id where hu.id = " . $user_id
         if($order){
             $watch_user = $this->db->getRow('select * from hqsen_user_data where user_id = '. $user_id);
             foreach ($order as $one_order){
-                $order_monkey = $one_order['create_user_money'] ? '￥(' . $one_order['create_user_money'] . ')' : '';
+                $order_monkey = '';
                 $create_user = $this->db->getRow('select * from hqsen_user_data where user_id = '. $one_order['user_id']);
                 $order_item = array(
                     'id' => (int)$one_order['id'],
                     'dajian_order_id' => (int)$one_order['dajian_order_id'],
-                    'create_time' => (string)date('Y-m-d h:i:s', $one_order['create_time']),
+                    'create_time' => (string)date('Y-m-d H:i:s', $one_order['create_time']),
                     'order_status' => $status_detail[$one_order['erxiao_order_status']] . $order_monkey,// 需要返回提供者状态   不搞给错了
                     'order_phone' => (string)$one_order['order_phone'],
                     'watch_user' => (string)$watch_user['user_name'] . '  (' . $watch_user['hotel_area'] . ')' ,
@@ -559,10 +566,10 @@ left join hqsen_user_data as hud on hu.id=hud.user_id where hu.id = " . $user_id
             $back_follows = [];
             if($user_kezi_order_follow_list){
                 foreach ($user_kezi_order_follow_list as $one_item){
-                    $follow_item['order_follow_time'] = $one_item['user_order_status'] == 2 ? '已取消' : date('Y-m-d h:i:s', $one_item['order_follow_time']);
+                    $follow_item['order_follow_time'] = $one_item['user_order_status'] == 2 ? '已取消' : date('Y-m-d H:i:s', $one_item['order_follow_time']);
                     $follow_item['order_follow_desc'] = $one_item['order_follow_desc'];
                     $follow_item['id'] = $one_item['id'];
-                    $follow_item['order_follow_create_time'] = date('Y-m-d h:i:s', $one_item['order_follow_create_time']);
+                    $follow_item['order_follow_create_time'] = date('Y-m-d H:i:s', $one_item['order_follow_create_time']);
                     $follow_item['user_order_status'] = $one_item['user_order_status'];
                     $back_follows[] = $follow_item;
                 }
@@ -581,10 +588,10 @@ left join hqsen_user_data as hud on hu.id=hud.user_id where hu.id = " . $user_id
             $back_follows = [];
             if($user_dajian_order_follow_list){
                 foreach ($user_dajian_order_follow_list as $one_item){
-                    $follow_item['order_follow_time'] = $one_item['user_order_status'] == 2 ? '已取消' : date('Y-m-d h:i:s', $one_item['order_follow_time']);
+                    $follow_item['order_follow_time'] = $one_item['user_order_status'] == 2 ? '已取消' : date('Y-m-d H:i:s', $one_item['order_follow_time']);
                     $follow_item['order_follow_desc'] = $one_item['order_follow_desc'];
                     $follow_item['id'] = $one_item['id'];
-                    $follow_item['order_follow_create_time'] = date('Y-m-d h:i:s', $one_item['order_follow_create_time']);
+                    $follow_item['order_follow_create_time'] = date('Y-m-d H:i:s', $one_item['order_follow_create_time']);
                     $follow_item['user_order_status'] = $one_item['user_order_status'];
                     $back_follows[] = $follow_item;
                 }
