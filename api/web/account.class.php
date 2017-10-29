@@ -462,13 +462,14 @@ left join hqsen_user_data as hud on hu.id=hud.user_id where hu.id = " . $user_id
         );
         if($order){
             foreach ($order as $one_order){
-                $order_from = $one_order['order_from'] == 2 ? '(同步)' : '';
+                $create_user = $this->db->getRow('select * from hqsen_user where id = ' . $one_order['user_id']);
                 $order_monkey = $one_order['create_user_money'] ? '￥(' . $one_order['create_user_money'] . ')' : '';
                 $order_item = array(
                     'id' => (int)$one_order['id'],
                     'create_time' => (string)date('Y-m-d H:i:s', $one_order['create_time']),
                     'order_status' => $status_detail[$one_order['user_order_status']] . $order_monkey,// 需要返回提供者状态   不搞给错了
-                    'order_phone' => (string)$one_order['order_phone'].$order_from,
+                    'order_phone' => (string)$one_order['order_phone'],
+                    'create_user' => (string)$create_user['user_name'],
                     'watch_user' => (string)$one_order['watch_user_name'] . '  (' . $one_order['watch_user_hotel_name'] . ')' ,
                 );
                 $order_list['order_list'][] = $order_item;
