@@ -101,7 +101,7 @@ class Follow extends Component {
         }
       }
     ]
-    if (['sxFollowList', 'exFollowList'].indexOf(type) > -1) {
+    if (['sxFollowList', 'exFollowList', 'hotelFollowList'].indexOf(type) > -1) {
       columns.unshift({
         key: 'create_user',
         dataIndex: 'create_user',
