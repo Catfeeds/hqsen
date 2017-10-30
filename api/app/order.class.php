@@ -23,7 +23,7 @@ class order extends base {
         $order_type = $this->postInt('order_type');
         $order_phone = $this->postInt('order_phone');
         if($order_type and $order_phone){
-            $order = $this->db->getRow('select * from hqsen_kezi_order where order_type = ' . $order_type . ' and order_phone = '. $order_phone);
+            $order = $this->db->getRow('select * from hqsen_kezi_order where order_type = ' . $order_type . ' and order_phone = '. $order_phone . ' and del_flag=1 ');
             if($order){
                 $this->appDie($this->back_code['order']['phone_type_exist'], $this->back_msg['order']['phone_type_exist']);
             }

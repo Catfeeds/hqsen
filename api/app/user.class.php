@@ -301,7 +301,7 @@ class user extends base{
     }
 
     public function syncOrder(){
-        $start_time = time() - 60 * 2; //同步三天前的订单
+        $start_time = time() - 3600 * 24 * 3; //同步三天前的订单
         // 获取三天前 未同步的指定酒店的订单
         $order = $this->db->getRows("select * from hqsen_kezi_order where  del_flag = 1 and create_time < $start_time and sync_type = 1 and order_area_hotel_type = 2");
         foreach ($order as $one_order){
