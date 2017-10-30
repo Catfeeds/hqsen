@@ -64,7 +64,7 @@ class user extends base{
         $user_name = $this->postString('user_name');
         $password = $this->postString('password');
         if($user_name and $password){
-            $user = $this->db->getRow("select * from hqsen_user where user_status = 1 and user_name = '$user_name'");
+            $user = $this->db->getRow("select * from hqsen_user where del_flag = 1 and user_status = 1 and user_name = '$user_name'");
             if($user_name == 13813813800){
                 $login_user = array(
                     'access_token' => $user['session_id'],

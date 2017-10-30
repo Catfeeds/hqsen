@@ -144,13 +144,18 @@ class account extends base {
         if($user_name and $hotel_id and $password){
             $sql_user['user_name'] = $user_name;
             $sql_user['password'] = md5($password);
-            $sql_user['create_time'] = time();
-            $sql_user['user_type'] = 4;
             $sql_user['del_flag'] = 1;
-            $sql_user['id'] = $this->db->insert('hqsen_user', $sql_user);
+            $old_user = $this->db->getRow("select * from hqsen_user where user_name = '$user_name' and user_type = 4");
+            if($old_user){
+                $this->db->update('hqsen_user', $sql_user, ' id = ' . $old_user['id']);
+            } else {
+                $sql_user['user_type'] = 4;
+                $sql_user['create_time'] = time();
+                $sql_user['id'] = $this->db->insert('hqsen_user', $sql_user);
+            }
 
             $hotel = $this->db->getRow("select * from hqsen_hotel  where id =" . $hotel_id);
-            if($hotel and $sql_user['id']){
+            if($hotel and isset($sql_user['id']) and $sql_user['id']){
                 $sql_user_date['hotel_id'] = $hotel['id'];
                 $sql_user_date['hotel_name'] = $hotel['hotel_name'];
                 $sql_user_date['area_id'] = $hotel['area_id'];
