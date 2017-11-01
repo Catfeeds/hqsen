@@ -37,7 +37,7 @@ export default {
         disabled: true
       },
       {
-        label: '举办时间',
+        label: '签单时间',
         type: 'date',
         name: 'sign_using_time',
         disabled: true
@@ -236,7 +236,7 @@ export default {
       }
     ]
   },
-  // 举办-搭建
+  // 尾款-搭建
   final: {
     submitKey: 'dajianErXiaoFollowCreate',
     detailUrlKey: 'dajianOrderDetail',
@@ -273,19 +273,19 @@ export default {
         disabled: true
       },
       {
-        label: '举办金额',
+        label: '尾款金额',
         type: 'text',
         name: 'other_item_order_money',
         disabled: true
       },
       {
-        label: '举办时间',
+        label: '尾款时间',
         type: 'date',
         name: 'other_item_order_time',
         disabled: true
       },
       {
-        label: '举办附件',
+        label: '尾款附件',
         type: 'image',
         name: 'other_item_order_sign_pic',
         disabled: true
