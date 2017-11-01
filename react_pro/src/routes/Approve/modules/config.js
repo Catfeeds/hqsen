@@ -12,7 +12,7 @@ export default {
         disabled: true
       },
       {
-        label: '举办时间',
+        label: '签单时间',
         type: 'date',
         name: 'sign_using_time',
         disabled: true
