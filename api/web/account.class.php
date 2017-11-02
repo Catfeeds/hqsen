@@ -471,6 +471,7 @@ left join hqsen_user_data as hud on hu.id=hud.user_id where hu.id = " . $user_id
                 $order_monkey = $one_order['create_user_money'] ? '￥(' . $one_order['create_user_money'] . ')' : '';
                 $order_item = array(
                     'id' => (int)$one_order['id'],
+                    'kezi_order_id' => (int)$one_order['kezi_order_id'],
                     'create_time' => (string)date('Y-m-d H:i:s', $one_order['create_time']),
                     'order_status' => $status_detail[$one_order['user_order_status']] . $order_monkey,// 需要返回提供者状态   不搞给错了
                     'order_phone' => (string)$one_order['order_phone'],
