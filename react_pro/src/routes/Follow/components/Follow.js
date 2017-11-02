@@ -85,11 +85,12 @@ class Follow extends Component {
         dataIndex: 'id',
         title: '操作',
         render: (text, record) => {
-          const detailId = type === 'userKeziList' ? 'kezi_order_id' : 'dajian_order_id'
+          const isKezi = ['hotelFollowList', 'userKeziList'].indexOf(type) > -1
+          const detailId = isKezi ? 'kezi_order_id' : 'dajian_order_id'
           return (
             <div>
               <Button size="small" onClick={() => this.goDetail(record[detailId])}>
-                {type === 'userKeziList' ? '客资详情' : '搭建详情'}
+                {isKezi ? '客资详情' : '搭建详情'}
               </Button>
               {type !== 'exFollowList' && (
                 <Button size="small" onClick={() => this.lookLog(text)}>
