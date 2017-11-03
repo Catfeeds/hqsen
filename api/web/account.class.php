@@ -482,7 +482,7 @@ left join hqsen_user_data as hud on hu.id=hud.user_id where hu.id = " . $user_id
             }
 
         }
-        $order_list['count'] = $this->db->getCount('hqsen_user_kezi_order', $sql_status); // 总的订单数
+        $order_list['count'] = intval($this->db->getCount('hqsen_user_kezi_order', $sql_status)); // 总的订单数
         $this->appDie($this->back_code['sys']['success'], $this->back_msg['sys']['success'], $order_list);
     }
 
