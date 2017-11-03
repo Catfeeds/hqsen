@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react'
-import { Form, Icon } from 'antd'
+import { Form } from 'antd'
 import MyBreadcrumb from 'components/MyBreadcrumb'
 import FormComponent from 'components/FormComponent'
 import Back from 'components/Back'
@@ -28,14 +28,14 @@ class Detail extends Component {
 
   render () {
     const {
-      location: { query: { page, type } },
+      location: { query: { page, type, url } },
       configData,
       Detail: { basicInfo, formData },
       form: { getFieldDecorator }
     } = this.props
     return (
       <div className="detail-page">
-        <Back type={type} page={page} />
+        <Back type={type} page={page} url={url} />
         <MyBreadcrumb breadcrumb={basicInfo.breadcrumb} />
         <Form className="vertival-form">
           {basicInfo.formList.map((item, index) => {

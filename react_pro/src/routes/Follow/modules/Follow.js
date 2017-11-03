@@ -32,8 +32,7 @@ export const handleCurrentChange = (current = 1) => {
 export const searchLog = id => {
   return (dispatch, getState) => {
     const { type } = getState().follow
-    const url =
-      type === ['hotelFollowList', 'userKeziList'].indexOf(type) > -1 ? 'keziOrderFollowList' : 'dajianOrderFollowList'
+    const url = ['hotelFollowList', 'userKeziList'].indexOf(type) > -1 ? 'keziOrderFollowList' : 'dajianOrderFollowList'
     Fetch(url, { id }).then(response => {
       dispatch(saveLogInfo(response.data))
     })
