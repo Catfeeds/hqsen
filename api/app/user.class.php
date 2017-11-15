@@ -306,7 +306,7 @@ class user extends base{
         $order = $this->db->getRows("select * from hqsen_kezi_order where  del_flag = 1 and create_time < $start_time and sync_type = 1 and order_area_hotel_type = 2");
         foreach ($order as $one_order){
             if($one_order){
-                $order_status = $this->db->getRow('select * from hqsen_user_kezi_order as huko left join hqsen_user_kezi_order_sign as hukos on huko.id = hukos.user_kezi_order_id where hukos.sign_status in (2,4) and huko.kezi_order_id' . $one_order['id']);
+                $order_status = $this->db->getRow('select * from hqsen_user_kezi_order as huko left join hqsen_user_kezi_order_sign as hukos on huko.id = hukos.user_kezi_order_id where hukos.sign_status in (2,4) and huko.kezi_order_id=' . $one_order['id']);
                 if($order_status){
                     // 更新同步状态
                     $update_sql['sync_type'] = 2;
