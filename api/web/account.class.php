@@ -468,7 +468,11 @@ left join hqsen_user_data as hud on hu.id=hud.user_id where hu.id = " . $user_id
         if($order){
             foreach ($order as $one_order){
                 $create_user = $this->db->getRow('select * from hqsen_user where id = ' . $one_order['user_id']);
-                $order_monkey = $one_order['create_user_money'] ? '￥(' . $one_order['create_user_money'] . ')' : '';
+                $order_monkey = '';
+                // 订单成功才有金额
+                if(in_array($one_order['user_order_status'],[2,3])){
+                    $order_monkey = $one_order['create_user_money'] ? '￥(' . $one_order['create_user_money'] . ')' : '';
+                }
                 $order_item = array(
                     'id' => (int)$one_order['id'],
                     'kezi_order_id' => (int)$one_order['kezi_order_id'],
