@@ -301,10 +301,19 @@ class user extends base{
     }
 
     public function syncOrder(){
-        $start_time = time() - 3600 * 24 * 3; //同步三天前的订单
+        $start_time = time() - 60 * 3; //同步三天前的订单
         // 获取三天前 未同步的指定酒店的订单
         $order = $this->db->getRows("select * from hqsen_kezi_order where  del_flag = 1 and create_time < $start_time and sync_type = 1 and order_area_hotel_type = 2");
         foreach ($order as $one_order){
+            if($one_order){
+                $order_status = $this->db->getRow('select * from hqsen_user_kezi_order as huko left join hqsen_user_kezi_order_sign as hukos on huko.id = hukos.user_kezi_order_id where hukos.sign_status in (2,4) and huko.kezi_order_id' . $one_order['id']);
+                if($order_status){
+                    // 更新同步状态
+                    $update_sql['sync_type'] = 2;
+                    $this->db->update('hqsen_kezi_order', $update_sql, ' id = ' . $one_order['id']);
+                    continue;
+                }
+            }
             $hotel_arr = explode(',', $one_order['order_area_hotel_id']);
             foreach ($hotel_arr as $one_hotel_id){
                 $this->syncHotelOrder($one_order, $one_hotel_id);
