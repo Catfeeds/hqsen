@@ -121,7 +121,7 @@ export default {
         disabled: true
       },
       {
-        label: '跟踪者账号',
+        label: '提供者账号',
         type: 'text',
         name: 'create_user_name',
         disabled: true

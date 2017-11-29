@@ -181,6 +181,7 @@ export default {
         label: '区域名称',
         type: 'text',
         name: 'area_name',
+        disabledEdit: true,
         rules: { required: true }
       },
       {

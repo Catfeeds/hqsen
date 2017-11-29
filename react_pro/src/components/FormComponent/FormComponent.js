@@ -24,35 +24,31 @@ class FormComponent extends Component {
   }
   renderComponent () {
     const { item, dataSource, setFieldsValue, id, defaultValue } = this.props
+    const isDisabled = item.disabled || (id && item.disabledEdit)
     switch (item.type) {
       case 'select':
         return (
-          <Select
-            placeholder={item.placeholder}
-            disabled={item.disabled}
-            allowClear
-            onChange={e => this.handleChange(e)}
-          >
+          <Select placeholder={item.placeholder} disabled={isDisabled} allowClear onChange={e => this.handleChange(e)}>
             {dataSource &&
-              dataSource.map(option =>
+              dataSource.map(option => (
                 <Option key={option.value} value={option.value}>
                   {option.label}
                 </Option>
-              )}
+              ))}
           </Select>
         )
       case 'radio':
         return (
-          <RadioGroup disabled={item.disabled} onChange={e => this.handleChange(e)}>
-            {dataSource.map(option =>
+          <RadioGroup disabled={isDisabled} onChange={e => this.handleChange(e)}>
+            {dataSource.map(option => (
               <Radio key={option.value} value={option.value}>
                 {option.label}
               </Radio>
-            )}
+            ))}
           </RadioGroup>
         )
       case 'checkbox':
-        return <CheckboxGroup options={dataSource} disabled={item.disabled} onChange={e => this.handleChange(e)} />
+        return <CheckboxGroup options={dataSource} disabled={isDisabled} onChange={e => this.handleChange(e)} />
       case 'image':
         return <ImageView data={defaultValue} />
       case 'upload':
@@ -64,7 +60,7 @@ class FormComponent extends Component {
           <Input
             type={item.type || 'text'}
             placeholder={item.placeholder}
-            disabled={item.disabled}
+            disabled={isDisabled}
             onChange={e => this.handleChange(e)}
           />
         )
