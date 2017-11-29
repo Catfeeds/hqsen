@@ -157,10 +157,10 @@ class pay extends base {
         $pay_item['user_kezi_order_id'] = $one_sign['user_kezi_order_id'];
         $pay_item['order_money'] = $one_sign['order_money'];
         $pay_item['order_other_money'] = $one_sign['order_other_money'];
-        $pay_item['create_user_name'] = $user_order['user_id'];// 改成用户名字
+        $pay_item['create_user_name'] = $create_user['user_name'];// 改成用户名字
         $pay_item['create_user_money'] = round($user_order['create_user_money'], 2);
         $pay_item['create_user_alipay'] = $c_accout;
-        $pay_item['watch_user_name'] = $user_order['watch_user_name'];
+        $pay_item['watch_user_name'] = $watch_user['user_name'];
         $pay_item['watch_user_money'] = round($user_order['watch_user_money'], 2);
         $pay_item['watch_user_alipay'] = $w_accout;
         $pay_item['pay_status'] = $user_order['order_status'];// 1未打款 2 已打款
@@ -232,7 +232,7 @@ class pay extends base {
         $pay_item['id'] = $one_sign['id'];
         $pay_item['user_dajian_order_id'] = $one_sign['user_dajian_order_id'];
         $pay_item['order_money'] = $one_sign['order_money'];
-        $pay_item['create_user_name'] = $user_order['user_id'];// 改成用户名字
+        $pay_item['create_user_name'] = $user_info['user_name'];// 改成用户名字
         $pay_item['create_user_money'] = round($user_order['create_user_money'], 2);
         $pay_item['watch_user_alipay'] = $c_accout;
         $pay_item['name'] = $one_sign['first_order_money'];
@@ -278,6 +278,7 @@ class pay extends base {
             // 打开文件资源，不存在则创建
             $file_name = '客资_' . date('Y-m-d' , $start_time) . '-'  . date('Y-m-d' , $end_time) . '.csv';
             $fp = fopen(API_PATH . "/upload/" . $file_name, 'w');
+            fwrite($fp, chr(0xEF).chr(0xBB).chr(0xBF)); // 添加 BOM
             // 拼接
             $csv = $header.$content;
             // 写入并关闭资源
@@ -321,6 +322,7 @@ class pay extends base {
             // 打开文件资源，不存在则创建
             $file_name = '搭建_' . date('Y-m-d' , $start_time) . '-'  . date('Y-m-d' , $end_time) . '.csv';
             $fp = fopen(API_PATH . "/upload/" . $file_name, 'w');
+            fwrite($fp, chr(0xEF).chr(0xBB).chr(0xBF)); // 添加 BOM
             // 拼接
             $csv = $header.$content;
             // 写入并关闭资源
